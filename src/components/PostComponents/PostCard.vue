@@ -3,17 +3,19 @@
     <div class="position-realtive container p-5">
         <div class="position-relative">
             <div>
-                <!-- Logo -->
+            <!-- Logo -->
             <a href="#" target="_blank" rel="noreferrer"><img style="position:absolute;top:0px;right:0px;width:150px" src="https://images.wuzzuf-data.net/files/company_logo/Etisalat-Misr-Egypt-4219-1656427377.png" alt="Jobs and Careers at Etisalat Egypt Egypt" class="css-17095x3"></a>
             </div>
       <div class="">
 
          <!-- Job Title -->
-         <h2 class=""><a :href="`/post/${post_id}`" target="_blank" rel="noreferrer" class="css-o171kl">{{ job_title }}</a></h2>
+         <h4 class="">
+            <RouterLink :to="`/posts/${post_id}`">{{ job_title }}</RouterLink>
+         </h4>
 
          <div class="">
             <!-- company_name -->
-            <p class="css-17s97q8">Etisalat Egypt </p> 
+            <p class="css-17s97q8">{{ company }}</p> 
             <!-- Location -->
             <span class="css-5wys0k">{{ location }}</span>
             <!-- created_at -->
@@ -35,16 +37,19 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
   props: {
     job_title: String,
     location: String,
     application_deadline: String,
     created_at: Date,
-    start_salary: String,
-    end_salary: String,
-    post_id: String,
-    work_type: String
+    start_salary: Number,
+    end_salary: Number,
+    post_id: Number,
+    work_type: String,
+    company:String
   },
 };
 </script>

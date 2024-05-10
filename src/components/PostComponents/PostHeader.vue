@@ -27,6 +27,14 @@
          <!-- deadline -->
          <div><p class="position-absolute bottom-0 end-0 text-danger " >{{ application_deadline }}</p></div>
 
+         <!-- skills -->
+         <h4>Skills Needed</h4>
+         <div v-for="skill in skills" :key="skill.index" class="d-inline-block ">
+            <p class="mx-2 bg-info-subtle ">
+            {{ skill }}
+            </p>
+
+         </div>
          </div>
       </div>
    </div>
@@ -40,10 +48,11 @@ export default {
     location: String,
     application_deadline: String,
     created_at: Date,
-    start_salary: String,
-    end_salary: String,
-    post_id: String,
-    work_type: String
+    start_salary: Number,
+    end_salary: Number,
+    post_id: Number,
+    work_type: String,
+    skills: Array
   },
 };
 </script>

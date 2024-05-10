@@ -2,18 +2,40 @@
 <script setup>
 import PostHeader from '../../components/PostComponents/PostHeader.vue';
 import PostDescription from '../../components/PostComponents/PostDescription.vue';
+import Navbar from '../../components/Navbar.vue';
+import axios from 'axios';
 </script>
 
 <template>
 
-    <div>
+    <div class="container">
+    <Navbar/>
 
-    <h1>asfa</h1>
+    <PostHeader 
+    :job_title="data.job_title"
+    :location="data.location"
+    :application_deadline="data.application_deadline"
+    :created_at="data.created_at"
+    :start_salary="data.start_salary"
+    :end_salary="data.end_salary"
+    :post_id="data.id"
+    :work_type="data.work_type"
+    :skills="data.skills"
+    />
+    
+    <!-- <PostDescription 
+    title="Job Description"
+    :content="data.description"/>
 
-    <PostHeader/>
-    <PostDescription :description="data.description"/>
+    <PostDescription
+    title="Responibilities"
+    :content="data.responsibilities"/>
+
+    <PostDescription
+    title="Qualifications"
+    :content="data.qualifications"/> -->
+
     </div>
-
 
 </template>
 
@@ -22,28 +44,18 @@ import PostDescription from '../../components/PostComponents/PostDescription.vue
 export default {
     data(){
         return {
-        "data": {
-        "id": 1,
-        "company_logo": null,
-        "company_name": "vodafone Egypt",
-        "job_title": "Front-end Developer",
-        "description": "we need \r\nto \r\nand\r\nand\r\n",
-        "responsibilities": "can do \r\n1\r\n2\r\n3\r\n4\r\n",
-        "qualifications": "has\r\n1\r\n2\r\n3\r\n4",
-        "start_salary": 15000,
-        "end_salary": 17000,
-        "location": "Cairo",
-        "work_type": "remote",
-        "application_deadline": "2024-05-15",
-        "status": "approved",
-        "skills": [
-            "Programming",
-            "Problem Solving",
-            "Data Analysis",
-            "Statistics"
-        ]
+        data: []     
     }
-        }
+        },
+    mounted() {
+        console.log(this.$route.params.id);
+        axios
+        .get(`http://localhost:8000/api/posts/${this.$route.params.id}`)
+        .then(response => { 
+            this.data = response.data.data;
+        })
+        .catch(err => console.log(err));
     }
-}
+    }
+
 </script>

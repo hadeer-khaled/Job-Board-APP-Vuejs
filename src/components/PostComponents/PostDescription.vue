@@ -1,17 +1,20 @@
 <template>
-    
-    <h1 v-html="formattedMessage"></h1>
+    <div class="p-5">
+        <h1>{{ title }}</h1>
+    <p v-html="formattedMessage"></p>
+    </div>
 
 </template>
 
 <script>
 export default {
     props:{
-        description:String
+        title:String,
+        content:String
     },
     computed: {
     formattedMessage() {
-        return this.description.replace(/\r\n/g, '<br>');
+        return this.content.replace(/\r\n/g, '<br>');
     },
 },
 }
