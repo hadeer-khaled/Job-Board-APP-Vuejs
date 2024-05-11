@@ -11,12 +11,15 @@ import Post from './pages/Post/Post.vue'
   <!-- </div> -->
   <div>
     
-  <p>
+  <!-- <p>
     <strong>Current route path:</strong> {{ $route.fullPath }}
-  </p>
+  </p> -->
   <nav>
     <RouterLink to="/">Go to Home</RouterLink>
     <RouterLink to="/posts/1">Go to Posts</RouterLink>
+    <RouterLink to="/employer/profile">Employer</RouterLink>/employer/add-post
+    <RouterLink to="/employer/add-post">Add Job</RouterLink>
+
   </nav>
   <main>
     <RouterView />
