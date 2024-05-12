@@ -1,7 +1,4 @@
-<script setup>
-import Navbar from '../../components/Navbar.vue';
-import axios from 'axios';
-</script>
+
 
 <template>
   <div>
@@ -12,14 +9,23 @@ import axios from 'axios';
         <input type="text" id="jobTitle" v-model="jobTitle" required maxlength="50">
         <!-- Add maxlength="50" to limit input length -->
       </div>
-      <div>
+   <div>
         <label for="skills">Skills:</label>
-        <input type="text" id="skills" v-model="skills" required>
+        <select id="skills" @change="handleSelectionChange" required>
+          <option v-for="skill in allSkills" :key="skill.id" :value="skill.id">{{ skill.skill }}</option>
+        </select>
+      </div>
+      <div>
+        <label>Selected Skills:</label>
+        <div>
+          <!-- <div v-for="skillId in selectedSkills" :key="skillId">{{ getSkillNameById(skillId) }}</div>selectedSkillNames -->
+          <div>{{selectedSkillNames }}</div>
+
+        </div>
       </div>
       <div>
         <label for="description">Description:</label>
         <textarea id="description" v-model="description" rows="4" required minlength="50"></textarea>
-        <!-- Add minlength="50" to enforce minimum character requirement -->
       </div>
       <div>
         <label for="responsibilities">Responsibilities:</label>
@@ -59,13 +65,13 @@ import axios from 'axios';
 </template>
 
 <script>
+import Navbar from '../../components/Navbar.vue';
 import axios from 'axios';
 
 export default {
   data() {
     return {
       jobTitle: '',
-      skills: '',
       description: '',
       responsibilities: '',
       qualifications: '',
@@ -74,15 +80,39 @@ export default {
       location: '',
       workType: '',
       applicationDeadline: '',
-      skills:"1,2,3"
+      allSkills: [],
+      selectedSkills: [],
+      selectedSkillNames: [],
     };
   },
-  component:{ Navbar },
+  components:{ Navbar },
+  created() {
+    this.fetchSkills();
+  },
+  
   methods: {
+      fetchSkills() {
+      axios.get(`${import.meta.env.VITE_BASE_URL}/skills`)
+        .then(response => {
+          this.allSkills = response.data.data;
+          console.log('Skills fetched successfully:', this.allSkills);
+        })
+        .catch(error => {
+          console.error('Error fetching skills:', error);
+        });
+    },
+     getSkillNameById(skillId) {
+      const skill = this.allSkills.find(skill => skill.id == skillId);
+      console.log(typeof skillId)
+      return skill ? skill.skill : '';
+    },
+    handleSelectionChange(event) {
+      this.selectedSkills.push(event.target.value);
+    },
     submitJobPost() {
       const postData = {
         job_title: this.jobTitle,
-        skills: this.skills,
+        skills: Array.from(this.selectedSkills),
         description: this.description,
         responsibilities: this.responsibilities,
         qualifications: this.qualifications,
@@ -93,16 +123,28 @@ export default {
         application_deadline: this.applicationDeadline,
       };
         console.log("postData",postData)
-      axios.post('http://127.0.0.1:8000/api/posts/', postData)
+      axios.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
         .then(response => {
           console.log('Job post added successfully:', response.data);
         })
         .catch(error => {
           console.error('Error adding job post:', error.response.data);
         });
+
+    }
+  },
+    computed: {
+    selectedSkillNames() {
+      return this.selectedSkills.map(skillId => {
+              console.log(skillId)
+
+        return this.getSkillNameById(skillId)});
+
     }
   }
+
 };
+
 </script>
 
 <style scoped>
