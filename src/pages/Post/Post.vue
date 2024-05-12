@@ -23,7 +23,7 @@ import axios from 'axios';
     :skills="data.skills"
     />
     
-    <!-- <PostDescription 
+    <PostDescription 
     title="Job Description"
     :content="data.description"/>
 
@@ -33,7 +33,7 @@ import axios from 'axios';
 
     <PostDescription
     title="Qualifications"
-    :content="data.qualifications"/> -->
+    :content="data.qualifications"/>
 
     </div>
 
