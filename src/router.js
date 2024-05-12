@@ -12,6 +12,12 @@ const routes = [
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: Profile },
   { path: '/employer/add-post', component: AddPost },
+  // {
+  //   path: 'employer/posts/:id',
+  //   name: 'EmployerPostDetails',
+  //   component: PostDetails,
+  //   props: true 
+  // }
 ]
 
 const router = createRouter({
