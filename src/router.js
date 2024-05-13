@@ -4,8 +4,7 @@ import LandingPage from './pages/Landing page/LandingPage.vue';
 import Post from './pages/Post/Post.vue';
 import Profile from './pages/Employer/Profile.vue';
 import AddPost from './pages/Employer/AddPost.vue';
-
-
+import ApplyingForm from './pages/ApplyingForm/ApplyingForm.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -18,6 +17,7 @@ const routes = [
   //   component: PostDetails,
   //   props: true 
   // }
+  { path: '/application/:id' , component: ApplyingForm}
 ]
 
 const router = createRouter({

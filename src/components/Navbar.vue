@@ -1,9 +1,14 @@
 <template>
-<div class="mt-3">
+
+<div class="mt-3 border-bottom pb-2 mb-3">
 <nav class="d-flex justify-content-between ">
     
-    <div class="mx-3">Logo</div>
-    
+    <div class="mx-3 d-flex justify-content-between ">
+        <div>
+            <img  src="/logo.jpg" class="mx-3 border rounded-circle" style="width:50px"/>
+        </div>
+    <RouterLink to="/" class="text-decoration-none mx-3 my-auto ">Home</RouterLink>
+    </div>
     <div>
         <div class="d-flex">
             <div >
