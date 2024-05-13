@@ -16,7 +16,30 @@
           <Button @click="rejectApplication(app.id)">Reject</Button>
         </div>
       </div>
+      <nav class="mx-5" aria-label="Page navigation example">
+        <ul class="pagination">
 
+            <!-- Prev -->
+            <li :class="{ 'page-item': true, disabled: !prev }">
+            <a class="page-link" @click="changePage(prev)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+            </li>
+
+            <!-- Pages -->
+            <li v-for="link in paginationLinks" :key="link.label" :class="{ 'page-item': true, active: link.active }">
+            <a v-if="!link.active" @click="changePage(link.url)" class="page-link">{{ link.label }}</a>
+            <span class="page-link" v-else>{{ link.label }}</span>
+            </li>
+
+            <!-- Next -->
+            <li :class="{ 'page-item': true, disabled: !next }">
+            <a class="page-link" @click="changePage(next)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+            </li>
+        </ul>
+        </nav>
     </div>
     <div v-else>
       <p>Loading...</p>
@@ -33,11 +56,18 @@ import axios from 'axios';
 import Navbar from '../../components/Navbar.vue';
 import Button from 'primevue/button';
 
+import Paginator from 'primevue/paginator';
+
 export default {
     data:()=>({  
-        applications:null 
+        applications:null,
+        paginationLinks: {},
+        next: null,
+        prev: null,
+      
     }),
     methods: {
+   
       acceptApplication(appId) {
       axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
         .then((response) => {
@@ -56,18 +86,30 @@ export default {
           console.error('Error rejecting application:', error.response.data.message);
         });
     },
-    fetchApplications() {
-      axios.get(`${import.meta.env.VITE_BASE_URL}/job-applications/7`)
+    fetchApplications(pageUrl = null) {
+      const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/job-applications/7`
+      axios.get(url)
         .then(response => {
           this.applications = response.data.applications.data;
+          this.paginationLinks = response.data.applications.links;
+          this.next = response.data.applications.next_page_url;
+          this.prev = response.data.applications.prev_page_url;
           console.log("applications: ", response.data.applications.data);
+          console.log("totalApplications: ",this.totalApplications );
         })
         .catch(error => {
           console.error('Error fetching applications:', error);
         });
-    }
     },
-    components:{ Navbar,Button },
+     changePage(pageUrl) 
+        {
+            if(pageUrl)
+            {
+                this.fetchApplications(pageUrl);
+            }
+        },
+    },
+    components:{ Navbar,Button,Paginator },
    mounted() {
     this.fetchApplications();
   }

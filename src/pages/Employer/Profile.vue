@@ -1,8 +1,3 @@
-<script setup>
-import Navbar from '../../components/Navbar.vue';
-import axios from 'axios';
-</script>
-
 <template>
   <div>
     <Navbar />
@@ -13,6 +8,18 @@ import axios from 'axios';
       <p>ID: {{ employer.id }}</p>
       <p>Company Name: {{ employer.company_name }}</p>
       <p>Name: {{ employer.name }}</p>
+      <InputGroup>
+        <InputGroupAddon>
+            <i class="pi pi-user"></i>
+        </InputGroupAddon>
+        <InputText placeholder="Username" />
+      </InputGroup>
+      <InputGroup>
+          <InputGroupAddon>$</InputGroupAddon>
+          <InputNumber placeholder="Price" />
+      </InputGroup>
+
+
     </div>
     <div v-else>
       <p>Loading...</p>
@@ -37,7 +44,16 @@ import axios from 'axios';
 </template>
 
 <script>
+
+import Card from 'primevue/card';
+import Navbar from '../../components/Navbar.vue';
+import axios from 'axios';
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+
+
 export default {
+   components:{ Navbar ,InputGroup,InputGroupAddon,Card},
     data:()=>({
    
         employer: null,
@@ -49,7 +65,7 @@ export default {
         this.$router.push({ name: 'EmployerPostDetails', params: { id: postId } });
       }
     },
-    component:{ Navbar },
+   
     mounted() 
     {
         axios
