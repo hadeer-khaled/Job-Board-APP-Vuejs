@@ -48,7 +48,6 @@ export default {
     }
         },
     mounted() {
-        console.log(this.$route.params.id);
         axios
         .get(`http://localhost:8000/api/posts/${this.$route.params.id}`)
         .then(response => { 

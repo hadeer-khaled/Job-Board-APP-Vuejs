@@ -19,7 +19,6 @@ export default {
             return "Not assigned" ;
         } 
 
-        console.log(this.content);
         return this.content.replace(/\r\n/g, '<br>');
     },
 },

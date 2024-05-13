@@ -11,10 +11,13 @@ import axios from 'axios';
     <Navbar />
 
     
-
+            <div class="w-25 m-auto d-flex align-baseline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit">Search</button>
+            </div>
     <div class="row">
     
-    <div class="col-3 text-center ">
+    <div class="col-3 text-center">
     
     <!-- Title -->
     <h3 class="m-auto">
@@ -51,6 +54,7 @@ import axios from 'axios';
     <input type="text" class="form-control m-auto w-50" placeholder="salary" name="salary" v-model="salary"/>
 
     <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
+    <button class="btn btn-danger my-5 mx-2 " @click="fetchPosts()">Reset</button>
     </div>
 
     <div class="col-9">

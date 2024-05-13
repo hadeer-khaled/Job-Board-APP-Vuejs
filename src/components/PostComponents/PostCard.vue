@@ -19,7 +19,7 @@
             <!-- Location -->
             <span class="css-5wys0k">{{ location }}</span>
             <!-- created_at -->
-            <div class="">{{ created_at }}</div>
+            <div class="">{{ formattedDate }}</div>
          </div>
       </div>
       <div class="">
@@ -38,18 +38,35 @@
 
 <script>
 import { RouterLink } from 'vue-router';
+import { formatDistanceToNow } from 'date-fns';
 
 export default {
   props: {
     job_title: String,
     location: String,
     application_deadline: String,
-    created_at: Date,
+    created_at: String,
     start_salary: Number,
     end_salary: Number,
     post_id: Number,
     work_type: String,
     company:String
   },
+  computed: {
+      formattedDate()
+      {
+         if(this.$props.created_at)
+         {
+            const currentDate = new Date();
+            const deadline = new Date(this.$props.created_at)
+            console.log(deadline);
+            const deadlineDate = new Date(deadline -  currentDate);
+            console.log(deadlineDate);
+            const res = formatDistanceToNow(deadlineDate); 
+            return res
+         }
+
+      }
+   }
 };
 </script>
