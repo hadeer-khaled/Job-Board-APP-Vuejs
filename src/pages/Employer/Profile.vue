@@ -64,53 +64,38 @@
           <div v-else>
             <p>Loading...</p>
           </div>
+          <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />
 
-           <nav class="mx-5" aria-label="Page navigation example">
-            <ul class="pagination">
-
-            <!-- Prev -->
-            <li :class="{ 'page-item': true, disabled: !prev }">
-            <a class="page-link" @click="changePage(prev)" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-            </li>
-
-            <!-- Pages -->
-            <li v-for="link in paginationLinks" :key="link.label" :class="{ 'page-item': true, active: link.active }">
-            <a v-if="!link.active" @click="changePage(link.url)" class="page-link">{{ link.label }}</a>
-            <span class="page-link" v-else>{{ link.label }}</span>
-            </li>
-
-            <!-- Next -->
-            <li :class="{ 'page-item': true, disabled: !next }">
-            <a class="page-link" @click="changePage(next)" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-            </li>
-             </ul>
-           </nav>
        </div>
 
       </div>
+
+  
   </div>
 </template>
+
 
 <script>
 
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Navbar from '../../components/Navbar.vue';
+import MyPaginator from '../../components/MyPaginator.vue';
+
 import axios from 'axios';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import InputText from 'primevue/inputtext';
 import Avatar from 'primevue/avatar';
 import Paginator from 'primevue/paginator';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 
 var static_employer_id = 1;
 
 export default {
-   components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator},
+   components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
+   TabView , TabPanel ,MyPaginator},
       data:()=>({
       employer: {
       company_name: '',
@@ -144,6 +129,10 @@ export default {
             this.fetchJobs(pageUrl);
         }
     },
+    handlePageChange(url) {
+      console.log('Page changed to:', url);
+      this.fetchJobs(url);
+    },
     fetchJobs(pageUrl = null) {
         const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
         axios
@@ -156,11 +145,8 @@ export default {
             console.log("jobs: " , res.data.jobs.data)
             })
         .catch(err => console.log(err));
-      }
-    },
-   
-    mounted() 
-    {
+      },
+      fetchEmployerData(){
         axios
         .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
         .then(res => {
@@ -173,6 +159,13 @@ export default {
             console.log("employer: ", this.employer)            
             })
         .catch(err => console.log(err));
+      }
+    },
+   
+    mounted() 
+    {
+      this.fetchEmployerData();
+       
 
        this.fetchJobs();
     }
