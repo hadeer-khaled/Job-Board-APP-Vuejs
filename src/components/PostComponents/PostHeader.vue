@@ -8,7 +8,7 @@
       <div class="">
 
          <!-- Job Title -->
-         <h2 class=""><a :href="`/post/${post_id}`" target="_blank" rel="noreferrer" class="css-o171kl">{{ job_title }}</a></h2>
+         <h4 class="css-o171kl">{{ job_title }}</h4>
 
          <div class="">
             <!-- company_name -->
@@ -21,9 +21,9 @@
       </div>
       <div class="">
          <!-- work_type -->
-         <div class=""><p class="" href="/a/Full-Time-Jobs-in-Egypt"><span class="text-capitalize">{{ work_type }}</span></p></div>
+         <div><p><span class="text-capitalize">{{ work_type }}</span></p></div>
          <!-- salary_range -->
-         <div><p class="" href="/a/Entry-Level-Jobs-in-Egypt">salary range <span> {{ start_salary }} - {{ end_salary }} EGP</span></p> 
+         <div><p>salary range <span> {{ start_salary }} - {{ end_salary }} EGP</span></p> 
          <!-- deadline -->
          <div><p class="position-absolute bottom-0 end-0 text-danger " >{{ application_deadline }}</p></div>
 
@@ -33,9 +33,11 @@
             <p class="mx-2 bg-info-subtle ">
             {{ skill }}
             </p>
+         </div>
 
+         
          </div>
-         </div>
+         <RouterLink class="text-decoration-none btn btn-primary" :to="`/application/${post_id}`">Apply</RouterLink>
       </div>
    </div>
 </div>
