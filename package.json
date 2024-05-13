@@ -13,6 +13,7 @@
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.8",
     "bootstrap-vue": "^2.23.1",
+    "primevue": "^3.52.0",
     "date-fns": "^3.6.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2",
