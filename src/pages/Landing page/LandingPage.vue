@@ -169,7 +169,7 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/home/posts`
+            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/posts`
             axios
             .get(url)
             .then(res => {
@@ -212,7 +212,7 @@ export default {
             let url = import.meta.env.VITE_BASE_URL;
 
             axios
-            .get(url+'/home/posts' , {params: queryParams})
+            .get(url+'/posts' , {params: queryParams})
             .then((res) => {
                 this.posts = res.data.data;
             })
