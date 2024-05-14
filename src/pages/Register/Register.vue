@@ -6,36 +6,47 @@
         <div class="card-body p-md-5">
           <h2 class="text-center mb-4">Register</h2>
           <form @submit.prevent="submitForm" novalidate="true">
-            <!-- Step Navigation -->
+
             <div v-if="role === 'candidate'" class="mb-4">
               <ul class="nav nav-pills">
                 <li class="nav-item" v-for="(step, index) in steps" :key="index">
-                  <a :class="['nav-link', { active: currentStep === index }]" href="#" @click.prevent="currentStep = index">{{ step }}</a>
+                  <a :class="['nav-link ', { active: currentStep === index }]" href="#" @click.prevent="currentStep = index">{{ step }}</a>
                 </li>
               </ul>
             </div>
 
-            <!-- Common Fields -->
             <div v-if="currentStep === 0">
               <div class="form-group mb-4">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" v-model="name" required>
+                <input type="text" class="form-control" id="name" v-model="name" :placeholder="errorMessages.name || 'Enter your name'" required :class="{ 'is-invalid': errorMessages.name }">
               </div>
               <div class="form-group mb-4">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" v-model="username" required>
+                <input type="text" class="form-control" id="username" v-model="username" :placeholder="errorMessages.username || 'Enter your username'" required :class="{ 'is-invalid': errorMessages.username }">
               </div>
               <div class="form-group mb-4">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" required>
+                <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe  || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
+                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
               </div>
               <div class="form-group mb-4">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" v-model="password" required>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="password" v-model="password" :placeholder="errorMessages.password || 'Enter your password'" required :class="{ 'is-invalid': errorMessages.password }">
+                  <button class="btn btn-outline-secondary" type="button" @click="togglePasswordVisibility">
+                    <FontAwesomeIcon :icon="passwordFieldIcon"/>
+                  </button>
+                </div>
               </div>
               <div class="form-group mb-4">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" :placeholder="errorMessages.confirmPasswordRe || 'Confirm your password'" required :class="{ 'is-invalid': errorMessages.confirmPasswordRe }">
+                  <button class="btn btn-outline-secondary" type="button" @click="toggleConfirmPasswordVisibility">
+                    <FontAwesomeIcon :icon="confirmPasswordFieldIcon"/>
+                  </button>
+                </div>
+                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.confirmPassword }}</small>
               </div>
               <div class="form-group mb-4">
                 <label for="image" class="form-label">Image</label>
@@ -43,29 +54,22 @@
               </div>
               <div class="form-group mb-4">
                 <label for="role" class="form-label">Role</label>
-                <select class="form-control" id="role" v-model="role" required>
+                <select class="form-control" id="role" v-model="role" required :class="{ 'is-invalid': errorMessages.role }">
                   <option value="" disabled>Select your role</option>
                   <option value="candidate">Candidate</option>
                   <option value="employer">Employer</option>
                 </select>
+                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.role }}</small>
               </div>
             </div>
 
-            <!-- Role Specific Fields -->
             <component :is="roleComponent" v-bind="roleProps" v-if="currentStep === 1"></component>
 
-            <!-- Display errors -->
-            <div v-if="errors.length">
-              <ul>
-                <li v-for="(error, index) in errors" :key="index" class="text-danger">{{ error }}</li>
-              </ul>
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div v-if="role === 'candidate'">
-                <button type="button" class="btn btn-secondary" @click="prevStep" v-if="currentStep > 0">Previous</button>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </div>
+          <div v-if="role === 'candidate'">
+    <button type="button" class="btn btn-secondary mr-2" @click="prevStep" v-if="currentStep > 0">Previous</button>
+    <div></div>
+    <button type="submit" class="btn btn-primary ml-4">Register</button>
+</div>
 
             <div v-if="role === 'employer'">
                 <EmployerFields v-bind="roleProps"/>
@@ -78,20 +82,25 @@
     </section>
   </div>
 </template>
-
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useUserStore } from "../../store/modules/UserPinia";
 import Navbar from '../../components/Navbar.vue';
 import CandidateFields from '../../components/CandidateFields.vue';
 import EmployerFields from '../../components/EmployerFields.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import router from '../../router';
+
+library.add(faEye, faEyeSlash);
 
 export default {
   components: {
     Navbar,
     CandidateFields,
-    EmployerFields
+    EmployerFields,
+    FontAwesomeIcon
   },
   setup() {
     const userStore = useUserStore();
@@ -112,9 +121,15 @@ export default {
     const companyName = ref('');
     const logo = ref(null);
     const errors = ref([]);
+    const errorMessages = ref({});
     const currentStep = ref(0);
 
     const steps = ['General Info', 'Additional Info'];
+
+    const passwordFieldType = ref('password');
+    const passwordFieldIcon = ref('fa-eye-slash');
+    const confirmPasswordFieldType = ref('password');
+    const confirmPasswordFieldIcon = ref('fa-eye-slash');
 
     const onImageChange = (event) => {
       image.value = event.target.files[0];
@@ -126,6 +141,28 @@ export default {
 
     const onLogoChange = (file) => {
       logo.value = file;
+    };
+
+    const togglePasswordVisibility = () => {
+        const passwordInput = document.getElementById('password');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordFieldIcon.value = 'fa-eye';
+        } else {
+            passwordInput.type = 'password';
+            passwordFieldIcon.value = 'fa-eye-slash';
+        }
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        if (confirmPasswordInput.type === 'password') {
+            confirmPasswordInput.type = 'text';
+            confirmPasswordFieldIcon.value = 'fa-eye';
+        } else {
+            confirmPasswordInput.type = 'password';
+            confirmPasswordFieldIcon.value = 'fa-eye-slash';
+      }
     };
 
     const roleComponent = computed(() => {
@@ -142,13 +179,16 @@ export default {
         github: github.value,
         resumeChange: onResumeChange,
         errors: {
-          education: errors.value.find(err => err.includes('education')),
-          faculty: errors.value.find(err => err.includes('faculty')),
-          resume: errors.value.find(err => err.includes('resume'))
+          education: errorMessages.value.education,
+          faculty: errorMessages.value.faculty,
+          resume: errorMessages.value.resume
         }
       } : role.value === 'employer' ? {
         companyName: companyName.value,
-        logoChange: onLogoChange
+        logoChange: onLogoChange,
+        errors: {
+          companyName: errorMessages.value.companyName,
+        }
       } : {};
     });
 
@@ -166,42 +206,11 @@ export default {
 
     const submitForm = async () => {
       errors.value = [];
+      errorMessages.value = {};
 
-      if (!name.value) {
-        errors.value.push("Name required.");
-      }
-      if (!username.value) {
-        errors.value.push("Username required.");
-      }
-      if (!email.value) {
-        errors.value.push("Email required.");
-      } else if (!validEmail(email.value)) {
-        errors.value.push('Valid email required.');
-      }
-      if (!password.value) {  errors.value.push("Password required.");
-      }
-      if (!confirmPassword.value) {
-        errors.value.push("Password confirmation required.");
-      } else if (password.value !== confirmPassword.value) {
-        errors.value.push("Passwords do not match.");
-      }
-      if (!role.value) {
-        errors.value.push("Role required.");
-      }
+      validateFields();
 
-      if (role.value === 'candidate') {
-        if (!education.value) {
-          errors.value.push("Education required.");
-        }
-        if (!faculty.value) {
-          errors.value.push("Faculty required.");
-        }
-        if (!resume.value) {
-          errors.value.push("Resume required.");
-        }
-      }
-
-      if (errors.value.length === 0) {
+      if (Object.keys(errorMessages.value).length === 0) {
         try {
           const formData = new FormData();
           formData.append('name', name.value);
@@ -220,10 +229,12 @@ export default {
             if (github.value) formData.append('github', github.value);
             if (resume.value) formData.append('resume', resume.value);
             await userStore.candidateRegister(formData);
+
           } else if (role.value === 'employer') {
             formData.append('companyName', companyName.value);
             if (logo.value) formData.append('logo', logo.value);
             await userStore.empRegister(formData);
+            
           }
           router.push('/');
         } catch (error) {
@@ -232,10 +243,37 @@ export default {
       }
     };
 
+    const validateFields = () => {
+      if (!name.value) {
+        errorMessages.value.name = "Name required.";
+      }
+      if (!username.value) {
+        errorMessages.value.username = "Username required.";
+      }
+      if (!email.value) {
+        errorMessages.value.emailRe = "Email required.";
+      } else if (!validEmail(email.value)) {
+        errorMessages.value.email = "Invalid email.";
+      }
+      if (!password.value) {
+        errorMessages.value.password = "Password required.";
+      }
+      if (!confirmPassword.value) {
+        errorMessages.value.confirmPasswordRe = "Password confirmation required.";
+      } else if (password.value !== confirmPassword.value) {
+        errorMessages.value.confirmPassword = "Passwords do not match.";
+      }
+      if (!role.value) {
+        errorMessages.value.role = "Role required.";
+      }
+    };
+
     const validEmail = (email) => {
-      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return re.test(String(email).toLowerCase());
     };
+
+    watch([email, password, confirmPassword], validateFields);
 
     return {
       name,
@@ -255,13 +293,20 @@ export default {
       companyName,
       logo,
       errors,
+      errorMessages,
       currentStep,
       steps,
       roleComponent,
       roleProps,
+      passwordFieldType,
+      passwordFieldIcon,
+      confirmPasswordFieldType,
+      confirmPasswordFieldIcon,
       onImageChange,
       onResumeChange,
       onLogoChange,
+      togglePasswordVisibility,
+      toggleConfirmPasswordVisibility,
       nextStep,
       prevStep,
       submitForm
@@ -285,5 +330,18 @@ export default {
     width: 90%;
     margin: 2px auto 0;
   }
+}
+
+.is-invalid {
+  border-color: red;
+}
+
+.input-group-append {
+  cursor: pointer;
+}
+
+.fa-eye,
+.fa-eye-slash {
+  cursor: pointer;
 }
 </style>

@@ -19,6 +19,7 @@ export const useUserStore = defineStore({
           userData,
           config
         );
+        
         return response;
       } catch (error) {
         console.error("Error updating user:", error);
