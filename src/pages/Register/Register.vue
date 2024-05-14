@@ -85,13 +85,13 @@
             </div>
 
             <div v-if="role === 'employer'">
-             <EmployerFields
+              <EmployerFields
                 :companyName="companyName"
                 :logo="logo"
                 @update:companyName="companyName = $event"
-                @update:logo="onLogoChange"
-                />
-             </div>
+                @update:logo="logo = $event"
+              />
+            </div>
 
              <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
           </form>
@@ -133,12 +133,13 @@ export default {
     const linkedin = ref('');
     const github = ref('');
     const resume = ref(null);
+    const companyName = ref('');
     const logo = ref(null);
     const currentStep = ref(0);
     const errorMessages = ref({});
     const passwordFieldIcon = ref(['fas', 'eye']);
     const confirmPasswordFieldIcon = ref(['fas', 'eye']);
-    const steps = ref(['Step 1', 'Step 2']);
+    const steps = ref(['Data', 'Additional Info']);
     const errors= [];
     const errorMessage= [];
 
@@ -161,16 +162,15 @@ export default {
       } : role.value === 'employer' ? {
         companyName: companyName.value,
         'update:companyName': (value) => companyName.value = value,
-        'update:logo':handleLogoChange
+        'update:logo': (value) => logo.value = value,
+         logo: logo.value 
       } : {};
     });
 
-    const handleResumeChange = (file) => {
-      resume.value = file;
+     const handleResumeChange = (file) => {
+       resume.value = file;
     };
-    const handleLogoChange = (file) => {
-      logo.value = file;
-    };
+    
     const validateFields = () => {
       if (!name.value) {
         errorMessages.value.name = "Name required.";
@@ -246,8 +246,8 @@ export default {
             if (resume.value) formData.append('resume', resume.value);
             await userStore.candidateRegister(formData);
         }else if (role.value === 'employer') {
-            formData.append('companyName', companyName.value);
-            if (logo.value) formData.append('logo', logo.value);
+          formData.append('company_name', companyName.value);
+          if (logo.value) formData.append('logo', logo.value);
             await userStore.empRegister(formData);
         }
     }
@@ -277,6 +277,8 @@ export default {
       linkedin,
       github,
       resume,
+      companyName,
+      logo,
       currentStep,
       errorMessages,
       passwordFieldIcon,

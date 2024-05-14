@@ -14,8 +14,10 @@
 <script>
 export default {
   props: {
-    companyName: String,
-    logo: File
+    companyName: {
+      type: String,
+      required: true
+    }
   },
   emits: ['update:companyName', 'update:logo'],
   methods: {
@@ -23,6 +25,9 @@ export default {
       this.$emit('update:companyName', event.target.value);
     },
     onLogoChange(event) {
+      const file = event.target.files[0];
+      console.log("ddddddddddddddddddddddddddddddddddddddd");
+      console.log(file);
       this.$emit('update:logo', event.target.files[0]);
     }
   }
