@@ -15,7 +15,7 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" :src="this.user.image" alt="">
+                        <img class="img-account-profile rounded-circle mb-2" :src="user.image" alt="">
                         <!-- Profile picture help block-->
                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                         <!-- Profile picture upload button-->
@@ -42,7 +42,6 @@
             }
         },
         beforeMount() {
-            const v$ = useVuelidate();
             this.fetchUser();
         },
         methods: {

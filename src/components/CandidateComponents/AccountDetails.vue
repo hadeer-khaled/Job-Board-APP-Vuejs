@@ -1,56 +1,50 @@
+<script setup>
+    import useVuelidate from '@vuelidate/core';
+    const v = useVuelidate();
+</script>
 <template>
     <div class="card mb-4">
         <div class="card-header">Account Details</div>
         <div class="card-body">
             <form>
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputFirstName">Name</label>
+                    <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your name" v-model="name" @blur="v.name.$touch">
+                    <div v-if="v.name.$error">Name field has an error.</div>
+                </div>
+
                 <!-- Form Group (username)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                    <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" :value="this.user.username">
+                    <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" v-model="user.username">
                 </div>
-
+                
                 <div class="mb-3">
-                    <label class="small mb-1" for="inputFirstName">Name</label>
-                    <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your name" :value="this.user.name">
+                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                    <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" v-model="user.email">
                 </div>
                 <!-- Form Row        -->
                 <div class="row gx-3 mb-3">
-                    <!-- Form Group (organization name)-->
+                    <!-- Form Group (faculty name)-->
                     <div class="col-md-6">
-                        <label class="small mb-1" for="inputOrgName">Organization name</label>
-                        <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
+                        <label class="small mb-1" for="inputFacName">Faculty name</label>
+                        <input class="form-control" id="inputFacName" type="text" placeholder="Enter your faculty name" v-model="user.faculty">
                     </div>
-                    <!-- Form Group (location)-->
+                    <!-- Form Group (education)-->
                     <div class="col-md-6">
-                        <label class="small mb-1" for="inputLocation">Location</label>
-                        <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
+                        <label class="small mb-1" for="inputEducation">Education</label>
+                        <input class="form-control" id="inputEducation" type="text" placeholder="Enter your Education" v-model="user.education">
                     </div>
                 </div>
-
+                <!-- Form Group (city)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputCity">City</label>
-                    <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" :value="this.user.city">
+                    <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" v-model="user.city">
                 </div>
                 <!-- Form Group (email address)-->
-                <div class="mb-3">
-                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                    <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" :value="this.user.email">
-                </div>
-                <!-- Form Row-->
-                <div class="row gx-3 mb-3">
-                    <!-- Form Group (phone number)-->
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputPhone">Phone number</label>
-                        <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567">
-                    </div>
-                    <!-- Form Group (birthday)-->
-                    <div class="col-md-6">
-                        <label class="small mb-1" for="inputBirthday">Birthday</label>
-                        <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
-                    </div>
-                </div>
+                
                 <!-- Save changes button-->
-                <button class="btn btn-primary" type="button">Save changes</button>
+                <button class="btn btn-primary" type="button" @click="submit(v)">Save changes</button>
             </form>
         </div>
     </div>
@@ -59,6 +53,38 @@
 <script>
     export default {
         props: ['user'],
+        
+        data() {
+            return {
+                name : this.user.name,
+                email : this.user.email,
+                city : this.user.city,
+                faculty : this.user.faculty,
+                education : this.user.education,
+                username : this.user.username,
+            }
+        },
+        validations() {
+            return {
+                name : { required: true, minLength: 10 },
+                email : { required: true },
+                username : { required: true },
+            }
+        },
+        methods: {
+            async submit(v) {
+                console.log(v);
+                console.log("name:" + JSON.stringify(v.name));
+                const result = await v.$validate();
 
+                if (!result) {
+                    console.log("ERROR");
+                    return;
+                }
+                else {
+                    console.log("CORRECT")
+                }
+            }
+        }
     }
 </script>
