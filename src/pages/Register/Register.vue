@@ -134,7 +134,6 @@ export default {
     const github = ref('');
     const resume = ref(null);
     const logo = ref(null);
-    const company_name=ref('');
     const currentStep = ref(0);
     const errorMessages = ref({});
     const passwordFieldIcon = ref(['fas', 'eye']);
@@ -160,7 +159,7 @@ export default {
         'onUpdate:resume': handleResumeChange,
         
       } : role.value === 'employer' ? {
-        company_name: companyName.value,
+        companyName: companyName.value,
         'update:companyName': (value) => companyName.value = value,
         'update:logo':handleLogoChange
       } : {};
