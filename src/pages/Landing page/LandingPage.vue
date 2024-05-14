@@ -81,6 +81,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     :end_salary="post.end_salary"
     :post_id="post.id"
     :company="post.employer.company_name"
+    :route="`/posts/${post.id}`"
     />
     
     </div>
@@ -169,7 +170,7 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/posts`
+            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/home/posts`
             axios
             .get(url)
             .then(res => {
