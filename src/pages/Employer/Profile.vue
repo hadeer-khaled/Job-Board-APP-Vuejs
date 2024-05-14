@@ -84,6 +84,7 @@
               :end_salary="job.end_salary"
               :post_id="job.id"
               :company="employer.company_name"
+              :route="`/posts/${job.id}`"
               />
             
      
