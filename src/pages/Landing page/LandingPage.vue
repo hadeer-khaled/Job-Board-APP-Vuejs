@@ -81,6 +81,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     :end_salary="post.end_salary"
     :post_id="post.id"
     :company="post.employer.company_name"
+    :route="`/posts/${post.id}`"
     />
     
     </div>

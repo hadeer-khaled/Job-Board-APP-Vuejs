@@ -11,7 +11,7 @@
 
          <!-- Job Title -->
          <h4 class="">
-            <RouterLink :to="`/posts/${post_id}`" class="text-decoration-none text-primary ">{{ job_title }}</RouterLink>
+            <RouterLink :to="route" class="text-decoration-none text-primary ">{{ job_title }}</RouterLink>
          </h4>
 
          <div class="">
@@ -56,7 +56,8 @@ export default {
       post_id: Number,
       work_type: String,
       company: String,
-      logo: String
+      logo: String,
+      route: String
    },
    computed: {
       formattedDate()

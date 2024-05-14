@@ -40,10 +40,10 @@
          </div>
          </div>
 
-         
+            
          </div>
-         <RouterLink :class="{disabled:passedDeadline}" class="text-decoration-none btn btn-primary" :to="`/application/${post_id}`">Apply</RouterLink>
-      </div>
+         <slot name="apply"></slot>
+         </div>
    </div>
 </div>
 </template>
