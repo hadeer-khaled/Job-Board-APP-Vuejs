@@ -6,22 +6,22 @@
         <div class="card-body p-md-5">
           <h2 class="text-center mb-4">Login</h2>
           <form @submit.prevent="submitForm" novalidate="true">
-            <div class="form-group mb-4" :class="{ 'has-error': errors.includes('Email required.') || errors.includes('Valid email required.') }">
+            <div class="form-group mb-4">
               <label for="userEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail" :placeholder="errors.includes('Email required.') || errors.includes('Valid email required.') ? errors[0] : 'Enter your email'" required>
-              <p v-if=" errors.includes('Valid email required.')" class="text-danger">{{ errors[0] }}</p>
-           </div>
-            <div class="form-group mb-4" :class="{ 'has-error': errors.includes('Password required.') }">
+              <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail" :placeholder="errorMessages.userEmail || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.userEmail }">
+              <small v-if="errorMessages.userEmailRe" class="text-danger">{{ errorMessages.userEmailRe }}</small>
+            </div>
+            <div class="form-group mb-4">
               <label for="password" class="form-label">Password</label>
               <div class="input-group">
-                <input type="password" class="form-control" name="password" id="password5" v-model="password" :placeholder="errors[1] || 'Enter your password'" required >
+                <input type="password" class="form-control" name="password" id="password5" v-model="password" :placeholder="errorMessages.password || 'Enter your password'" required :class="{ 'is-invalid': errorMessages.password }">
                 <button class="btn btn-outline-secondary" type="button" @click="togglePasswordVisibility">
                   <FontAwesomeIcon :icon="passwordFieldIcon"/>
                 </button>
               </div>
-
             </div>
             <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+            <small v-if="errorMessages.general" class="text-danger d-block mt-3 text-center">{{ errorMessages.general }}</small>
           </form>
           <p class="text-center mt-3">Don't have an account? <router-link to="/register">Register</router-link></p>
         </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useUserStore } from "../../store/modules/UserPinia";
 import Navbar from '../../components/Navbar.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -50,37 +50,41 @@ export default {
     const userStore = useUserStore();
     const userEmail = ref('');
     const password = ref('');
-    const errors = ref([]);
+    const errorMessages = ref({});
 
     const passwordFieldType = ref('password');
     const passwordFieldIcon = ref('fa-eye-slash');
 
     const submitForm = async () => {
-      errors.value = [];
+      errorMessages.value = {};
 
       if (!userEmail.value) {
-        errors.value.push("Email required.");
+        errorMessages.value.userEmail = "Email required.";
       } else if (!validEmail(userEmail.value)) {
-        errors.value.push('Valid email required.');
+        errorMessages.value.userEmailRe = "Invalid email";
       }
 
       if (!password.value) {
-        errors.value.push("Password required.");
+        errorMessages.value.password = "Password required.";
       }
 
-      if (errors.value.length === 0) {
+      if (Object.keys(errorMessages.value).length === 0) {
         try {
-            const response = await userStore.login({ 
-              email: userEmail.value,
-              password: password.value
-            });
+          await userStore.login({ 
+            email: userEmail.value,
+            password: password.value
+          });
 
-            if(userStore.user.role==='admin')   router.push('/');
-            else if(userStore.user.role==='candidate')  router.push('/');
-            else if(userStore.user.role==='employer')   router.push('/');
-
+          if (userStore.user.role === 'admin') router.push('/');
+          else if (userStore.user.role === 'candidate') router.push('/');
+          else if (userStore.user.role === 'employer') router.push('/');
         } catch (error) {
-          console.error('Login failed:', error);
+          if (error.response && error.response.status === 401) {
+            errorMessages.value.general = 'Unauthorized: Incorrect email or password.';
+          } else {
+            console.error('Login failed:', error);
+            errorMessages.value.general = 'An error occurred during login. Please try again.';
+          }
         }
       }
     };
@@ -91,14 +95,14 @@ export default {
     };
 
     const togglePasswordVisibility = () => {
-        const passwordInput = document.getElementById('password5');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordFieldIcon.value = 'fa-eye';
-        } else {
-            passwordInput.type = 'password';
-            passwordFieldIcon.value = 'fa-eye-slash';
-        }
+      const passwordInput = document.getElementById('password5');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordFieldIcon.value = 'fa-eye';
+      } else {
+        passwordInput.type = 'password';
+        passwordFieldIcon.value = 'fa-eye-slash';
+      }
     };
 
     return {
@@ -107,7 +111,7 @@ export default {
       validEmail,
       userEmail,
       password,
-      errors,
+      errorMessages,
       passwordFieldIcon,
       togglePasswordVisibility
     };
@@ -132,11 +136,11 @@ export default {
   }
 }
 
-.has-error .form-control {
+.is-invalid {
   border-color: red;
 }
 
-.input-group-append {
-  cursor: pointer;
+.text-danger {
+  color: red;
 }
 </style>

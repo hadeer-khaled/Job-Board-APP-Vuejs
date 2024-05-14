@@ -12,10 +12,18 @@
       <label for="city" class="form-label">City</label>
       <input type="text" class="form-control" id="city" :value="city" @input="$emit('update:city', $event.target.value)">
     </div>
+
     <div class="form-group mb-4">
-      <label for="experienceLevel" class="form-label">Experience Level</label>
-      <input type="text" class="form-control" id="experienceLevel" :value="experienceLevel" @input="$emit('update:experienceLevel', $event.target.value)">
-    </div>
+    <label for="experienceLevel" class="form-label">Experience Level</label>
+    <select class="form-control" id="experienceLevel" :value="experienceLevel" @change="$emit('update:experienceLevel', $event.target.value)">
+      <option value="" disabled>Select experience level</option>
+      <option value="junior">Junior</option>
+      <option value="mid-senior">Mid-Senior</option>
+      <option value="senior">Senior</option>
+      <option value="manager">Manager</option>
+      <option value="team-lead">Team Lead</option>
+    </select>
+  </div>
     <div class="form-group mb-4">
       <label for="linkedin" class="form-label">LinkedIn</label>
       <input type="text" class="form-control" id="linkedin" :value="linkedin" @input="$emit('update:linkedin', $event.target.value)">

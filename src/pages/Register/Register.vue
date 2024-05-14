@@ -36,6 +36,7 @@
                   </button>
                 </div>
               </div>
+               <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.passwordStrong }}</small>
               <div class="form-group mb-4">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                 <div class="input-group">
@@ -170,7 +171,7 @@ export default {
      const handleResumeChange = (file) => {
        resume.value = file;
     };
-    
+
     const validateFields = () => {
       if (!name.value) {
         errorMessages.value.name = "Name required.";
@@ -185,6 +186,8 @@ export default {
       }
       if (!password.value) {
         errorMessages.value.password = "Password required.";
+      }else if (!validatePassword(password.value) ){
+        errorMessages.value.passwordStrong = "Must contain least eight characters, at least one number, lowercase, uppercase letter, and one special character.";
       }
       if (!confirmPassword.value) {
         errorMessages.value.confirmPasswordRe = "Password confirmation required.";
@@ -240,10 +243,11 @@ export default {
             formData.append('education', education.value);
             formData.append('faculty', faculty.value);
             formData.append('city', city.value);
-            formData.append('experienceLevel', experienceLevel.value);
+            formData.append('experience_level', experienceLevel.value);
             formData.append('linkedin', linkedin.value);
             formData.append('github', github.value);
             if (resume.value) formData.append('resume', resume.value);
+            console.log(experienceLevel.value);
             await userStore.candidateRegister(formData);
         }else if (role.value === 'employer') {
           formData.append('company_name', companyName.value);
@@ -252,12 +256,17 @@ export default {
         }
     }
      
-     
+    };
+
+    const validatePassword = (password) => {
+      const re = /^(?=.*[A-Z])(?=.*[a-z])((?=.*\d)|(?=.*\W+)).{8,}$/;
+      return re.test(password);
     };
     const validEmail = (email) => {
       var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return re.test(String(email).toLowerCase());
     };
+
     const prevStep = () => {
       if (currentStep.value > 0) currentStep.value -= 1;
     };
