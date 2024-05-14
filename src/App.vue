@@ -12,5 +12,10 @@ import Post from './pages/Post/Post.vue'
   </div>
 </template>
 
-<style scoped>
+<style>
+  body {
+    background-color: #f5f6f7;
+    font-family: Open Sans,sans-serif;
+}
+
 </style>

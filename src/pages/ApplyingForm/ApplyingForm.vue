@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 import Navbar from '../../components/Navbar.vue';
-// import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 </script>
 
@@ -30,9 +29,10 @@ import { required, email } from '@vuelidate/validators'
       <div class="form-group my-3">
         <label for="cv">Upload CV</label>
         <input type="file" class="form-control" id="cv" @change="handleFileUpload" required>
+        <p class="text-danger " :hidden="err ? true : false">Wrong File Format</p>
       </div>
 
-      <button type="submit" class="btn btn-primary m-auto my-2">Submit</button>
+      <button type="submit" class="btn btn-primary m-auto my-2" :disabled="!err">Submit</button>
     </form>
 
   </div>
@@ -47,6 +47,7 @@ export default {
       userEmail: '',
       phone: '',
       cvFile: null,
+      err: null,
     };
   },
   computed: {
@@ -61,24 +62,32 @@ export default {
   methods: {
     handleFileUpload(event) {
       this.cvFile = event.target.files[0];
+
+      if(/\.pdf$/i.test(this.cvFile.name))
+      {
+        this.err = true;
+      }
+      else
+      {
+        this.err = false;
+      }
     },
     submitForm() {
         const formData = new FormData();
         formData.append('email', this.userEmail);
         formData.append('phone', this.phone);
-        formData.append('cv', this.cvFile.name);
-        
-        console.log(formData.get('email'));
-        console.log(formData.get('phone'));
-        console.log(formData.get('cv'));
+        formData.append('cv', this.cvFile);
+        formData.append('candidateId', 1);
+        formData.append('postId', this.$route.params.id);
 
-        // axios
-        // .post('/api/application', formData)
-        // .then((response) => {
-        // })
-        // .catch((error) => {
-        //   console.error(error);
-        // });
+        axios
+        .post(`${import.meta.env.VITE_BASE_URL}/applications`, formData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   },
   validations:
