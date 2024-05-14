@@ -130,7 +130,7 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/posts`
+            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/home/posts`
             axios
             .get(url)
             .then(res => {
