@@ -73,13 +73,27 @@
                   </router-link>
                 </template>
             </Card> 
+            <PostCard  v-for="job in jobs" :key="job.id" class="mb-2"
+              :job_title="job.job_title"
+              :location="job.location"
+              :application_deadline="job.application_deadline"
+              :created_at="job.created_at"
+              :logo="employer.company_logo "
+              :work_type="job.work_type"
+              :start_salary="job.start_salary"
+              :end_salary="job.end_salary"
+              :post_id="job.id"
+              :company="employer.company_name"
+              />
+            
+     
           </div>
 
           <div v-else>
             <p>Loading...</p>
           </div>
           <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />
-
+                 
        </div>
 
       </div>
@@ -94,6 +108,7 @@ import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Navbar from '../../components/Navbar.vue';
 import MyPaginator from '../../components/MyPaginator.vue';
+import PostCard from '../../components/PostComponents/PostCard.vue';
 import axios from 'axios';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
@@ -111,7 +126,7 @@ var static_employer_id = 1;
 
 export default {
    components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
-   TabView , TabPanel ,MyPaginator},
+   TabView , TabPanel ,MyPaginator , PostCard},
       data:()=>(
         {
           v$:useVuelidate(),
@@ -180,6 +195,7 @@ export default {
             .get(url)
             .then(res => {
                 this.jobs = res.data.jobs.data
+                console.log(" this.jobs " ,  this.jobs )
                 this.paginationLinks = res.data.jobs.links;
                 this.next = res.data.jobs.next_page_url;
                 this.prev = res.data.jobs.prev_page_url;
@@ -210,6 +226,7 @@ export default {
         this.fetchJobs();
       }
 };
+
 </script>
 <style lang="stylus" scoped>
 
