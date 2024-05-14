@@ -46,9 +46,12 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     </div>
     </div>
     <!-- City -->
-    
+    <div>
     <p class="mx-3 fw-bold my-3">City</p>
-    
+    <select class="form-select w-50 mx-3" v-model="searchLocation" name="city">
+    <option v-for="location in locations" :value="location" :key="index">{{ location }}</option>
+    </select>
+    </div>
     <!-- Salary -->
 
     <p class="mx-3 fw-bold my-3">Salary</p>
@@ -72,6 +75,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     :location="post.location"
     :application_deadline="post.application_deadline"
     :created_at="post.created_at"
+    :logo="post.employer.logo"
     :work_type="post.work_type"
     :start_salary="post.start_salary"
     :end_salary="post.end_salary"
@@ -136,9 +140,11 @@ export default {
         work_type: [],
         salary:'',
         titles:[],
+        searchTitle:'',
+        locations:[],
+        searchLocation:'',
         tob_title:'',
         suggestions:[],
-        searchTitle:''
     };
     },
     mounted() 
@@ -152,9 +158,10 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/titles`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
         .then((res)=> {
-            this.titles = res.data;
+            this.titles = res.data.titles;
+            this.locations = res.data.locations;
         })
         
 
@@ -197,7 +204,10 @@ export default {
                 queryParams.job_title = this.searchTitle;
             }
             
-            console.log(queryParams);
+            if (this.searchLocation) {
+                queryParams.location = this.searchLocation;
+                console.log(this.searchLocation);
+            }
             
             let url = import.meta.env.VITE_BASE_URL;
 

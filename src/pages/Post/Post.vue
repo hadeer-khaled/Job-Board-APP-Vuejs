@@ -9,14 +9,15 @@ import axios from 'axios';
 
 <template>
 
-    <div class="container">
+    <div>
+
     <Navbar/>
-    
-    <RouterLink :to="`/employer/posts/${$route.params.id}`">Employer</RouterLink>
+    <div class="container p-5">
 
     <PostHeader 
     :job_title="data.job_title"
     :location="data.location"
+    :company="company"
     :application_deadline="data.application_deadline"
     :created_at="data.created_at"
     :start_salary="data.start_salary"
@@ -41,6 +42,7 @@ import axios from 'axios';
 
     </div>
 
+    </div>
 </template>
 
 <script>
@@ -48,7 +50,8 @@ import axios from 'axios';
 export default {
     data(){
         return {
-        data: []     
+        data: [],
+        company: ''    
     }
         },
     mounted() {
@@ -56,6 +59,7 @@ export default {
         .get(`http://localhost:8000/api/posts/${this.$route.params.id}`)
         .then(response => { 
             this.data = response.data.data;
+            this.company = response.data.data.employer.company_name;
         })
         .catch(err => console.log(err));
     }

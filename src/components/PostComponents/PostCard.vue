@@ -4,7 +4,8 @@
         <div class="position-relative">
             <div>
             <!-- Logo -->
-            <a href="#" target="_blank" rel="noreferrer"><img style="position:absolute;top:0px;right:0px;width:150px" src="https://images.wuzzuf-data.net/files/company_logo/Etisalat-Misr-Egypt-4219-1656427377.png" alt="Jobs and Careers at Etisalat Egypt Egypt" class="css-17095x3"></a>
+            <img v-if="logo" style="position:absolute;top:0px;right:0px;width:100px" :src="logo" alt="Logo" class="border rounded-circle">
+            <img v-if="!logo" style="position:absolute;top:0px;right:0px;width:100px" src="/default.jpg" alt="Logo" class="">
             </div>
       <div class="">
 
@@ -54,7 +55,8 @@ export default {
       end_salary: Number,
       post_id: Number,
       work_type: String,
-      company:String
+      company: String,
+      logo: String
    },
    computed: {
       formattedDate()
