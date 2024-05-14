@@ -27,7 +27,7 @@
          <!-- deadline -->
          <div>
             <p class="position-absolute bottom-0 end-0 text-danger fw-bold" :hidden="passedDeadline"> <span class="fw-bolder text-black-50" >Deadline:</span> {{ formattedDeadline }}</p>
-            <p v-if="passedDeadline" class="position-absolute bottom-0 end-0 text-danger">Closed</p>
+            <p v-if="passedDeadline" class="position-absolute bottom-0 end-0 text-danger fw-bold">Closed</p>
          </div>
 
          <!-- skills -->
@@ -42,7 +42,7 @@
 
             
          </div>
-         <slot name="apply"></slot>
+         <slot v-if="!passedDeadline" name="apply"></slot>
          </div>
    </div>
 </div>
@@ -97,7 +97,7 @@ computed: {
          {
             const currentDate = new Date()
             const date = new Date(this.$props.application_deadline)
-            console.log(currentDate > date)
+            console.log(1111,currentDate > date)
             return currentDate > date ;
          }
       }
