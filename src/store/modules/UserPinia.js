@@ -17,26 +17,25 @@ export const useUserStore = defineStore({
         const response = await axiosInstance.post(
           `/EmpRegister`,
           userData,
-          config
         );
-        
+        console.log("response", response);
         return response;
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.log("error",error);
         throw error;
       }
     },
     async candidateRegister(userData) {
       try {
-      
+        console.log("user data", userData);
         const response = await axiosInstance.post(
           `/CandidateRegister`,
           userData,
-          config
         );
+        console.log("response", response);
         return response;
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.log("error",error);
         throw error;
       }
     },

@@ -8,18 +8,18 @@
           <form @submit.prevent="submitForm" novalidate="true">
             <div class="form-group mb-4" :class="{ 'has-error': errors.includes('Email required.') || errors.includes('Valid email required.') }">
               <label for="userEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail">
-              <p v-if="errors.includes('Email required.') || errors.includes('Valid email required.')" class="text-danger">{{ errors[0] }}</p>
-            </div>
+              <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail" :placeholder="errors.includes('Email required.') || errors.includes('Valid email required.') ? errors[0] : 'Enter your email'" required>
+              <p v-if=" errors.includes('Valid email required.')" class="text-danger">{{ errors[0] }}</p>
+           </div>
             <div class="form-group mb-4" :class="{ 'has-error': errors.includes('Password required.') }">
               <label for="password" class="form-label">Password</label>
               <div class="input-group">
-                <input type="password" class="form-control" name="password" id="password5" v-model="password">
+                <input type="password" class="form-control" name="password" id="password5" v-model="password" :placeholder="errors[1] || 'Enter your password'" required >
                 <button class="btn btn-outline-secondary" type="button" @click="togglePasswordVisibility">
                   <FontAwesomeIcon :icon="passwordFieldIcon"/>
                 </button>
               </div>
-              <p v-if="errors.includes('Password required.')" class="text-danger">{{ errors[1] }}</p>
+
             </div>
             <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
           </form>
@@ -53,9 +53,7 @@ export default {
     const errors = ref([]);
 
     const passwordFieldType = ref('password');
-    const passwordFieldIcon = computed(() => {
-      return passwordFieldType.value === 'password' ? 'fa-eye-slash' : 'fa-eye';
-    });
+    const passwordFieldIcon = ref('fa-eye-slash');
 
     const submitForm = async () => {
       errors.value = [];

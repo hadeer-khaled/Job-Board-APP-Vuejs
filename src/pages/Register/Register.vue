@@ -6,7 +6,6 @@
         <div class="card-body p-md-5">
           <h2 class="text-center mb-4">Register</h2>
           <form @submit.prevent="submitForm" novalidate="true">
-
             <div v-if="role === 'candidate'" class="mb-4">
               <ul class="nav nav-pills">
                 <li class="nav-item" v-for="(step, index) in steps" :key="index">
@@ -14,7 +13,6 @@
                 </li>
               </ul>
             </div>
-
             <div v-if="currentStep === 0">
               <div class="form-group mb-4">
                 <label for="name" class="form-label">Name</label>
@@ -26,7 +24,7 @@
               </div>
               <div class="form-group mb-4">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe  || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
+                <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
                 <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
               </div>
               <div class="form-group mb-4">
@@ -63,39 +61,56 @@
               </div>
             </div>
 
-            <component :is="roleComponent" v-bind="roleProps" v-if="currentStep === 1"></component>
-
-          <div v-if="role === 'candidate'">
-    <button type="button" class="btn btn-secondary mr-2" @click="prevStep" v-if="currentStep > 0">Previous</button>
-    <div></div>
-    <button type="submit" class="btn btn-primary ml-4">Register</button>
-</div>
-
-            <div v-if="role === 'employer'">
-                <EmployerFields v-bind="roleProps"/>
+            <div v-if="currentStep === 1">
+              <CandidateFields
+                :education="education"
+                :faculty="faculty"
+                :city="city"
+                :experienceLevel="experienceLevel"
+                :linkedin="linkedin"
+                :github="github"
+                @update:education="education = $event"
+                @update:faculty="faculty = $event"
+                @update:city="city = $event"
+                @update:experienceLevel="experienceLevel = $event"
+                @update:linkedin="linkedin = $event"
+                @update:github="github = $event"
+                @update:resume="handleResumeChange"
+              />
             </div>
 
-            <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
+            <div v-if="role === 'candidate'">
+              <button type="button" class="btn btn-secondary mr-2" @click="prevStep" v-if="currentStep > 0">Previous</button>
+              <button type="submit" class="btn btn-primary ml-4">Register</button>
+            </div>
+
+            <div v-if="role === 'employer'">
+             <EmployerFields
+                :companyName="companyName"
+                :logo="logo"
+                @update:companyName="companyName = $event"
+                @update:logo="onLogoChange"
+                />
+             </div>
+
+             <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
           </form>
         </div>
       </div>
     </section>
   </div>
 </template>
+
 <script>
-import { ref, computed, watch } from 'vue';
-import { useUserStore } from "../../store/modules/UserPinia";
+import { ref, computed } from 'vue';
+import { useUserStore } from '../../store/modules/UserPinia'
 import Navbar from '../../components/Navbar.vue';
 import CandidateFields from '../../components/CandidateFields.vue';
 import EmployerFields from '../../components/EmployerFields.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import router from '../../router';
-
-library.add(faEye, faEyeSlash);
-
+import router from '../../router'; 
 export default {
+  name: 'Register',
   components: {
     Navbar,
     CandidateFields,
@@ -111,63 +126,22 @@ export default {
     const confirmPassword = ref('');
     const image = ref(null);
     const role = ref('');
-    const resume = ref(null);
     const education = ref('');
     const faculty = ref('');
     const city = ref('');
     const experienceLevel = ref('');
     const linkedin = ref('');
     const github = ref('');
-    const companyName = ref('');
+    const resume = ref(null);
     const logo = ref(null);
-    const errors = ref([]);
-    const errorMessages = ref({});
+    const company_name=ref('');
     const currentStep = ref(0);
-
-    const steps = ['General Info', 'Additional Info'];
-
-    const passwordFieldType = ref('password');
-    const passwordFieldIcon = ref('fa-eye-slash');
-    const confirmPasswordFieldType = ref('password');
-    const confirmPasswordFieldIcon = ref('fa-eye-slash');
-
-    const onImageChange = (event) => {
-      image.value = event.target.files[0];
-    };
-
-    const onResumeChange = (file) => {
-      resume.value = file;
-    };
-
-    const onLogoChange = (file) => {
-      logo.value = file;
-    };
-
-    const togglePasswordVisibility = () => {
-        const passwordInput = document.getElementById('password');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordFieldIcon.value = 'fa-eye';
-        } else {
-            passwordInput.type = 'password';
-            passwordFieldIcon.value = 'fa-eye-slash';
-        }
-    };
-
-    const toggleConfirmPasswordVisibility = () => {
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        if (confirmPasswordInput.type === 'password') {
-            confirmPasswordInput.type = 'text';
-            confirmPasswordFieldIcon.value = 'fa-eye';
-        } else {
-            confirmPasswordInput.type = 'password';
-            confirmPasswordFieldIcon.value = 'fa-eye-slash';
-      }
-    };
-
-    const roleComponent = computed(() => {
-      return role.value === 'candidate' ? CandidateFields : role.value === 'employer' ? EmployerFields : null;
-    });
+    const errorMessages = ref({});
+    const passwordFieldIcon = ref(['fas', 'eye']);
+    const confirmPasswordFieldIcon = ref(['fas', 'eye']);
+    const steps = ref(['Step 1', 'Step 2']);
+    const errors= [];
+    const errorMessage= [];
 
     const roleProps = computed(() => {
       return role.value === 'candidate' ? {
@@ -177,72 +151,27 @@ export default {
         experienceLevel: experienceLevel.value,
         linkedin: linkedin.value,
         github: github.value,
-        resumeChange: onResumeChange,
-        errors: {
-          education: errorMessages.value.education,
-          faculty: errorMessages.value.faculty,
-          resume: errorMessages.value.resume
-        }
+        'onUpdate:education': (value) => education.value = value,
+        'onUpdate:faculty': (value) => faculty.value = value,
+        'onUpdate:city': (value) => city.value = value,
+        'onUpdate:experienceLevel': (value) => experienceLevel.value = value,
+        'onUpdate:linkedin': (value) => linkedin.value = value,
+        'onUpdate:github': (value) => github.value = value,
+        'onUpdate:resume': handleResumeChange,
+        
       } : role.value === 'employer' ? {
-        companyName: companyName.value,
-        logoChange: onLogoChange,
-        errors: {
-          companyName: errorMessages.value.companyName,
-        }
+        company_name: companyName.value,
+        'update:companyName': (value) => companyName.value = value,
+        'update:logo':handleLogoChange
       } : {};
     });
 
-    const nextStep = () => {
-      if (currentStep.value < steps.length - 1) {
-        currentStep.value++;
-      }
+    const handleResumeChange = (file) => {
+      resume.value = file;
     };
-
-    const prevStep = () => {
-      if (currentStep.value > 0) {
-        currentStep.value--;
-      }
+    const handleLogoChange = (file) => {
+      logo.value = file;
     };
-
-    const submitForm = async () => {
-      errors.value = [];
-      errorMessages.value = {};
-
-      validateFields();
-
-      if (Object.keys(errorMessages.value).length === 0) {
-        try {
-          const formData = new FormData();
-          formData.append('name', name.value);
-          formData.append('username', username.value);
-          formData.append('email', email.value);
-          formData.append('password', password.value);
-          formData.append('role', role.value);
-          if (image.value) formData.append('image', image.value);
-
-          if (role.value === 'candidate') {
-            formData.append('education', education.value);
-            formData.append('faculty', faculty.value);
-            formData.append('city', city.value);
-            formData.append('experienceLevel', experienceLevel.value);
-            if (linkedin.value) formData.append('linkedin', linkedin.value);
-            if (github.value) formData.append('github', github.value);
-            if (resume.value) formData.append('resume', resume.value);
-            await userStore.candidateRegister(formData);
-
-          } else if (role.value === 'employer') {
-            formData.append('companyName', companyName.value);
-            if (logo.value) formData.append('logo', logo.value);
-            await userStore.empRegister(formData);
-            
-          }
-          router.push('/');
-        } catch (error) {
-          console.error('Registration failed:', error);
-        }
-      }
-    };
-
     const validateFields = () => {
       if (!name.value) {
         errorMessages.value.name = "Name required.";
@@ -266,14 +195,73 @@ export default {
       if (!role.value) {
         errorMessages.value.role = "Role required.";
       }
+     };
+    const togglePasswordVisibility = () => {
+      const passwordField = document.getElementById('password');
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        passwordFieldIcon.value = ['fas', 'eye-slash'];
+      } else {
+        passwordField.type = 'password';
+        passwordFieldIcon.value = ['fas', 'eye'];
+      }
     };
 
+    const toggleConfirmPasswordVisibility = () => {
+      const confirmPasswordField = document.getElementById('confirmPassword');
+      if (confirmPasswordField.type === 'password') {
+        confirmPasswordField.type = 'text';
+        confirmPasswordFieldIcon.value = ['fas', 'eye-slash'];
+      } else {
+        confirmPasswordField.type = 'password';
+        confirmPasswordFieldIcon.value = ['fas', 'eye'];
+      }
+    };
+
+    const onImageChange = (event) => {
+      image.value = event.target.files[0];
+    };
+
+    const submitForm = async () => {
+    errors.value = [];
+    errorMessages.value = {};
+
+    validateFields();
+
+    if (Object.keys(errorMessages.value).length === 0) {
+        const formData = new FormData();
+        formData.append('name', name.value);
+        formData.append('username', username.value);
+        formData.append('email', email.value);
+        formData.append('password', password.value);
+        formData.append('confirmPassword', confirmPassword.value);
+        formData.append('role', role.value);
+        if (image.value) formData.append('image', image.value);
+        if (role.value === 'candidate') {
+            formData.append('education', education.value);
+            formData.append('faculty', faculty.value);
+            formData.append('city', city.value);
+            formData.append('experienceLevel', experienceLevel.value);
+            formData.append('linkedin', linkedin.value);
+            formData.append('github', github.value);
+            if (resume.value) formData.append('resume', resume.value);
+            await userStore.candidateRegister(formData);
+        }else if (role.value === 'employer') {
+            formData.append('companyName', companyName.value);
+            if (logo.value) formData.append('logo', logo.value);
+            await userStore.empRegister(formData);
+        }
+    }
+     
+     
+    };
     const validEmail = (email) => {
       var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return re.test(String(email).toLowerCase());
     };
-
-    watch([email, password, confirmPassword], validateFields);
+    const prevStep = () => {
+      if (currentStep.value > 0) currentStep.value -= 1;
+    };
 
     return {
       name,
@@ -283,33 +271,25 @@ export default {
       confirmPassword,
       image,
       role,
-      resume,
       education,
       faculty,
       city,
       experienceLevel,
       linkedin,
       github,
-      companyName,
-      logo,
-      errors,
-      errorMessages,
+      resume,
       currentStep,
-      steps,
-      roleComponent,
-      roleProps,
-      passwordFieldType,
+      errorMessages,
       passwordFieldIcon,
-      confirmPasswordFieldType,
       confirmPasswordFieldIcon,
-      onImageChange,
-      onResumeChange,
-      onLogoChange,
+      steps,
+      roleProps,
+      handleResumeChange,
       togglePasswordVisibility,
       toggleConfirmPasswordVisibility,
-      nextStep,
+      submitForm,
       prevStep,
-      submitForm
+      onImageChange
     };
   }
 };
@@ -317,31 +297,10 @@ export default {
 
 <style scoped>
 .register-section {
-  background-color: #eee;
+  background-color: #f8f9fa;
 }
-
 .register-card {
-  border-radius: 25px;
-  width: 800px;
-}
-
-@media (max-width: 576px) {
-  .register-card {
-    width: 90%;
-    margin: 2px auto 0;
-  }
-}
-
-.is-invalid {
-  border-color: red;
-}
-
-.input-group-append {
-  cursor: pointer;
-}
-
-.fa-eye,
-.fa-eye-slash {
-  cursor: pointer;
+  width: 100%;
+  max-width: 800px;
 }
 </style>
