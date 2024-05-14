@@ -11,21 +11,25 @@ export const useUserStore = defineStore({
 
   }),
   actions: {
-    async register(userData) {
+    async empRegister(userData) {
       try {
-        //! if admin try add admin it must send token in register
-        const token = localStorage.getItem("token");
-        let config = "";
-        if (token) {
-          config = {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          };
-        }
-
+      
         const response = await axiosInstance.post(
-          `/register`,
+          `/EmpRegister`,
+          userData,
+          config
+        );
+        return response;
+      } catch (error) {
+        console.error("Error updating user:", error);
+        throw error;
+      }
+    },
+    async candidateRegister(userData) {
+      try {
+      
+        const response = await axiosInstance.post(
+          `/CandidateRegister`,
           userData,
           config
         );
