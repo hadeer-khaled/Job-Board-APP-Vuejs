@@ -59,20 +59,7 @@
       </div>
 
       <div id="jobs" class="col-8" >
-          <div v-if="jobs" >
-            <Card v-for="job in jobs" :key="job.id" class="mb-2">
-                <template #title>{{ job.job_title }}</template>
-                <template #content>
-                  <!-- <p>ID: {{ job.id }}</p> -->
-                  <p>job_title: {{ job.job_title }}</p>
-                  <p>location: {{ job.location }}</p>
-                  <p>qualifications: {{ job.qualifications }}</p>
-                  <p>responsibilities: {{ job.responsibilities }}</p>
-                  <router-link :to="'/job-applications/' + job.id">
-                    <Button label="View Job Applications" />
-                  </router-link>
-                </template>
-            </Card> 
+          <div v-if="jobs" > 
             <PostCard  v-for="job in jobs" :key="job.id" class="mb-2"
               :job_title="job.job_title"
               :location="job.location"
