@@ -3,7 +3,9 @@ import LandingPage from './pages/Landing page/LandingPage.vue';
 import Post from './pages/Post/Post.vue';
 import ApplyingForm from './pages/ApplyingForm/ApplyingForm.vue';
 import Login from './pages/Login/Login.vue';
-import Register from './pages/Register/Register.vue';import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
+import Register from './pages/Register/Register.vue';
+import EmployerPost from './pages/Post/EmployerPost.vue';
+import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -11,7 +13,8 @@ const routes = [
   { path: '/application/:id', component: ApplyingForm },
   { path: '/candidate/profile', component: CandidateProfile},
   { path: '/login', component: Login } ,
-  { path: '/register', component: Register } 
+  { path: '/register', component: Register },
+  { path: '/employer/posts/:id' , component: EmployerPost },
 ];
 
 const router = createRouter({
