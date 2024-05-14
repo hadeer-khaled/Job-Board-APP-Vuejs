@@ -3,6 +3,7 @@
 import PostHeader from '../../components/PostComponents/PostHeader.vue';
 import PostDescription from '../../components/PostComponents/PostDescription.vue';
 import Navbar from '../../components/Navbar.vue';
+import EmployerPost from '../../pages/Post/EmployerPost.vue';
 import axios from 'axios';
 </script>
 
@@ -10,6 +11,8 @@ import axios from 'axios';
 
     <div class="container">
     <Navbar/>
+    
+    <RouterLink :to="`/employer/posts/${$route.params.id}`">Employer</RouterLink>
 
     <PostHeader 
     :job_title="data.job_title"
@@ -22,7 +25,7 @@ import axios from 'axios';
     :work_type="data.work_type"
     :skills="data.skills"
     />
-    
+
     <PostDescription 
     title="Job Description"
     :content="data.description"/>
@@ -34,6 +37,7 @@ import axios from 'axios';
     <PostDescription
     title="Qualifications"
     :content="data.qualifications"/>
+
 
     </div>
 

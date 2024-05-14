@@ -1,8 +1,12 @@
 <script setup>
+import axios from 'axios';
+
+import AutoComplete from 'primevue/autocomplete';
+
 import { RouterLink } from 'vue-router';
 import Navbar from '../../components/Navbar.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
-import axios from 'axios';
+
 </script>
 
 <template>
@@ -10,22 +14,20 @@ import axios from 'axios';
     <!-- Navbar -->
     <Navbar />
 
-    
-            <div class="w-25 m-auto d-flex align-baseline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit">Search</button>
+            <div class="w-25 m-auto d-flex align-baseline my-2">
+                <AutoComplete v-model="searchTitle" :suggestions="suggestions" @complete="search"></AutoComplete>
+                <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit" @click="getSearchPosts">Search</button>
             </div>
     <div class="row">
     
-    <div class="col-3 text-center">
+    <div class="col-3 px-5">
     
+    <div class="bg-white mt-3  border border-2 py-3">
     <!-- Title -->
-    <h3 class="m-auto">
-    Filters   
-    </h3>
+    <h5 class="mx-3 fw-bold">Filters</h5>
 
     <!-- Work Place -->
-    <p class="fw-bold my-3">Work Place</p>
+    <p class="mx-3 fw-bold my-3">Work Place</p>
     <div class="px-5">
 
     <div class="form-check-reverse mx-5">
@@ -45,16 +47,20 @@ import axios from 'axios';
     </div>
     <!-- City -->
     
-    <p class="fw-bold my-3">City</p>
+    <p class="mx-3 fw-bold my-3">City</p>
     
     <!-- Salary -->
 
-    <p class="fw-bold my-3">Salary</p>
+    <p class="mx-3 fw-bold my-3">Salary</p>
 
-    <input type="text" class="form-control m-auto w-50" placeholder="salary" name="salary" v-model="salary"/>
+    <input type="number" class="form-control mx-3 w-50" placeholder="salary" name="salary" v-model="salary"/>
 
-    <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
-    <button class="btn btn-danger my-5 mx-2 " @click="fetchPosts()">Reset</button>
+    <div class="d-flex align-baseline justify-content-around">
+        <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
+        <button class="btn btn-danger my-5 mx-3 " @click="fetchPosts()">Reset</button>
+    </div>
+
+    </div>
     </div>
 
     <div class="col-9">
@@ -106,7 +112,19 @@ import axios from 'axios';
     </div>
 </template>
 
+<style>
+post:first-child {
+    margin-top: 0px o !important ;
+}
+</style>
+
+
 <script>
+import { ref } from 'vue';
+
+const filteredTitles = ref([]);
+
+
 export default {
     data() {
     return {
@@ -117,6 +135,10 @@ export default {
         prev: null,
         work_type: [],
         salary:'',
+        titles:[],
+        tob_title:'',
+        suggestions:[],
+        searchTitle:''
     };
     },
     mounted() 
@@ -129,6 +151,12 @@ export default {
         {
             this.applyFilters();
         }
+
+        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/titles`)
+        .then((res)=> {
+            this.titles = res.data;
+        })
+        
 
     },
     methods: {
@@ -164,6 +192,10 @@ export default {
             if (this.salary !== '') {
                 queryParams.salary = this.salary;
             }
+
+            if (this.searchTitle) {
+                queryParams.job_title = this.searchTitle;
+            }
             
             console.log(queryParams);
             
@@ -177,7 +209,18 @@ export default {
             .catch(err => {
                 console.log(err);
             })
+        },
+        search(event) {
+        const query = event.query.toLowerCase();
+            this.suggestions = this.titles.filter((title) =>
+                title.toLowerCase().startsWith(query)
+            );
+        },
+        getSearchPosts() {
+            this.applyFilters();
         }
     }
 };
+
+
 </script>
