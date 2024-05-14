@@ -9,7 +9,6 @@
         </div>
             <RouterLink to="/" class="text-decoration-none mx-3 my-auto ">Home</RouterLink>
             <RouterLink to="/employer/profile" class="text-decoration-none mx-3 my-auto ">Employer Profile</RouterLink>
-            <RouterLink to="/job-applications/7" class="text-decoration-none mx-3 my-auto ">Applications</RouterLink>
 
 
     </div>

@@ -11,7 +11,9 @@
         <p>email: {{ app.email }}</p>
         <p>phone: {{ app.phone }}</p>
         <div>
-          <Button>See Resume</Button>
+          <Button>         
+            <a style="color: white; text-decoration: none;" href="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715534582/esh9vhuferm5mmeawows.pdf" target="_blank" > See Resume</a>
+        </Button>
           <Button @click="acceptApplication(app.id)">Accept</Button>
           <Button @click="rejectApplication(app.id)">Reject</Button>
         </div>
@@ -55,11 +57,12 @@
 import axios from 'axios';
 import Navbar from '../../components/Navbar.vue';
 import Button from 'primevue/button';
-
 import Paginator from 'primevue/paginator';
+
 
 export default {
     data:()=>({  
+       static_job_id:null,
         applications:null,
         paginationLinks: {},
         next: null,
@@ -68,15 +71,16 @@ export default {
     }),
     methods: {
    
-      acceptApplication(appId) {
-      axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
+      acceptApplication(appId)
+       {axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
         .then((response) => {
            console.log('Response:', response.data.message);
         })
         .catch(error => {
           console.error('Error rejecting application:', error.response.data.message);
-        });
-    },
+        });},
+      
+      
       rejectApplication(appId) {
       axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'rejected' })
         .then((response) => {
@@ -87,7 +91,7 @@ export default {
         });
     },
     fetchApplications(pageUrl = null) {
-      const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/job-applications/7`
+      const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/job-applications/${this.static_job_id}`
       axios.get(url)
         .then(response => {
           this.applications = response.data.applications.data;
@@ -111,6 +115,7 @@ export default {
     },
     components:{ Navbar,Button,Paginator },
    mounted() {
+    this.static_job_id = this.$route.params.jobId
     this.fetchApplications();
   }
 };
