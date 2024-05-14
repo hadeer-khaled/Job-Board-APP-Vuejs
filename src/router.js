@@ -6,15 +6,17 @@ import Login from './pages/Login/Login.vue';
 import Register from './pages/Register/Register.vue';
 import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
+import Navbar from './components/Navbar.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/application/:id', component: ApplyingForm },
-  { path: '/candidate/profile', component: CandidateProfile},
   { path: '/login', component: Login } ,
   { path: '/register', component: Register },
   { path: '/employer/posts/:id' , component: EmployerPost },
+  // Candidates
+  { path: '/candidate/profile', component: CandidateProfile },
 ];
 
 const router = createRouter({
