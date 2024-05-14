@@ -1,8 +1,12 @@
 <script setup>
+import axios from 'axios';
+
+import AutoComplete from 'primevue/autocomplete';
+
 import { RouterLink } from 'vue-router';
 import Navbar from '../../components/Navbar.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
-import axios from 'axios';
+
 </script>
 
 <template>
@@ -10,19 +14,20 @@ import axios from 'axios';
     <!-- Navbar -->
     <Navbar />
 
-    
-
+            <div class="w-25 m-auto d-flex align-baseline my-2">
+                <AutoComplete v-model="searchTitle" :suggestions="suggestions" @complete="search"></AutoComplete>
+                <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit" @click="getSearchPosts">Search</button>
+            </div>
     <div class="row">
     
-    <div class="col-3 text-center ">
+    <div class="col-3 px-5">
     
+    <div class="bg-white mt-3  border border-2 py-3">
     <!-- Title -->
-    <h3 class="m-auto">
-    Filters   
-    </h3>
+    <h5 class="mx-3 fw-bold">Filters</h5>
 
     <!-- Work Place -->
-    <p class="fw-bold my-3">Work Place</p>
+    <p class="mx-3 fw-bold my-3">Work Place</p>
     <div class="px-5">
 
     <div class="form-check-reverse mx-5">
@@ -41,16 +46,24 @@ import axios from 'axios';
     </div>
     </div>
     <!-- City -->
-    
-    <p class="fw-bold my-3">City</p>
-    
+    <div>
+    <p class="mx-3 fw-bold my-3">City</p>
+    <select class="form-select w-50 mx-3" v-model="searchLocation" name="city">
+    <option v-for="location in locations" :value="location" :key="index">{{ location }}</option>
+    </select>
+    </div>
     <!-- Salary -->
 
-    <p class="fw-bold my-3">Salary</p>
+    <p class="mx-3 fw-bold my-3">Salary</p>
 
-    <input type="text" class="form-control m-auto w-50" placeholder="salary" name="salary" v-model="salary"/>
+    <input type="number" class="form-control mx-3 w-50" placeholder="salary" name="salary" v-model="salary"/>
 
-    <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
+    <div class="d-flex align-baseline justify-content-around">
+        <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
+        <button class="btn btn-danger my-5 mx-3 " @click="fetchPosts()">Reset</button>
+    </div>
+
+    </div>
     </div>
 
     <div class="col-9">
@@ -62,11 +75,13 @@ import axios from 'axios';
     :location="post.location"
     :application_deadline="post.application_deadline"
     :created_at="post.created_at"
+    :logo="post.employer.logo"
     :work_type="post.work_type"
     :start_salary="post.start_salary"
     :end_salary="post.end_salary"
     :post_id="post.id"
     :company="post.employer.company_name"
+    :route="`/posts/${post.id}`"
     />
     
     </div>
@@ -102,7 +117,19 @@ import axios from 'axios';
     </div>
 </template>
 
+<style>
+post:first-child {
+    margin-top: 0px o !important ;
+}
+</style>
+
+
 <script>
+import { ref } from 'vue';
+
+const filteredTitles = ref([]);
+
+
 export default {
     data() {
     return {
@@ -113,6 +140,12 @@ export default {
         prev: null,
         work_type: [],
         salary:'',
+        titles:[],
+        searchTitle:'',
+        locations:[],
+        searchLocation:'',
+        tob_title:'',
+        suggestions:[],
     };
     },
     mounted() 
@@ -126,11 +159,18 @@ export default {
             this.applyFilters();
         }
 
+        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
+        .then((res)=> {
+            this.titles = res.data.titles;
+            this.locations = res.data.locations;
+        })
+        
+
     },
     methods: {
         fetchPosts(pageUrl = null)
         {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/posts`
+            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/home/posts`
             axios
             .get(url)
             .then(res => {
@@ -160,8 +200,15 @@ export default {
             if (this.salary !== '') {
                 queryParams.salary = this.salary;
             }
+
+            if (this.searchTitle) {
+                queryParams.job_title = this.searchTitle;
+            }
             
-            console.log(queryParams);
+            if (this.searchLocation) {
+                queryParams.location = this.searchLocation;
+                console.log(this.searchLocation);
+            }
             
             let url = import.meta.env.VITE_BASE_URL;
 
@@ -173,7 +220,18 @@ export default {
             .catch(err => {
                 console.log(err);
             })
+        },
+        search(event) {
+        const query = event.query.toLowerCase();
+            this.suggestions = this.titles.filter((title) =>
+                title.toLowerCase().startsWith(query)
+            );
+        },
+        getSearchPosts() {
+            this.applyFilters();
         }
     }
 };
+
+
 </script>
