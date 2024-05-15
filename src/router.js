@@ -12,6 +12,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/employer/posts/:id', component: EmployerPost },
+  { path: '/admin', component: Admin }
 ];
 
 const router = createRouter({
