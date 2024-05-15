@@ -15,19 +15,6 @@
             {{ v$.jobTitle.$errors[0].$message }}
           </InlineMessage>
         </div>
-
-        <!-- Skills -->
-        <div>
-          <label for="skills">Skills:</label>
-          <select id="skills" @change="handleSelectionChange" required>
-            <option disabled selected value="">Select skill</option>
-            <option v-for="skill in allSkills" :key="skill.id" :value="skill.id">{{ skill.skill }}</option>
-          </select>
-
-          <InlineMessage v-if = "v$.selectedSkills.$error">
-                {{v$.selectedSkills.$errors[0].$message}}
-            </InlineMessage>
-       </div>
            
         <div>
           <label>Selected Skills:</label>
@@ -98,16 +85,18 @@
         <!-- Application Deadline -->
         <div>
           <label for="applicationDeadline">Application Deadline:</label>
-          <input type="date" id="applicationDeadline" v-model="applicationDeadline" @blur="dateFieldTouched = true">
+          <input type="date" id="applicationDeadline" v-model="applicationDeadline">
 
-          <InlineMessage v-if="dateFieldTouched && v$.applicationDeadline.$error">
+          <InlineMessage v-if=" v$.applicationDeadline.$error">
             Application deadline must be in the future
           </InlineMessage>
         </div>
 
         <label for="skills">Skills:</label>
             <AutoComplete v-model="autocompleteValue" multiple  :suggestions="skillSuggestions" @complete="searchSkills" />
-
+            <InlineMessage v-if = "v$.selectedSkills.$error">
+                {{v$.selectedSkills.$errors[0].$message}}
+            </InlineMessage>
 
       
         
@@ -136,8 +125,7 @@ export default {
 
   data() {
     return {
-      autocompleteValue:'',
-      skillSuggestions:[],
+
       v$:useVuelidate(),
       dateFieldTouched: false,
       jobTitle: '',
@@ -153,6 +141,8 @@ export default {
       selectedSkills: [],
       selectedSkillNames: [],
       testSelectedSkills: [],
+      autocompleteValue:'',
+      skillSuggestions:[],
     };
   },
    validations(){
@@ -198,11 +188,7 @@ export default {
     handleSelectionChange(event) {
       this.selectedSkills.push(event.target.value);
     },  
-    validateDeadline() {
-    if (this.applicationDeadline) {
-      this.$v.applicationDeadline.$touch();
-    }
-  },
+ 
 
     searchSkills (event) {
       const query = event.query.toLowerCase();
@@ -212,7 +198,22 @@ export default {
 
     },
     submitJobPost() {
-      const postData = {
+     
+      
+      console.log("this.allSkills",this.allSkills)
+      this.selectedSkills = [];
+      Array.from(this.autocompleteValue).forEach(skill => {
+      // Search for the skill in allSkills array
+      let matchedSkill = this.allSkills.find(item => item.skill === skill);
+
+      // If a matching skill is found, extract its id and store it
+      if (matchedSkill) {
+        this.selectedSkills.push(matchedSkill.id);
+      }
+      });
+       console.log("this.selectedSkills",this.selectedSkills)
+      console.log("autocompleteValue",this.autocompleteValue)
+       const postData = {
         job_title: this.jobTitle,
         skills: Array.from(this.selectedSkills),
         description: this.description,
@@ -224,23 +225,7 @@ export default {
         work_type: this.workType,
         application_deadline: this.applicationDeadline,
       };
-      console.log("postData",postData)
-      console.log("this.allSkills",this.allSkills)
-      this.testSelectedSkills = [];
-      Array.from(this.autocompleteValue).forEach(skill => {
-      // Search for the skill in allSkills array
-      let matchedSkill = this.allSkills.find(item => item.skill === skill);
-
-      // If a matching skill is found, extract its id and store it
-      if (matchedSkill) {
-        this.testSelectedSkills.push(matchedSkill.id);
-      }
-      });
-       console.log("this.testSelectedSkills",this.testSelectedSkills)
-      console.log("autocompleteValue",this.autocompleteValue)
-      if (this.dateFieldTouched) {
-          this.$v.applicationDeadline.$touch();
-        }
+   console.log("postData",postData)
       this.v$.$validate();
       if(!this.v$.$error){
       axios.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
