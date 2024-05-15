@@ -5,7 +5,6 @@ import AutoComplete from 'primevue/autocomplete';
 
 import { RouterLink } from 'vue-router';
 import Navbar from '../../components/Navbar.vue';
-import Pinia from '../../components/Pinia.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
 
 </script>
