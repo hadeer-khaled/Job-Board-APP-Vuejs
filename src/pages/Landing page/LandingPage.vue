@@ -28,7 +28,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
 
     <!-- Work Place -->
     <p class="mx-3 fw-bold my-3">Work Place</p>
-    <div class="px-5">
+    <div class="px-5 py-2">
 
     <div class="form-check-reverse mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
@@ -37,13 +37,14 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
 
     <div class="form-check-reverse mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
-        <label class="form-check-label" for="flexCheckDefault">On-site</label>
+        <label class="form-check-label" for="flexCheckDefault">On-Site</label>
     </div>    
 
     <div class="form-check-reverse mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
         <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
     </div>
+
     </div>
     <!-- City -->
     <div>
@@ -195,6 +196,17 @@ export default {
         {
             const queryParams = {};
             
+            if (this.salary <= 0)
+            {
+                let instance = this.$toast.open({
+                    message:"Cannot search with zero or negative",
+                    position:'bottom-right',
+                    type:'error',
+                    duration:3000
+                });
+                return
+            }
+
             if (this.work_type && this.work_type.length > 0) {
                 queryParams.work_type = this.work_type.join(',');
             }
