@@ -52,6 +52,9 @@ export const useUserStore = defineStore({
       }
         
     },
+    async logout() {
+      localStorage.clear();
+    },
    
   },
 });
