@@ -105,7 +105,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
             <!-- Next -->
             <li :class="{ 'page-item': true, disabled: !next }">
             <a class="page-link" @click="changePage(next)" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+                <span aria-hidden="true">&raquo; </span>
             </a>
             </li>
         </ul>
@@ -176,6 +176,8 @@ export default {
             .then(res => {
                 this.posts = res.data.data;
                 this.paginationLinks = res.data.links;
+                this.paginationLinks.pop(this.paginationLinks.length-1)
+                this.paginationLinks.shift()
                 this.next = res.data.next_page_url;
                 this.prev = res.data.prev_page_url;
                 this.full_res = res.data;
@@ -213,7 +215,7 @@ export default {
             let url = import.meta.env.VITE_BASE_URL;
 
             axios
-            .get(url+'/posts' , {params: queryParams})
+            .get(url+'/home/posts' , {params: queryParams})
             .then((res) => {
                 this.posts = res.data.data;
             })
