@@ -15,14 +15,7 @@
             {{ v$.jobTitle.$errors[0].$message }}
           </InlineMessage>
         </div>
-           
-        <div>
-          <label>Selected Skills:</label>
-          <div>
-            <div>{{selectedSkillNames }}</div>
-          </div>
-        </div>
-
+        
         <!-- Description -->
         <div>
           <label for="description">Description:</label>
@@ -139,15 +132,13 @@ export default {
       applicationDeadline: '',
       allSkills: [],
       selectedSkills: [],
-      selectedSkillNames: [],
-      testSelectedSkills: [],
       autocompleteValue:'',
       skillSuggestions:[],
     };
   },
    validations(){
       return{
-      jobTitle:  {required , alphaNum},
+      jobTitle:  {required},
       description:  {required, minLength:minLength(50)},
       responsibilities:  {required, minLength:minLength(50)},
       qualifications:  {required, minLength:minLength(50)},
@@ -180,16 +171,6 @@ export default {
           console.error('Error fetching skills:', error);
         });
     },
-     getSkillNameById(skillId) {
-      const skill = this.allSkills.find(skill => skill.id == skillId);
-      console.log(typeof skillId)
-      return skill ? skill.skill : '';
-    },
-    handleSelectionChange(event) {
-      this.selectedSkills.push(event.target.value);
-    },  
- 
-
     searchSkills (event) {
       const query = event.query.toLowerCase();
       const filteredSkills = this.allSkills.filter(skill => skill.skill.toLowerCase().includes(query));
@@ -197,23 +178,19 @@ export default {
 
 
     },
-    submitJobPost() {
-     
-      
-      console.log("this.allSkills",this.allSkills)
+    prepareSelectedSkills() {
       this.selectedSkills = [];
       Array.from(this.autocompleteValue).forEach(skill => {
-      // Search for the skill in allSkills array
       let matchedSkill = this.allSkills.find(item => item.skill === skill);
-
-      // If a matching skill is found, extract its id and store it
       if (matchedSkill) {
         this.selectedSkills.push(matchedSkill.id);
       }
       });
-       console.log("this.selectedSkills",this.selectedSkills)
-      console.log("autocompleteValue",this.autocompleteValue)
-       const postData = {
+    },
+    submitJobPost() {
+      this.prepareSelectedSkills();
+
+      const postData = {
         job_title: this.jobTitle,
         skills: Array.from(this.selectedSkills),
         description: this.description,
@@ -225,7 +202,6 @@ export default {
         work_type: this.workType,
         application_deadline: this.applicationDeadline,
       };
-   console.log("postData",postData)
       this.v$.$validate();
       if(!this.v$.$error){
       axios.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
@@ -246,16 +222,7 @@ export default {
        }
     }
   },
-    computed: {
-    selectedSkillNames() {
-      return this.selectedSkills.map(skillId => {
-              console.log(skillId)
-
-        return this.getSkillNameById(skillId)});
-
-    },
-    
-  }
+    computed: {}
 
 };
 
