@@ -12,7 +12,6 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
 <template>
     <div>
     <!-- Navbar -->
-    <Pinia/>
     <Navbar />
 
             <div class="w-25 m-auto d-flex align-baseline my-2">
