@@ -7,8 +7,8 @@
             <!-- Profile picture help block-->
             <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
             <!-- Profile picture upload button-->
-            <!-- <button class="btn btn-primary" type="button">Upload new image</button> -->
-            <input type="file" @change="previewFiles">
+            <button class="btn btn-primary" type="button" @click="onUpload">Upload new image</button>
+            <!-- <input type="file" @change="previewFiles"> -->
         </div>
     </div>
 
@@ -27,6 +27,10 @@
             }
         },
         methods: {
+            onUpload() {
+                console.log("WE HERE");
+                console.log(this.event);
+            },
             previewFiles(event) {
                 console.log(event.target.files);
                 this.image = event.target.files[0].name;

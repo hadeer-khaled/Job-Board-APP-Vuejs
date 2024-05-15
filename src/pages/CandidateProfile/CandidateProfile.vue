@@ -5,8 +5,8 @@
     import useVuelidate from '@vuelidate/core';
     import AccountDetails from '../../components/CandidateComponents/AccountDetails.vue';
     import ProfilePictureCard from '../../components/CandidateComponents/ProfilePictureCard.vue';
-    
 </script>
+
 <template>
     <Navbar/>
     <div class="container-xl px-4 mt-4">        

@@ -40,12 +40,17 @@
                     <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" v-model="city">
                 </div>
                 <!-- Form Group (email address)-->
-                
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputResume">Resume</label>
+                    <input class="form-control" id="inputResume" type="file">
+                    <button class="btn btn-primary" @click="previewResume(resume)">Preview</button>
+                </div>
                 <!-- Save changes button-->
                 <button class="btn btn-primary" type="button" @click="submit">Save changes</button>
             </form>
         </div>
     </div>
+    
 </template>
 
 <script>
@@ -67,6 +72,7 @@
                 faculty : this.user.faculty,
                 education : this.user.education,
                 username : this.user.username,
+                resume : this.user.resume,
             }
         },
         validations() {
@@ -97,7 +103,7 @@
                         city: this.city,
                         faculty: this.faculty,
                         education: this.education,
-                        username: this.username
+                        username: this.username,
                     };
                     const url = import.meta.env.VITE_BASE_URL;
                     axios
@@ -107,6 +113,9 @@
                     })
                     .catch(err => console.log(err))
                 }
+            },
+            previewResume(url) {
+                window.open(url, '_blank').focus();
             }
         }
     }
