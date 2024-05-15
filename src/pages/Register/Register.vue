@@ -28,22 +28,22 @@
             </div>
             <div v-if="currentStep === 0">
               <div class="form-group mb-4">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">Name<span class="text-danger text-danger-astric">*</span></label>
                 <input type="text" class="form-control" id="name" v-model="name" :placeholder="errorMessages.name || 'Enter your name'" required :class="{ 'is-invalid': errorMessages.name }">
               </div>
               <div class="form-group mb-4">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Username<span class="text-danger text-danger-astric">*</span></label>
                 <input type="text" class="form-control" id="username" v-model="username" :placeholder="errorMessages.username || 'Enter your username'" required :class="{ 'is-invalid': errorMessages.username }">
                  <p v-if="errorMessages.usernameFromServer" class="text-danger">{{ errorMessages.usernameFromServer}}</p>
               </div>
               <div class="form-group mb-4">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email<span class="text-danger text-danger-astric">*</span></label>
                 <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
                 <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
                 <small v-if="errorMessages.emailFromServer" class="text-danger">{{ errorMessages.emailFromServer}}</small>
               </div>
               <div class="form-group mb-4">
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label">Password<span class="text-danger text-danger-astric">*</span></label>
                 <div class="input-group">
                   <input type="password" class="form-control" id="password" v-model="password" :placeholder="errorMessages.password || 'Enter your password'" required :class="{ 'is-invalid': errorMessages.password }">
                   <button class="btn btn-outline-secondary" type="button" @click="togglePasswordVisibility">
@@ -53,7 +53,7 @@
               </div>
                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.passwordStrong }}</small>
               <div class="form-group mb-4">
-                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <label for="confirmPassword" class="form-label">Confirm Password<span class="text-danger text-danger-astric">*</span></label>
                 <div class="input-group">
                   <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" :placeholder="errorMessages.confirmPasswordRe || 'Confirm your password'" required :class="{ 'is-invalid': errorMessages.confirmPasswordRe }">
                   <button class="btn btn-outline-secondary" type="button" @click="toggleConfirmPasswordVisibility">
@@ -67,7 +67,7 @@
                 <input type="file" class="form-control" id="image" @change="onImageChange">
               </div>
               <div class="form-group mb-4">
-                <label for="role" class="form-label">Role</label>
+                <label for="role" class="form-label">Role<span class="text-danger text-danger-astric">*</span></label>
                 <select class="form-control" id="role" v-model="role" required :class="{ 'is-invalid': errorMessages.role }">
                   <option value="" disabled>Select your role</option>
                   <option value="candidate">Candidate</option>
@@ -424,5 +424,7 @@ export default {
 .text-danger {
   color: red;
 }
-
+.text-danger-astric{
+  font-size: 1.2em; 
+}
 </style>
