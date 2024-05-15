@@ -14,13 +14,14 @@ import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
 import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
-
+import Admin from './pages/Admin/Admin.vue';
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
-  { path: '/application/:id' , component: ApplyingForm},
+  { path: '/application/:id', component: ApplyingForm },
+  { path: '/admin', component: Admin },
   { path: '/job-applications/:jobId', component: JobApplications },
   { path: '/application/:id', component: ApplyingForm },
   { path: '/login', component: Login } ,
