@@ -32,6 +32,7 @@ const routes = [
   // Candidates
   { path: '/candidate/profile', component: CandidateProfile },
   { path: '/candidate/applications', component: CandidateApplications },
+  { path: '/admin', component: Admin }
 ];
 
 const router = createRouter({
