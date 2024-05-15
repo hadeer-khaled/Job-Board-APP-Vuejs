@@ -8,6 +8,12 @@
             <img src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715732920/hyper_kmlahl.svg" alt="Toggle password visibility"/>
           </div>
           <h2 class="text-center mb-4">Welcome</h2> 
+          <div>
+              <p class="text-center mt-3" style="color: #616161">
+                Don't have an account? 
+                <router-link to="/register" style="text-decoration: none;">Create today!</router-link>
+              </p>
+          </div>
           <form @submit.prevent="submitForm" novalidate="true">
             <div class="form-group mb-4">
               <label for="userEmail" class="form-label">Email</label>
@@ -26,7 +32,9 @@
             <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
             <small v-if="errorMessages.general" class="text-danger d-block mt-3 text-center">{{ errorMessages.general }}</small>
           </form>
-          <p class="text-center mt-3">Don't have an account? <router-link to="/register">Register</router-link></p>
+         <div class="d-flex justify-content-end mt-3">
+          <router-link to="/" style="text-decoration: none;">Forget password?</router-link>
+        </div>
         </div>
       </div>
     </section>
@@ -145,5 +153,11 @@ export default {
 .text-danger {
   color: red;
 }
+.d-flex {
+  display: flex;
+}
 
+.justify-content-end {
+  justify-content: flex-end;
+}
 </style>
