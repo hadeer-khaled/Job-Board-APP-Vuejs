@@ -7,6 +7,7 @@ import Register from './pages/Register/Register.vue';
 import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
+import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/employer/posts/:id' , component: EmployerPost },
   // Candidates
   { path: '/candidate/profile', component: CandidateProfile },
+  { path: '/candidate/applications', component: CandidateApplications },
 ];
 
 const router = createRouter({
