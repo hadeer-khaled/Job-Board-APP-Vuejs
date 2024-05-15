@@ -7,6 +7,7 @@
     <div>
       <h2>Add Job Post</h2>
       <form @submit.prevent="submitJobPost" novalidate>
+
         <!-- job title -->
         <div>
           <label for="jobTitle">Job Title:</label>
@@ -85,6 +86,7 @@
           </InlineMessage>
         </div>
 
+        <!-- Skills -->
         <label for="skills">Skills:</label>
             <AutoComplete v-model="autocompleteValue" multiple  :suggestions="skillSuggestions" @complete="searchSkills" />
             <InlineMessage v-if = "v$.selectedSkills.$error">
@@ -213,6 +215,7 @@ export default {
                   showConfirmButton: false,
                   timer: 1500
           });
+          this.$router.push('/employer/profile');
         })
         .catch(error => {
           console.error('Error adding job post:', error.response.data);

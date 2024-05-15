@@ -213,7 +213,7 @@ export default {
             let url = import.meta.env.VITE_BASE_URL;
 
             axios
-            .get(url+'/posts' , {params: queryParams})
+            .get(url+'/home/posts' , {params: queryParams})
             .then((res) => {
                 this.posts = res.data.data;
             })

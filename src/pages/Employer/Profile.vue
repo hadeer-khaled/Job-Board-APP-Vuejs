@@ -50,8 +50,19 @@
                     <Button label="Post A Job" />
                   </router-link>
             </div>
+
           </template>
         </Card>
+<!-- 
+        <div>
+            <p class="mx-3 fw-bold my-3">City</p>
+            <select class="form-select w-50 mx-3" name="city" @change="getJobs">
+              <option value="all">All</option>
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
+        </div> -->
       </div>
 
       <div v-else>
@@ -85,7 +96,6 @@
        </div>
 
       </div>
-
   
   </div>
 </template>
@@ -191,6 +201,7 @@ export default {
                 })
             .catch(err => console.log(err));
           },
+
           fetchEmployerData(){
             axios
             .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
@@ -205,7 +216,27 @@ export default {
                 console.log("employer: ", this.employer)            
                 })
             .catch(err => console.log(err));
-          }
+          },
+
+          // getJobs(e){
+      
+          //   const status = e.target.value;
+          //   const url = `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}?status=${status}`;
+      
+          //   axios
+          //   .get(url)
+          //   .then(res => {
+          //       this.jobs = res.data.jobs.data;
+          //       this.paginationLinks = res.data.jobs.links;
+          //       this.next = res.data.jobs.next_page_url+`?status=${status}`;
+          //       this.prev = res.data.jobs.prev_page_url+`?status=${status}`;
+          //       console.log("filtered: " , res.data.jobs.data)
+          //       })
+          //   .catch(err => console.log(err));
+            
+          // }
+
+
       },
       mounted() {
         this.fetchEmployerData();
