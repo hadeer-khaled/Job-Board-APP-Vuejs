@@ -1,29 +1,15 @@
 <template>
     <div class="card">
         <DataTable :value="jobs">
-            <template #paginatorstart>
-                <Button type="button" icon="pi pi-refresh" text></Button>
-            </template>
-            <template #paginatorend>
-                <Button type="button" icon="pi pi-download" text></Button>
-            </template>
             <Column v-for="(column, index) in columns" :key="index" :field="column.field" :header="column.header"
                 :style="{ 'width': column.width }">
-                <!-- Check if it's the "Details" button column -->
-                <template v-if="column.field === 'details'">
-                    <Button @click="viewDetails(rowData)">
+
+            </Column>
+            <Column :exportable="false" field="customButton" header="Actions">
+                <template #body="rowData">
+                    <RouterLink class="text-decoration-none btn btn-primary" :to="`/admin/post/${rowData.data.id}`">
                         View Details
-                    </Button>
-                </template>
-                <!-- Custom button column -->
-                <template v-else-if="column.field === 'customButton'">
-                    <Button @click="customButtonClick(rowData)">
-                        Custom Action
-                    </Button>
-                </template>
-                <!-- Default column rendering -->
-                <template v-else>
-                    {{ rowData[column.field] }}
+                    </RouterLink>
                 </template>
             </Column>
         </DataTable>
@@ -89,12 +75,10 @@ export default {
         onPageChange(event) {
             this.$emit('onChange', event);
         },
+
         viewDetails(job) {
-            console.log(job);
-        },
-        customButtonClick(rowData) {
-            console.log('Custom button clicked for row:', rowData);
-            // You can emit an event here if needed
+            const router = useRouter();
+            router.push({ name: 'post-details', params: { id: job.id } });
         }
     }
 }
