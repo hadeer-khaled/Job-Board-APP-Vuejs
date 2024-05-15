@@ -2,7 +2,7 @@
     <div class="card mb-4">
         <div class="card-header">Account Details</div>
         <div class="card-body">
-            <form>
+            <form @submit.prevent="submit">
                 <div class="mb-3">
                     <label class="small mb-1" for="inputFirstName">Name</label>
                     <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your name" v-model="name">
@@ -40,7 +40,7 @@
                 <!-- Form Group (email address)-->
                 
                 <!-- Save changes button-->
-                <button class="btn btn-primary" type="button" @click="submit()">Save changes</button>
+                <button class="btn btn-primary" type="button" @click="submit">Save changes</button>
             </form>
         </div>
     </div>
@@ -49,6 +49,7 @@
 <script>
     import useVuelidate from '@vuelidate/core'; 
     import { email, minLength, required } from '@vuelidate/validators';
+    import axios from 'axios';
     export default {
         props: ['user'],
         setup() {
@@ -78,7 +79,7 @@
             $lazy: true,
         },
         methods: {
-            async submit() {
+            async submit(event) {
                 console.log(this.v.$errors);
                 const result = await this.v.$validate();
 
@@ -87,7 +88,21 @@
                     return;
                 }
                 else {
-                    console.log("CORRECT")
+                    // console.log(this.event);
+                    const data = {
+                        name: this.name,
+                        email: this.email,
+                        city: this.city,
+                        faculty: this.faculty,
+                        education: this.education,
+                        username: this.username
+                    };
+                    console.log(data);
+                    const url = import.meta.env.VITE_BASE_URL;
+                    axios
+                    .patch(url+'/candidates/'+this.user.id, data)
+                    .then(res => console.log(res))
+                    .catch(err => console.log(err))
                 }
             }
         }
