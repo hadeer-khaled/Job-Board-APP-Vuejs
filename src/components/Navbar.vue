@@ -8,6 +8,8 @@
             <img  src="/logo.jpg" class="mx-3 border rounded-circle" style="width:50px"/>
         </div>
     <RouterLink to="/" class="text-decoration-none mx-3 my-auto ">Home</RouterLink>
+    <RouterLink to="/admin" class="text-decoration-none mx-3 my-auto ">admin</RouterLink>
+
     </div>
     <div>
         <div class="d-flex">
