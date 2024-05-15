@@ -21,7 +21,7 @@ export const useUserStore = defineStore({
         return response;
         
       } catch (error) {
-        console.log("error",error);
+        console.log("error.",error);
         throw error;
       }
     },
