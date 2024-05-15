@@ -4,7 +4,10 @@
     <section class="vh-100 login-section d-flex justify-content-center align-items-center">
       <div class="card text-black login-card shadow">
         <div class="card-body p-md-5">
-          <h2 class="text-center mb-4">Login</h2>
+          <div class="text-center mb-4">
+            <img src="../../assets/hyper.svg" alt="Toggle password visibility"/>
+          </div>
+          <h2 class="text-center mb-4">Welcome</h2> 
           <form @submit.prevent="submitForm" novalidate="true">
             <div class="form-group mb-4">
               <label for="userEmail" class="form-label">Email</label>
@@ -29,7 +32,6 @@
     </section>
   </div>
 </template>
-
 <script>
 import { ref } from 'vue';
 import { useUserStore } from "../../store/modules/UserPinia";
@@ -143,4 +145,5 @@ export default {
 .text-danger {
   color: red;
 }
+
 </style>
