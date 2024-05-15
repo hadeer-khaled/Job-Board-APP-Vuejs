@@ -4,6 +4,8 @@
     import { useUserStore } from '../../store/modules/UserPinia';
     import useVuelidate from '@vuelidate/core';
     import AccountDetails from '../../components/CandidateComponents/AccountDetails.vue';
+    import ProfilePictureCard from '../../components/CandidateComponents/ProfilePictureCard.vue';
+    
 </script>
 <template>
     <Navbar/>
@@ -11,21 +13,11 @@
         <div class="row">
             <div class="col-xl-4">
                 <!-- Profile picture card-->
-                <div class="card mb-4 mb-xl-0">
-                    <div class="card-header">Profile Picture</div>
-                    <div class="card-body text-center">
-                        <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle mb-2" :src="user.image" alt="">
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                        <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button">Upload new image</button>
-                    </div>
-                </div>
+                <ProfilePictureCard :user="user" :userStore="userStore"/>
             </div>
             <div class="col-xl-8">
                 <!-- Account details card-->
-                <AccountDetails :user="user"/>
+                <AccountDetails :user="user" :userStore="userStore"/>
             </div>
         </div>
     </div>
@@ -39,6 +31,7 @@
         data() {
             return {
                 user : null,
+                userStore : useUserStore(), 
             }
         },
         beforeMount() {
@@ -52,8 +45,7 @@
                 }
             },
             fetchUser() {
-                const userStore = useUserStore();
-                this.user = userStore.user;
+                this.user = this.userStore.user;
             }
             
         }

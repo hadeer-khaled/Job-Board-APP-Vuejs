@@ -13,11 +13,13 @@
                 <div class="mb-3">
                     <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
                     <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" v-model="username">
+                    <small class="text-danger" v-if="v.username.$error">{{ v.username.$errors[0].$message }}</small>
                 </div>
                 
                 <div class="mb-3">
                     <label class="small mb-1" for="inputEmailAddress">Email address</label>
                     <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" v-model="email">
+                    <small class="text-danger" v-if="v.email.$error">{{ v.email.$errors[0].$message }}</small>
                 </div>
                 <!-- Form Row        -->
                 <div class="row gx-3 mb-3">
@@ -51,7 +53,7 @@
     import { email, minLength, required } from '@vuelidate/validators';
     import axios from 'axios';
     export default {
-        props: ['user'],
+        props: ['user', 'userStore'],
         setup() {
             return {
                 v : useVuelidate()
@@ -97,11 +99,12 @@
                         education: this.education,
                         username: this.username
                     };
-                    console.log(data);
                     const url = import.meta.env.VITE_BASE_URL;
                     axios
                     .patch(url+'/candidates/'+this.user.id, data)
-                    .then(res => console.log(res))
+                    .then((res) => {                        
+                        this.userStore.user = res.data.data;
+                    })
                     .catch(err => console.log(err))
                 }
             }
