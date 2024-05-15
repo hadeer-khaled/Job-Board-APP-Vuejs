@@ -34,7 +34,7 @@ import axios from 'axios';
 
     <template v-slot:seeApplications> 
        <router-link :to="'/job-applications/' + data.id">
-                    <Button label="View Job Applications" />
+            <button class="btn btn-primary p">View Job Applications</button>
         </router-link>
     </template>
     

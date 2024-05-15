@@ -96,6 +96,8 @@ export default {
         .then(response => {
           this.applications = response.data.applications.data;
           this.paginationLinks = response.data.applications.links;
+          this.paginationLinks.pop(this.paginationLinks.length-1)
+          this.paginationLinks.shift()
           this.next = response.data.applications.next_page_url;
           this.prev = response.data.applications.prev_page_url;
           console.log("applications: ", response.data.applications.data);

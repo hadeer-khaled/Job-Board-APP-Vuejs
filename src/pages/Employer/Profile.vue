@@ -210,6 +210,8 @@ export default {
                 this.jobs = res.data.jobs.data
                 console.log(" this.jobs " ,  this.jobs )
                 this.paginationLinks = res.data.jobs.links;
+                this.paginationLinks.pop(this.paginationLinks.length-1)
+                this.paginationLinks.shift()
                 this.next = res.data.jobs.next_page_url;
                 this.prev = res.data.jobs.prev_page_url;
                 console.log("jobs: " , res.data.jobs.data)
