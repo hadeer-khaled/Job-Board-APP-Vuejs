@@ -21,11 +21,13 @@
               <div class="form-group mb-4">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" v-model="username" :placeholder="errorMessages.username || 'Enter your username'" required :class="{ 'is-invalid': errorMessages.username }">
+                 <p v-if="errorMessages.usernameFromServer" class="text-danger">{{ errorMessages.usernameFromServer}}</p>
               </div>
               <div class="form-group mb-4">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
                 <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
+                <small v-if="errorMessages.emailFromServer" class="text-danger">{{ errorMessages.emailFromServer}}</small>
               </div>
               <div class="form-group mb-4">
                 <label for="password" class="form-label">Password</label>
@@ -45,7 +47,7 @@
                     <FontAwesomeIcon :icon="confirmPasswordFieldIcon"/>
                   </button>
                 </div>
-                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.confirmPassword }}</small>
+                <small v-if="errorMessages.confirmPassword" class="text-danger">{{ errorMessages.confirmPassword }}</small>
               </div>
               <div class="form-group mb-4">
                 <label for="image" class="form-label">Image</label>
@@ -93,8 +95,9 @@
                 @update:logo="logo = $event"
               />
             </div>
-
+             
              <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
+             <p v-if="errorMessages.errorFromServer" class="text-danger">{{ errorMessages.errorFromServer}}</p>
           </form>
         </div>
       </div>
@@ -251,7 +254,15 @@ export default {
           try{
             await userStore.candidateRegister(formData);
           }catch(error){
-
+          if (error.response.data.exception=="Illuminate\\Database\\UniqueConstraintViolationException" ) {
+                   errorMessages.value.usernameFromServer="username already exist";
+            }
+            if (error.response && error.response.data.errors) {
+            const serverErrors = error.response.data.errors;
+             Object.keys(serverErrors).forEach(key => {
+              errorMessages.value[`${key}FromServer`] = serverErrors[key][0];
+            });
+          }
           }
         }else if (role.value === 'employer') {
           formData.append('company_name', companyName.value);
@@ -259,7 +270,15 @@ export default {
           try{
               await userStore.empRegister(formData);
           }catch(error){
-            
+            if (error.response.data.exception=="Illuminate\\Database\\UniqueConstraintViolationException" ) {
+                   errorMessages.value.usernameFromServer="username already exist";
+            }
+            if (error.response && error.response.data.errors) {
+            const serverErrors = error.response.data.errors;
+             Object.keys(serverErrors).forEach(key => {
+              errorMessages.value[`${key}FromServer`] = serverErrors[key][0];
+            });
+          }
           }
         }
     }
