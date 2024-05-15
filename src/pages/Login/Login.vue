@@ -48,6 +48,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import router from '../../router'; 
+import axiosInstance from '../../axios/index';
 
 library.add(faEye, faEyeSlash);
 
@@ -56,6 +57,20 @@ export default {
     Navbar,
     FontAwesomeIcon
   },
+   data() {
+    return {
+      verify: null
+    }
+  },
+  mounted() {
+    const { verify } = this.$route.query;
+    const params = new URLSearchParams(window.location.search);
+    const verifyParam = params.get("verify");
+    if (verifyParam) {
+      this.verify = true;
+    }
+  }
+,
   setup() {
     const userStore = useUserStore();
     const userEmail = ref('');
@@ -85,9 +100,23 @@ export default {
             password: password.value
           });
 
-          if (userStore.user.role === 'admin') router.push('/');
-          else if (userStore.user.role === 'candidate') router.push('/');
-          else if (userStore.user.role === 'employer') router.push('/');
+           try {
+             const response =await axiosInstance.post('/email/verified', {
+             timestamp: new Date(), 
+             email: userEmail.value,
+           })
+            console.log('ssssssssssssssssss' );
+            const params = new URLSearchParams(window.location.search);
+            const verifyParam = params.get("verify");
+            if (verifyParam) {
+                const path = window.location.pathname;
+                window.history.replaceState({}, document.title, path);
+            }
+            router.push('/');
+           } catch (error) {
+             console.log("error",error);
+           }
+          
         } catch (error) {
           if (error.response && error.response.status === 401) {
             errorMessages.value.general = 'Unauthorized: Incorrect email or password.';
