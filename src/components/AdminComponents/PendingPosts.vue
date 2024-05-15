@@ -28,9 +28,6 @@ export default {
                 { field: 'created_at', header: 'Posted', width: '25%' },
                 { field: 'work_type', header: 'Work Type', width: '25%' },
                 { field: 'company_name', header: 'Company', width: '25%' },
-                { field: 'details', header: 'Details', width: '25%' },
-                // New column for custom button
-                { field: 'customButton', header: 'Actions', width: '25%' }
             ],
 
 
