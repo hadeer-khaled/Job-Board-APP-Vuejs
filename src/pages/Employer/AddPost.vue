@@ -4,84 +4,97 @@
     <Navbar />
 
     <div class="p-mt-4 p-mb-6 p-grid p-dir-col p-align-center">
-      <h2>Add Job Post</h2>
       <div class="container form-div">
-      <form @submit.prevent="submitJobPost" novalidate class="p-fluid">
+          <Card>
+            <template #title>Add New Job</template>
+            <template #content>
+                <form @submit.prevent="submitJobPost" novalidate class="p-fluid">
 
-        <!-- Job Title -->
-        <div class="p-field">
-          <label for="jobTitle">Job Title:</label>
-          <InputText id="jobTitle" v-model="jobTitle" required maxlength="50" />
-          <InlineMessage v-if="v$.jobTitle.$error" severity="error">{{ v$.jobTitle.$errors[0].$message }}</InlineMessage>
-        </div>
 
-        <!-- Description -->
-        <div class="p-field">
-          <label for="description">Description:</label>
-          <Textarea id="description" v-model="description" rows="4" required minlength="50" />
-          <InlineMessage v-if="v$.description.$error" severity="error">{{ v$.description.$errors[0].$message }}</InlineMessage>
-        </div>
+                 <div class="d-flex justify-content-center">
+                      <!-- Job Title -->
+                      <div class="p-field  w-50">
+                        <label for="jobTitle">Job Title:</label>
+                        <InputText id="jobTitle" v-model="jobTitle" required maxlength="50" />
+                        <InlineMessage v-if="v$.jobTitle.$error" severity="error">{{ v$.jobTitle.$errors[0].$message }}</InlineMessage>
+                      </div>
 
-        <!-- Responsibilities -->
-        <div class="p-field">
-          <label for="responsibilities">Responsibilities:</label>
-          <Textarea id="responsibilities" v-model="responsibilities" rows="4" required minlength="50" />
-          <InlineMessage v-if="v$.responsibilities.$error" severity="error">{{ v$.responsibilities.$errors[0].$message }}</InlineMessage>
-        </div>
+                      <!-- Work Type -->
+                      <div class="p-field w-50">
+                        <label for="workType">Work Type:</label>
+                        <Dropdown v-model="workType" :options="workTypeOptions" optionLabel="name" placeholder="Work Type" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" />
+                        <InlineMessage v-if="v$.workType.$error" severity="error">{{ v$.workType.$errors[0].$message }}</InlineMessage>
 
-        <!-- Qualifications -->
-        <div class="p-field">
-          <label for="qualifications">Qualifications:</label>
-          <Textarea id="qualifications" v-model="qualifications" rows="4" required minlength="50" />
-          <InlineMessage v-if="v$.qualifications.$error" severity="error">{{ v$.qualifications.$errors[0].$message }}</InlineMessage>
-        </div>
 
-        <!-- Start Salary -->
-        <div class="p-field">
-          <label for="startSalary">Start Salary:</label>
-          <InputNumber id="startSalary" v-model="startSalary" :min="0" />
-        </div>
+                      </div>
 
-        <!-- End Salary -->
-        <div class="p-field">
-          <label for="endSalary">End Salary:</label>
-          <InputNumber id="endSalary" v-model="endSalary" :min="0" />
-        </div>
+                  </div>
 
-        <!-- Location -->
-        <div class="p-field">
-          <label for="location">Location:</label>
-          <InputText id="location" v-model="location" required />
-          <InlineMessage v-if="v$.location.$error" severity="error">{{ v$.location.$errors[0].$message }}</InlineMessage>
-        </div>
+                  <!-- Description -->
+                  <div class="p-field">
+                    <label for="description">Description:</label>
+                    <Textarea id="description" v-model="description" rows="4" required minlength="50" />
+                    <InlineMessage v-if="v$.description.$error" severity="error">{{ v$.description.$errors[0].$message }}</InlineMessage>
+                  </div>
 
-        <!-- Work Type -->
-        <div class="p-field">
-          <label for="workType">Work Type:</label>
-          <Dropdown id="workType" v-model="workType" required placeholder="Work Type">
-            <option value="remote">Remote</option>
-            <option value="on-site">On-Site</option>
-            <option value="hybrid">Hybrid</option>
-          </Dropdown>
-        </div>
+                  <!-- Responsibilities -->
+                  <div class="p-field">
+                    <label for="responsibilities">Responsibilities:</label>
+                    <Textarea id="responsibilities" v-model="responsibilities" rows="4" required minlength="50" />
+                    <InlineMessage v-if="v$.responsibilities.$error" severity="error">{{ v$.responsibilities.$errors[0].$message }}</InlineMessage>
+                  </div>
 
-        <!-- Application Deadline -->
-        <div class="p-field">
-          <label for="applicationDeadline">Application Deadline:</label>
-          <Calendar id="applicationDeadline" v-model="applicationDeadline" required />
-          <InlineMessage v-if="v$.applicationDeadline.$error" severity="error">Application deadline must be in the future</InlineMessage>
-        </div>
+                  <!-- Qualifications -->
+                  <div class="p-field">
+                    <label for="qualifications">Qualifications:</label>
+                    <Textarea id="qualifications" v-model="qualifications" rows="4" required minlength="50" />
+                    <InlineMessage v-if="v$.qualifications.$error" severity="error">{{ v$.qualifications.$errors[0].$message }}</InlineMessage>
+                  </div>
 
-        <!-- Skills -->
-        <div class="p-field">
-          <label for="skills">Skills:</label>
-          <AutoComplete v-model="autocompleteValue" multiple :suggestions="skillSuggestions" @complete="searchSkills" />
-          <InlineMessage v-if="v$.selectedSkills.$error" severity="error">{{ v$.selectedSkills.$errors[0].$message }}</InlineMessage>
-        </div>
+                  <!--  Salaries -->
+                 <div class="d-flex justify-content-center">
+                        <!-- Start Salary -->
+                      <div class="p-field w-50">
+                        <label for="startSalary">Start Salary:</label>
+                        <InputNumber id="startSalary" v-model="startSalary" :min="0" />
+                      </div>
 
-        <Button type="submit" label="Submit" class="p-mt-3" />
+                      <!-- End Salary -->
+                      <div class="p-field w-50">
+                        <label for="endSalary">End Salary:</label>
+                        <InputNumber id="endSalary" v-model="endSalary" :min="0" />
+                      </div>
 
-      </form>
+                 </div>
+               
+                  <!-- Location -->
+                  <div class="p-field">
+                    <label for="location">Location:</label>
+                    <InputText id="location" v-model="location" required />
+                    <InlineMessage v-if="v$.location.$error" severity="error">{{ v$.location.$errors[0].$message }}</InlineMessage>
+                  </div>
+
+
+                  <!-- Application Deadline -->
+                  <div class="p-field">
+                    <label for="applicationDeadline">Application Deadline:</label>
+                    <Calendar id="applicationDeadline" v-model="applicationDeadline" required />
+                    <InlineMessage v-if="v$.applicationDeadline.$error" severity="error">Application deadline must be in the future</InlineMessage>
+                  </div>
+
+                  <!-- Skills -->
+                  <div class="p-field">
+                    <label for="skills">Skills:</label>
+                    <AutoComplete v-model="autocompleteValue" multiple :suggestions="skillSuggestions" @complete="searchSkills" />
+                    <InlineMessage v-if="v$.selectedSkills.$error" severity="error">{{ v$.selectedSkills.$errors[0].$message }}</InlineMessage>
+                  </div>
+
+                  <Button class="mt-3" type="submit" label="Submit" icon="pi pi-check" iconPos="right"  severity="success"   />
+
+
+                </form>
+            </template>
+           </Card>
       </div>
     </div>
 
@@ -142,11 +155,17 @@ export default {
       selectedSkills: [],
       autocompleteValue:'',
       skillSuggestions:[],
+      workTypeOptions:[
+            { name: 'Remote', code: 'remote' },
+            { name: 'On-Site', code: 'on-site' },
+            { name: 'Hybrid', code: 'hybrid' }
+        ]
     };
   },
    validations(){
       return{
       jobTitle:  {required},
+      workType:{required},
       description:  {required, minLength:minLength(50)},
       responsibilities:  {required, minLength:minLength(50)},
       qualifications:  {required, minLength:minLength(50)},
@@ -207,11 +226,12 @@ export default {
         start_salary: this.startSalary,
         end_salary: this.endSalary,
         location: this.location,
-        work_type: this.workType,
+        work_type: this.workType.code,
         application_deadline: this.applicationDeadline,
       };
       this.v$.$validate();
       if(!this.v$.$error){
+        console.log("postData",postData)
       axios.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
         .then(response => {
           console.log('Job post added successfully:', response.data);
@@ -219,7 +239,7 @@ export default {
                   icon: "success",
                   text: "Your Job have been received successfully!",
                   showConfirmButton: false,
-                  timer: 1500
+                  timer: 2000
           });
           this.$router.push('/employer/profile');
         })
@@ -227,7 +247,8 @@ export default {
           console.error('Error adding job post:', error.response.data);
         });
        }else{
-         console.log("this.v$.$error",this.v$.$errors)
+         console.log("this.v$.$error",this.v$.$errors);
+         console.log("postData",postData)
        }
     }
   },

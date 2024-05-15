@@ -71,9 +71,6 @@ import Button from 'primevue/button';
     </div>
     </div>
 
-        <!-- right: 12px !important;
-    top: -50px !important; -->
-
     <div class="col-9 position-relative">
         <!-- <div class=" position-absolute top-0 end-0" > -->
         <router-link :to="'/employer/add-post'">
