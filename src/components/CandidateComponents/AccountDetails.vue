@@ -1,7 +1,3 @@
-<script setup>
-    import useVuelidate from '@vuelidate/core';
-    const v = useVuelidate();
-</script>
 <template>
     <div class="card mb-4">
         <div class="card-header">Account Details</div>
@@ -51,9 +47,15 @@
 </template>
 
 <script>
+    import useVuelidate from '@vuelidate/core'; 
+    import { minLength, required } from '@vuelidate/validators';
     export default {
         props: ['user'],
-        
+        setup() {
+            return {
+                v : useVuelidate()
+            }
+        },
         data() {
             return {
                 name : this.user.name,
@@ -66,15 +68,16 @@
         },
         validations() {
             return {
-                name : { required: true, minLength: 10 },
-                email : { required: true },
-                username : { required: true },
+                name : { required, minLength: minLength(10) },
+                email : { required },
+                username : { required },
             }
         },
         methods: {
             async submit(v) {
                 console.log(v);
                 console.log("name:" + JSON.stringify(v.name));
+                console.log("name errors:" + JSON.stringify(v.name.$errors));
                 const result = await v.$validate();
 
                 if (!result) {
