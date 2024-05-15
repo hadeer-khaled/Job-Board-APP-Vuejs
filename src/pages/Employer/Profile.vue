@@ -3,13 +3,14 @@
     <Navbar />
     <div class="p-3 row">
       <div v-if="employer" class="col-3" >
-        <Card>
+
+        <Card class="mb-2" >
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
               <Avatar image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRfV9n69zxuV4DQX7sYF7ql8ajx47wLioPeP-m4qFbHLkD9UNwfQSneRtkQEDnx-QxFs&usqp=CAU" 
                       class="custom-avatar mb-3" shape="circle" />
             
-              <form @submit.prevent="saveChanges" v-if="employer">
+              <form @submit.prevent="saveChanges" v-if="employer" class="d-flex flex-column align-items-center justify-content-center ">
                 <!-- Company Name -->
                 <InputGroup class="mb-2" >
                   <InputGroupAddon>
@@ -44,11 +45,25 @@
                 </InputGroup>  
 
                 <!-- Save Changes Button -->
-                <Button type="submit" label="Save Changes" />
+                <Button class="mt-3" type="submit" label="Save Changes" icon="pi pi-check" iconPos="right"  severity="success"   />
+
               </form>
+            </div>
+
+          </template>
+        </Card>
+               
+        <Card>
+          <template #content>
+            <div class="d-flex align-items-center justify-content-around "> 
+          
               <router-link :to="'/employer/add-post'">
-                    <Button label="Post A Job" />
-                  </router-link>
+                    <Button  label="Post New Job"  severity="info"/>
+              </router-link>
+
+              <router-link :to="'/employer/add-post'">
+                    <Button label="Deleted Jobs"  severity="contrast" />
+              </router-link>
             </div>
 
           </template>
@@ -257,4 +272,10 @@ export default {
   border-color: #dc3545;
 }
 
+button {
+    border-radius: 50px !important ;
+}
+.p-card .p-card-body {
+     padding: 0px !important; 
+}
 </style>

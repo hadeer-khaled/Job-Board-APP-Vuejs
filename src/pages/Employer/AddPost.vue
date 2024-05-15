@@ -1,109 +1,92 @@
 
-
 <template>
-<div>
+  <div>
+    <Navbar />
 
-  <Navbar/>
-    <div>
+    <div class="p-mt-4 p-mb-6 p-grid p-dir-col p-align-center">
       <h2>Add Job Post</h2>
-      <form @submit.prevent="submitJobPost" novalidate>
+      <div class="container form-div">
+      <form @submit.prevent="submitJobPost" novalidate class="p-fluid">
 
-        <!-- job title -->
-        <div>
+        <!-- Job Title -->
+        <div class="p-field">
           <label for="jobTitle">Job Title:</label>
-          <input type="text" id="jobTitle" v-model="jobTitle" required maxlength="50">
-          <InlineMessage v-if="v$.jobTitle.$error">
-            {{ v$.jobTitle.$errors[0].$message }}
-          </InlineMessage>
+          <InputText id="jobTitle" v-model="jobTitle" required maxlength="50" />
+          <InlineMessage v-if="v$.jobTitle.$error" severity="error">{{ v$.jobTitle.$errors[0].$message }}</InlineMessage>
         </div>
-        
+
         <!-- Description -->
-        <div>
+        <div class="p-field">
           <label for="description">Description:</label>
-          <textarea id="description" v-model="description" rows="4" required minlength="50"></textarea>
-          <InlineMessage v-if = "v$.description.$error">
-              {{v$.description.$errors[0].$message}}
-          </InlineMessage>
+          <Textarea id="description" v-model="description" rows="4" required minlength="50" />
+          <InlineMessage v-if="v$.description.$error" severity="error">{{ v$.description.$errors[0].$message }}</InlineMessage>
         </div>
 
         <!-- Responsibilities -->
-        <div>
+        <div class="p-field">
           <label for="responsibilities">Responsibilities:</label>
-          <textarea id="responsibilities" v-model="responsibilities" rows="4" required minlength="50"></textarea>
-          <InlineMessage v-if = "v$.responsibilities.$error">
-              {{v$.responsibilities.$errors[0].$message}}
-          </InlineMessage>
+          <Textarea id="responsibilities" v-model="responsibilities" rows="4" required minlength="50" />
+          <InlineMessage v-if="v$.responsibilities.$error" severity="error">{{ v$.responsibilities.$errors[0].$message }}</InlineMessage>
         </div>
 
-        <div>
+        <!-- Qualifications -->
+        <div class="p-field">
           <label for="qualifications">Qualifications:</label>
-          <textarea id="qualifications" v-model="qualifications" rows="4" required minlength="50"></textarea>
-          <InlineMessage v-if = "v$.qualifications.$error">
-              {{v$.qualifications.$errors[0].$message}}
-          </InlineMessage>
+          <Textarea id="qualifications" v-model="qualifications" rows="4" required minlength="50" />
+          <InlineMessage v-if="v$.qualifications.$error" severity="error">{{ v$.qualifications.$errors[0].$message }}</InlineMessage>
         </div>
 
-        <!-- Start Salary: -->
-        <div>
+        <!-- Start Salary -->
+        <div class="p-field">
           <label for="startSalary">Start Salary:</label>
-          <input type="number" id="startSalary" v-model="startSalary" min="0">
+          <InputNumber id="startSalary" v-model="startSalary" :min="0" />
         </div>
 
-        <!-- End Salary: -->
-        <div>
+        <!-- End Salary -->
+        <div class="p-field">
           <label for="endSalary">End Salary:</label>
-          <input type="number" id="endSalary" v-model="endSalary" min="0">     
-          
+          <InputNumber id="endSalary" v-model="endSalary" :min="0" />
         </div>
 
         <!-- Location -->
-        <div>
+        <div class="p-field">
           <label for="location">Location:</label>
-          <input type="text" id="location" v-model="location" required>
-          <InlineMessage v-if = "v$.location.$error">
-              {{v$.location.$errors[0].$message}}
-          </InlineMessage>
+          <InputText id="location" v-model="location" required />
+          <InlineMessage v-if="v$.location.$error" severity="error">{{ v$.location.$errors[0].$message }}</InlineMessage>
         </div>
 
         <!-- Work Type -->
-        <div>
+        <div class="p-field">
           <label for="workType">Work Type:</label>
-          <select id="workType" v-model="workType" required>
-            <option disabled selected value="">Work Type</option>
+          <Dropdown id="workType" v-model="workType" required placeholder="Work Type">
             <option value="remote">Remote</option>
             <option value="on-site">On-Site</option>
             <option value="hybrid">Hybrid</option>
-          </select>
+          </Dropdown>
         </div>
 
         <!-- Application Deadline -->
-        <div>
+        <div class="p-field">
           <label for="applicationDeadline">Application Deadline:</label>
-          <input type="date" id="applicationDeadline" v-model="applicationDeadline">
-
-          <InlineMessage v-if=" v$.applicationDeadline.$error">
-            Application deadline must be in the future
-          </InlineMessage>
+          <Calendar id="applicationDeadline" v-model="applicationDeadline" required />
+          <InlineMessage v-if="v$.applicationDeadline.$error" severity="error">Application deadline must be in the future</InlineMessage>
         </div>
 
         <!-- Skills -->
-        <label for="skills">Skills:</label>
-            <AutoComplete v-model="autocompleteValue" multiple  :suggestions="skillSuggestions" @complete="searchSkills" />
-            <InlineMessage v-if = "v$.selectedSkills.$error">
-                {{v$.selectedSkills.$errors[0].$message}}
-            </InlineMessage>
+        <div class="p-field">
+          <label for="skills">Skills:</label>
+          <AutoComplete v-model="autocompleteValue" multiple :suggestions="skillSuggestions" @complete="searchSkills" />
+          <InlineMessage v-if="v$.selectedSkills.$error" severity="error">{{ v$.selectedSkills.$errors[0].$message }}</InlineMessage>
+        </div>
 
-      
-        
+        <Button type="submit" label="Submit" class="p-mt-3" />
 
-        <button type="submit">Submit</button>
       </form>
+      </div>
     </div>
 
-  
-</div>
+  </div>
 </template>
-
 <script>
 import axios from 'axios';
 import Navbar from '../../components/Navbar.vue';
@@ -112,11 +95,34 @@ import InlineMessage from 'primevue/inlinemessage';
 import AutoComplete from 'primevue/autocomplete';
 
 import { useVuelidate } from '@vuelidate/core'
-import { required, alphaNum , minLength} from '@vuelidate/validators'
+import { required , minLength} from '@vuelidate/validators'
 import Swal from 'sweetalert2'
 
+import Card from 'primevue/card';
+
+
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import InputNumber from 'primevue/inputnumber';
+import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
+import Calendar from 'primevue/calendar';
+
+
+
 export default {
-  components:{ Navbar , InlineMessage , AutoComplete},
+    components: {
+    Navbar,
+    InlineMessage,
+    AutoComplete,
+    InputText,
+    Textarea,
+    InputNumber,
+    Dropdown,
+    Calendar,
+    Button,
+    Card
+  },
 
   data() {
     return {
