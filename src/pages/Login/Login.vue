@@ -5,7 +5,7 @@
       <div class="card text-black login-card shadow">
         <div class="card-body p-md-5">
           <div class="text-center mb-4">
-            <img src="../../assets/hyper.svg" alt="Toggle password visibility"/>
+            <img src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715732920/hyper_kmlahl.svg" alt="Toggle password visibility"/>
           </div>
           <h2 class="text-center mb-4">Welcome</h2> 
           <form @submit.prevent="submitForm" novalidate="true">
