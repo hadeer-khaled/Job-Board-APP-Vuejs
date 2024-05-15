@@ -12,14 +12,6 @@
               <img :src="image.src" class="d-block w-100" :alt="'Image ' + (index + 1)">
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" @click="prevImage">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" @click="nextImage">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
         </div>
       </div>
       <div class="card text-black register-card shadow d-flex flex-row">
@@ -119,6 +111,7 @@
              
              <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
              <p v-if="errorMessages.errorFromServer" class="text-danger">{{ errorMessages.errorFromServer}}</p>
+              <p v-if="errorMessages.imageFromServer" class="text-danger">{{ errorMessages.imageFromServer}}</p>
           </form>
      
         </div>
