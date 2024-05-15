@@ -11,10 +11,8 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    const url = import.meta.env.VITE_BASE_URL;
     export default {
-        props: ['application'],
+        props: ['application', 'applicationsStore'],
         data() {
             return {
                 id: this.application.id,
@@ -26,18 +24,21 @@
                 application_date: this.application.application_date,
             }
         },
+        watch: {
+            application: function(newValue, oldValue) {
+                this.id = newValue.id;
+                this.post = newValue.post;
+                this.resume = newValue.resume;
+                this.email = newValue.email;
+                this.phone = newValue.phone;
+                this.status = newValue.status;
+                this.application_date = newValue.application_date;
+            }
+        },
         methods: {
-            cancelApplication() {
-                axios.delete(url+'/applications', {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
-                    },
-                    data: {
-                        app_id: this.id
-                    }
-                })
-                .then(res => console.log(res))
-                .catch(err => console.log(err));
+            async cancelApplication() {
+                const res = await this.applicationsStore.removeApplication(this.id);
+                this.$parent.updateApplications();
             }
         }
     }

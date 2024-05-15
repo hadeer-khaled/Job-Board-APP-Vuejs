@@ -56,7 +56,7 @@
 <script>
     import useVuelidate from '@vuelidate/core'; 
     import { email, minLength, required } from '@vuelidate/validators';
-    import axios from 'axios';
+    import axiosInstance from '../../axios';
     export default {
         props: ['user', 'userStore'],
         setup() {
@@ -77,7 +77,7 @@
         },
         validations() {
             return {
-                name : { required, minLength: minLength(10) },
+                name : { required },
                 email : { required, email },
                 username : { required },
             }
@@ -96,7 +96,6 @@
                     return;
                 }
                 else {
-                    // console.log(this.event);
                     const data = {
                         name: this.name,
                         email: this.email,
@@ -106,7 +105,7 @@
                         username: this.username,
                     };
                     const url = import.meta.env.VITE_BASE_URL;
-                    axios
+                    axiosInstance
                     .patch(url+'/candidates/'+this.user.id, data)
                     .then((res) => {                        
                         this.userStore.user = res.data.data;
