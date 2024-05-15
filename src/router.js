@@ -5,6 +5,7 @@ import ApplyingForm from './pages/ApplyingForm/ApplyingForm.vue';
 import Login from './pages/Login/Login.vue';
 import Register from './pages/Register/Register.vue'; import EmployerPost from './pages/Post/EmployerPost.vue';
 import Admin from './pages/Admin/Admin.vue';
+import AdminPost from './pages/Post/AdminPost.vue';
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
@@ -12,7 +13,9 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/employer/posts/:id', component: EmployerPost },
-  { path: '/admin', component: Admin }
+  { path: '/admin', component: Admin },
+  { path: '/admin/post/:id', component: AdminPost },
+
 ];
 
 const router = createRouter({
