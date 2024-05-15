@@ -27,10 +27,10 @@
         },
         methods: {
             fetchApplications() {
-                
+                const token = localStorage.getItem('token');
                 axios.get(url + '/candidates/applications', {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                        Authorization: "Bearer " + token
                     }
                 })
                 .then(res => this.applications = res.data.data)
