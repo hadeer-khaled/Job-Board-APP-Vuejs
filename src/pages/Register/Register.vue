@@ -248,11 +248,19 @@ export default {
             formData.append('github', github.value);
             if (resume.value) formData.append('resume', resume.value);
             console.log(experienceLevel.value);
+          try{
             await userStore.candidateRegister(formData);
+          }catch(error){
+
+          }
         }else if (role.value === 'employer') {
           formData.append('company_name', companyName.value);
           if (logo.value) formData.append('logo', logo.value);
-            await userStore.empRegister(formData);
+          try{
+              await userStore.empRegister(formData);
+          }catch(error){
+            
+          }
         }
     }
      
