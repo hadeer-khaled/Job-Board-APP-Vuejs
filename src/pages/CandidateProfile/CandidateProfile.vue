@@ -6,16 +6,18 @@
 </script>
 
 <template>
-    <Navbar/>
-    <div class="container-xl px-4 mt-4">        
-        <div class="row">
-            <div class="col-xl-4">
-                <!-- Profile picture card-->
-                <ProfilePictureCard :user="user" :userStore="userStore"/>
-            </div>
-            <div class="col-xl-8">
-                <!-- Account details card-->
-                <AccountDetails :user="user" :userStore="userStore"/>
+    <div style="display: contents">
+        <Navbar/>
+        <div class="container-xl px-4 mt-4">        
+            <div class="row">
+                <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <ProfilePictureCard :user="user" :userStore="userStore"/>
+                </div>
+                <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <AccountDetails :user="user" :userStore="userStore"/>
+                </div>
             </div>
         </div>
     </div>

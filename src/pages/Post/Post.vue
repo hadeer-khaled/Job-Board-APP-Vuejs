@@ -70,7 +70,7 @@ export default {
         },
     mounted() {
         axios
-        .get(`http://localhost:8000/api/posts/${this.$route.params.id}`)
+        .get(`${import.meta.env.VITE_BASE_URL}/posts/${this.$route.params.id}`)
         .then(response => { 
             this.data = response.data.data;
             this.company = response.data.data.employer.company_name;
