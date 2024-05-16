@@ -2,13 +2,14 @@
     
 </script>
 <template>
-    <Navbar/>
-    <div class="container w-75 mx-auto mt-3">
-        <div v-for="application in applications">
-            <ApplicationCard :application="application" :applicationsStore="applicationsStore"/>
+    <div style="display: contents">
+        <Navbar/>
+        <div class="container w-75 mx-auto mt-3">
+            <div v-for="application in applications">
+                <ApplicationCard :application="application" :applicationsStore="applicationsStore"/>
+            </div>
         </div>
     </div>
-
 </template>
 
 <script>
