@@ -5,7 +5,7 @@
     <div style="display: contents">
         <Navbar/>
         <div class="container w-75 mx-auto mt-3">
-            <div v-for="application in applications">
+            <div v-for="application in applications" class="mt-3">
                 <ApplicationCard :application="application" :applicationsStore="applicationsStore"/>
             </div>
         </div>
