@@ -20,7 +20,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
             </div>
     <div class="row">
     
-    <div class="col-3 px-5">
+    <div class="col-3 px-5 d-none d-lg-block ">
     
     <div class="bg-white mt-3  border border-2 py-3">
     <!-- Title -->
@@ -49,7 +49,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     <!-- City -->
     <div>
     <p class="mx-3 fw-bold my-3">City</p>
-    <select class="form-select w-50 mx-3" v-model="searchLocation" name="city">
+    <select class="form-control w-50 mx-3" v-model="searchLocation" name="city">
     <option v-for="location in locations" :value="location" :key="index">{{ location }}</option>
     </select>
     </div>
@@ -61,7 +61,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
 
     <div class="d-flex align-baseline justify-content-around">
         <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
-        <button class="btn btn-danger my-5 mx-3 " @click="fetchPosts()">Reset</button>
+        <button class="btn btn-danger my-5 mx-3 " @click="resetPosts()">Reset</button>
     </div>
 
     </div>
@@ -69,6 +69,58 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
 
     <div class="col-9">
         
+      <button type="button" class="btn btn-light border border-black d-lg-none mx-5" data-bs-toggle="modal" data-bs-target="#sidebarModal">
+            Filters
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sidebarModalLabel">Filters</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Sidebar content here -->
+                        <div class="bg-white mt-3 border border-2 py-3">
+                            <!-- Work Place -->
+                            <p class="mx-3 fw-bold my-3">Work Place</p>
+                            <div class="px-5 py-2">
+                                <div class="form-check-reverse mx-5">
+                                    <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
+                                    <label class="form-check-label" for="flexCheckDefault">Remote</label>
+                                </div>
+                                <div class="form-check-reverse mx-5">
+                                    <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
+                                    <label class="form-check-label" for="flexCheckDefault">On-Site</label>
+                                </div>
+                                <div class="form-check-reverse mx-5">
+                                    <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
+                                    <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
+                                </div>
+                            </div>
+                            <!-- City -->
+                            <div>
+                                <p class="mx-3 fw-bold my-3">City</p>
+                                <select class="form-control w-50 mx-3" v-model="searchLocation" name="city">
+                                    <option v-for="(location, index) in locations" :value="location" :key="index">{{ location }}</option>
+                                </select>
+                            </div>
+                            <!-- Salary -->
+                            <p class="mx-3 fw-bold my-3">Salary</p>
+                            <input type="number" class="form-control mx-3 w-50" placeholder="salary" name="salary" v-model="salary"/>
+                            <div class="d-flex align-baseline justify-content-around">
+                                <button class="btn btn-primary my-5" @click="applyFilters">Filter</button>
+                                <button class="btn btn-danger my-5 mx-3" @click="resetPosts">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     <div v-for="post in posts" :key="post.id" class="border border-2 my-3 mx-5">
     
     <PostCard 
@@ -87,7 +139,7 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     
     </div>
     
-        <nav class="mx-5" aria-label="Page navigation example">
+        <nav v-if="posts" class="mx-5" aria-label="Page navigation example">
         <ul class="pagination">
 
             <!-- Prev -->
@@ -136,11 +188,11 @@ export default {
     return {
         posts: [],
         full_res: null,
-        paginationLinks: {},
+        paginationLinks: [],
         next: null,
         prev: null,
         work_type: [],
-        salary:'',
+        salary: null,
         titles:[],
         searchTitle:'',
         locations:[],
@@ -171,9 +223,39 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
+const queryParams = {};
+            
+            if (this.salary && this.salary <= 0)
+            {
+                let instance = this.$toast.open({
+                    message:"Cannot search with zero or negative",
+                    position:'bottom-right',
+                    type:'error',
+                    duration:3000
+                });
+                return
+            }
+
+            if (this.work_type && this.work_type.length > 0) {
+                queryParams.work_type = this.work_type.join(',');
+            }
+            
+            if (this.salary !== '') {
+                queryParams.salary = this.salary;
+            }
+
+            if (this.searchTitle) {
+                queryParams.job_title = this.searchTitle;
+            }
+            
+            if (this.searchLocation) {
+                queryParams.location = this.searchLocation;
+                console.log(this.searchLocation);
+            }
+
             const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/home/posts`
             axios
-            .get(url)
+            .get(url , {params: queryParams})
             .then(res => {
                 this.posts = res.data.data;
                 this.paginationLinks = res.data.links;
@@ -196,7 +278,7 @@ export default {
         {
             const queryParams = {};
             
-            if (this.salary <= 0)
+            if (this.salary && this.salary <= 0)
             {
                 let instance = this.$toast.open({
                     message:"Cannot search with zero or negative",
@@ -243,6 +325,27 @@ export default {
         },
         getSearchPosts() {
             this.applyFilters();
+        },
+        resetPosts() {
+            
+            this.searchTitle = ''
+            this.work_type = []
+            this.salary = ''
+            this.searchLocation = ''
+
+            const url = `${import.meta.env.VITE_BASE_URL}/home/posts`
+            axios
+            .get(url)
+            .then(res => {
+                this.posts = res.data.data;
+                this.paginationLinks = res.data.links;
+                this.paginationLinks.pop(this.paginationLinks.length-1)
+                this.paginationLinks.shift()
+                this.next = res.data.next_page_url;
+                this.prev = res.data.prev_page_url;
+                this.full_res = res.data;
+            })
+            .catch(err => console.log(err));
         }
     }
 };
