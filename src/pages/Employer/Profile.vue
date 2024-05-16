@@ -101,7 +101,7 @@
             <div class="d-flex align-items-center justify-content-around mt-4">
                 <div class="d-flex align-items-center">        
                     <p class="mx-1 fw-bold my-3">Job Status</p>
-                    <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
+                    <select class="form-select w-50 mx-3" name="status" v-model="selectedJobStatus">
                       <option value="all">All</option>
                       <option value="approved">Approved</option>
                       <option value="pending">Pending</option>
@@ -143,6 +143,7 @@
                   :end_salary="job.end_salary"
                   :post_id="job.id"
                   :company="employer.company_name"
+                  :status="job.status"
                   :route="`/posts/${job.id}`
                   "/>
                 <!-- <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />  -->
@@ -223,6 +224,7 @@ import Paginator from 'primevue/paginator';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import axiosInstance from '../../axios/index';
+
 import { useUserStore } from '../../store/modules/UserPinia';
 
 
@@ -250,7 +252,7 @@ export default {
           },
           company_logo:"",
           file:"", 
-          selectedWorkType:"all",
+          selectedJobStatus:"all",
           paginationLinks: {},
           next: null,
           prev: null, 
@@ -384,7 +386,7 @@ export default {
         getJobs(pageUrl = null){
           console.log(pageUrl)
            const queryParams = {};
-           queryParams.status = this.selectedWorkType;
+           queryParams.status = this.selectedJobStatus;
            console.log(queryParams)
            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
             console.log(url)
