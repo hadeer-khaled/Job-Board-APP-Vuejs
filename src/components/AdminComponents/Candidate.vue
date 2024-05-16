@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import axiosInstance from 'axiosInstance';
 import Table from './Table.vue';
 import axiosInstance from '../../axios';
 
