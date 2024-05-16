@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axiosInstance from '../../axios/index';
 import Navbar from '../../components/Navbar.vue';
 import Button from 'primevue/button';
 import Paginator from 'primevue/paginator';
@@ -166,7 +166,7 @@ export default {
         },
       acceptApplication(appId)
        {console.log(appId)
-        axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
+        axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
         .then((response) => {
            console.log('Response:', response.data.message);
         })
@@ -176,7 +176,7 @@ export default {
       
       
       rejectApplication(appId) {
-      axios.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'rejected' })
+      axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'rejected' })
         .then((response) => {
            console.log('Response:', response.data.message);
         })
@@ -186,7 +186,7 @@ export default {
     },
       fetchApplications(pageUrl = null) {
         const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/job-applications/${this.static_job_id}`
-        axios.get(url)
+        axiosInstance.get(url)
           .then(response => {
             this.applications = response.data.applications.data;
             this.paginationLinks = response.data.applications.links;
