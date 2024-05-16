@@ -49,7 +49,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-briefcase"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.company_name" />
+                  <InputText v-model="employer.company_name" placeholder="Company Name"/>
                   <span v-if = "v$.employer.company_name.$error">
                     {{v$.employer.company_name.$errors[0].$message}}
                   </span>
@@ -60,7 +60,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-user"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.name" />
+                  <InputText v-model="employer.name" placeholder="Full Name"/>
                    <span v-if = "v$.employer.name.$error">
                     {{v$.employer.name.$errors[0].$message}}
                   </span>
@@ -71,7 +71,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-at"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.email" />
+                  <InputText v-model="employer.email" placeholder="Your Email" />
                    <span v-if = "v$.employer.email.$error">
                     {{v$.employer.email.$errors[0].$message}}
                   </span>
@@ -252,7 +252,7 @@ export default {
           //     user_id:''
           // },
           employer: useUserStore().user,
-          company_logo:"",
+          company_logo:useUserStore().user.company_logo,
           file:"", 
           selectedJobStatus:"all",
           paginationLinks: {},

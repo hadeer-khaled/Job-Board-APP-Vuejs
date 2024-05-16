@@ -16,7 +16,8 @@
          <!-- Job Title -->
          <h4 class="">
             <RouterLink :to="route" class="text-decoration-none text-primary ">{{ job_title }}</RouterLink>
-            <Tag :value="status" :severity="getSeverity(status)" class="mx-2" />
+            <Tag v-show="role === 'employer'" :value="status" :severity="getSeverity(status)" class="mx-2" />
+            
          </h4>
 
          <div class="">
@@ -54,10 +55,12 @@ import { RouterLink } from 'vue-router';
 import { formatDistanceToNow } from 'date-fns';
 import Avatar from 'primevue/avatar';
 import Tag from 'primevue/tag';
+import { useUserStore } from '../../store/modules/UserPinia';
 
 
 
 export default {
+   data:()=>({role:useUserStore().user.role}),
    props: {
       job_title: String,
       location: String,
