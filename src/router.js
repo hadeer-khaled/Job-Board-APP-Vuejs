@@ -15,6 +15,9 @@ import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
 import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
 
+import Register from './pages/Register/Register.vue'; import EmployerPost from './pages/Post/EmployerPost.vue';
+import Admin from './pages/Admin/Admin.vue';
+import AdminPost from './pages/Post/AdminPost.vue';
 import DeletePost from './pages/Employer/DeletedPosts.vue';
 const routes = [
   { path: '/', component: LandingPage },
@@ -25,7 +28,7 @@ const routes = [
   { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
   { path: '/application/:id', component: ApplyingForm },
-  { path: '/login', component: Login } ,
+  { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/verify', component: Verify},
   { path: '/Reset', component: Reset},
@@ -33,6 +36,10 @@ const routes = [
   // Candidates
   { path: '/candidate/profile', component: CandidateProfile },
   { path: '/candidate/applications', component: CandidateApplications },
+  { path: '/employer/posts/:id', component: EmployerPost },
+  { path: '/admin', component: Admin },
+  { path: '/admin/post/:id', component: AdminPost },
+
 ];
 
 const router = createRouter({
