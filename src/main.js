@@ -13,7 +13,7 @@ import 'primevue/resources/primevue.min.css'; // Core CSS
 import 'primevue/resources/themes/saga-blue/theme.css'; // Theme
 import 'primeicons/primeicons.css'; // Icons
 import 'primevue/resources/themes/aura-light-green/theme.css';
-
+import ConfirmationService from 'primevue/confirmationservice';
 
 const app = createApp(App);
 
@@ -21,6 +21,7 @@ app.use(router)
   .use(PrimeVue)
   .use(ToastService)
   .use(ToastPlugin)
+  .use(ConfirmationService)
   .use(createPinia())
   .mount('#app');
 
