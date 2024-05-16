@@ -30,6 +30,12 @@ import axios from 'axios';
     <template v-slot:apply> 
         <RouterLink v-if="!passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.post_id}`">Apply</RouterLink>
     </template>
+
+    <template v-slot:seeApplications> 
+       <router-link :to="'/job-applications/' + data.id">
+            <button class="btn btn-primary p">View Job Applications</button>
+        </router-link>
+    </template>
     
     </PostHeader>
 
@@ -52,9 +58,11 @@ import axios from 'axios';
 </template>
 
 <script>
+import Button from 'primevue/button';
 
 export default {
-    data(){
+   components:{Button},
+   data(){
         return {
         data: [],
         company: '',    

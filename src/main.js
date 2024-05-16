@@ -9,6 +9,12 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import { useUserStore } from "./store/modules/UserPinia";
 
+import 'primevue/resources/primevue.min.css'; // Core CSS
+import 'primevue/resources/themes/saga-blue/theme.css'; // Theme
+import 'primeicons/primeicons.css'; // Icons
+import 'primevue/resources/themes/aura-light-green/theme.css';
+
+
 const app = createApp(App);
 
 app.use(router)

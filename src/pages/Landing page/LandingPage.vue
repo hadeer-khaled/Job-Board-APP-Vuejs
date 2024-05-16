@@ -6,6 +6,7 @@ import AutoComplete from 'primevue/autocomplete';
 import { RouterLink } from 'vue-router';
 import Navbar from '../../components/Navbar.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
+import Button from 'primevue/button';
 
 </script>
 
@@ -14,10 +15,14 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     <!-- Navbar -->
     <Navbar />
 
+
+        
             <div class="w-25 m-auto d-flex align-baseline my-2">
                 <AutoComplete v-model="searchTitle" :suggestions="suggestions" @complete="search"></AutoComplete>
                 <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit" @click="getSearchPosts">Search</button>
             </div>
+     
+
     <div class="row">
     
     <div class="col-3 px-5 d-none d-lg-block ">
@@ -67,7 +72,16 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     </div>
     </div>
 
-    <div class="col-9">
+    <div class="col-9 position-relative">
+        <!-- <div class=" position-absolute top-0 end-0" > -->
+        <router-link :to="'/employer/add-post'">
+            <button class="btn btn-primary position-absolute  mx-5" style="
+                right: 10px !important;
+                top: -30px !important;
+            ">Add New Job</button>
+        </router-link>
+    
+        <!-- </div> -->
         
       <button type="button" class="btn btn-light border border-black d-lg-none mx-5" data-bs-toggle="modal" data-bs-target="#sidebarModal">
             Filters
@@ -179,7 +193,7 @@ post:first-child {
 
 <script>
 import { ref } from 'vue';
-
+import router from '../../router'; 
 const filteredTitles = ref([]);
 
 
@@ -202,7 +216,14 @@ export default {
     };
     },
     mounted() 
-    {
+    { 
+        const { verify } = this.$route.query;
+        const params = new URLSearchParams(window.location.search);
+        const verifyParam = params.get("verify");
+        if(verifyParam){
+            router.push('/verify')
+        }
+        
         if(this.work_type.length === 0 && !this.salary)
         {
             this.fetchPosts();
@@ -212,7 +233,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts//locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;
