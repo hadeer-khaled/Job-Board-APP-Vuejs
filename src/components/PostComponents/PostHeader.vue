@@ -45,7 +45,7 @@
 
 
             </div>
-            <slot v-if="!passedDeadline" name="apply"></slot>
+            <slot v-if="!passedDeadline && userStore.user && userStore.user.role==='candidate' " name="apply"></slot>
          <slot name="seeApplications"></slot>
             <slot name="Admin"></slot>
 
@@ -57,10 +57,13 @@
 <script>
 import { formatDistanceToNow } from 'date-fns';
 import { ref, watch } from 'vue';
+import { useUserStore } from '../../store/modules/UserPinia';
 import Button from 'primevue/button';
 
 export default {
-    components:{Button},
+   setup() {
+   },
+   components:{Button},
    props: {
       job_title: String,
       company: String,
@@ -76,7 +79,8 @@ export default {
    data() {
       return {
          human_created_at: '',
-         human_deadline: ''
+         human_deadline: '',
+         userStore: useUserStore()
       }
 
    },
