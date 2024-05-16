@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2",
+    "vue-toast-notification": "^3.1.2",
     "vuelidate": "^0.7.7"
   },
   "devDependencies": {

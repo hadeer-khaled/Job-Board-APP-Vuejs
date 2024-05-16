@@ -26,10 +26,9 @@ import axios from 'axios';
     :work_type="data.work_type"
     :skills="data.skills"
     >
-    
 
-    <template v-if="false" v-slot:apply> 
-        <RouterLink :class="{disabled:passedDeadline}" class="text-decoration-none btn btn-primary" :to="`/application/${data.post_id}`">Apply</RouterLink>
+    <template v-slot:apply> 
+        <RouterLink v-if="!passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.post_id}`">Apply</RouterLink>
     </template>
 
     <template v-slot:seeApplications> 
@@ -66,7 +65,7 @@ export default {
    data(){
         return {
         data: [],
-        company: ''    
+        company: '',    
     }
         },
     mounted() {
@@ -85,7 +84,7 @@ export default {
             {
                 const currentDate = new Date()
                 const date = new Date(this.data.created_at)
-                console.log(currentDate > date)
+                console.log('11111111111',currentDate > date)
                 return currentDate > date ;
             }
         }
