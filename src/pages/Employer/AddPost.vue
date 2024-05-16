@@ -102,6 +102,8 @@
 </template>
 <script>
 import axiosInstance from '../../axios/index';
+import { useUserStore } from '../../store/modules/UserPinia';
+
 import Navbar from '../../components/Navbar.vue';
 
 import InlineMessage from 'primevue/inlinemessage';
@@ -252,7 +254,7 @@ export default {
        }
     }
   },
-    computed: {}
+     mounted() {}
 
 };
 

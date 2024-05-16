@@ -32,7 +32,7 @@ import axios from 'axios';
     </template>
 
     <template v-slot:seeApplications> 
-       <router-link :to="'/job-applications/' + data.id">
+       <router-link :to="'/job-applications/' + data.id" v-show="role === 'employer'">
             <button class="btn btn-primary p">View Job Applications</button>
         </router-link>
     </template>
@@ -59,13 +59,15 @@ import axios from 'axios';
 
 <script>
 import Button from 'primevue/button';
+import { useUserStore } from '../../store/modules/UserPinia';
 
 export default {
    components:{Button},
    data(){
         return {
         data: [],
-        company: '',    
+        company: '',
+        role:useUserStore().user.role,    
     }
         },
     mounted() {
