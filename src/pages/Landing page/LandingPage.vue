@@ -33,19 +33,19 @@ import Button from 'primevue/button';
 
     <!-- Work Place -->
     <p class="mx-3 fw-bold my-3">Work Place</p>
-    <div class="px-5 py-2">
+    <div class="">
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
         <label class="form-check-label" for="flexCheckDefault">Remote</label>
     </div>
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
         <label class="form-check-label" for="flexCheckDefault">On-Site</label>
     </div>    
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
         <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
     </div>
@@ -100,16 +100,16 @@ import Button from 'primevue/button';
                         <div class="bg-white mt-3 border border-2 py-3">
                             <!-- Work Place -->
                             <p class="mx-3 fw-bold my-3">Work Place</p>
-                            <div class="px-5 py-2">
-                                <div class="form-check-reverse mx-5">
+                            <div class="">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
                                     <label class="form-check-label" for="flexCheckDefault">Remote</label>
                                 </div>
-                                <div class="form-check-reverse mx-5">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
                                     <label class="form-check-label" for="flexCheckDefault">On-Site</label>
                                 </div>
-                                <div class="form-check-reverse mx-5">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
                                     <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
                                 </div>
@@ -233,7 +233,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts//locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts/locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;
@@ -244,7 +244,7 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
-const queryParams = {};
+            const queryParams = {};
             
             if (this.salary && this.salary <= 0)
             {
