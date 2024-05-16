@@ -167,10 +167,14 @@ export default {
         const { verify } = this.$route.query;
         const params = new URLSearchParams(window.location.search);
         const verifyParam = params.get("verify");
+        const token= params.get("token");
+        const user= params.get("user");
         if(verifyParam){
             router.push('/verify')
         }
-        
+        if(token){
+           router.push('/reset')
+        }
         if(this.work_type.length === 0 && !this.salary)
         {
             this.fetchPosts();
