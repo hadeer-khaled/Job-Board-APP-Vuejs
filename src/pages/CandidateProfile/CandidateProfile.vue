@@ -52,7 +52,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     body{
         margin-top:20px;
         color:#69707a;

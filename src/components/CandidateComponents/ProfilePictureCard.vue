@@ -30,29 +30,29 @@
 }
 
 .profile-img {
-    width: 150px; /* Adjust size as needed */
-    height: 150px; /* Ensure it maintains a square aspect ratio */
+    width: 150px; 
+    height: 150px; 
     border-radius: 50%;
-    border: 4px solid #ffffff; /* Add a white border */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    object-fit: cover; /* Ensure the image covers the area without distortion */
+    border: 4px solid #ffffff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    object-fit: cover; 
 }
 
 .profile-card .card-body {
-    padding: 2rem; /* Add padding for better spacing */
+    padding: 2rem; 
 }
 
 .profile-card .btn {
-    background-color: #007bff; /* Primary color */
-    border: none; /* Remove border */
-    padding: 0.5rem 1.5rem; /* Adjust padding for better button size */
-    font-size: 1rem; /* Increase font size */
-    border-radius: 25px; /* Rounded button */
-    transition: background-color 0.3s; /* Smooth transition */
+    background-color: #007bff; 
+    border: none; 
+    padding: 0.5rem 1.5rem; 
+    font-size: 1rem; 
+    border-radius: 25px; 
+    transition: background-color 0.3s; 
 }
 
 .profile-card .btn:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3; 
 }
 
 </style>
