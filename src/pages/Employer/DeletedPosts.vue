@@ -71,12 +71,13 @@
     </template>
     <script setup>
     import { useConfirm } from "primevue/useconfirm";
-    import axios from 'axios';
+    import axiosInstance from '../../axios/index';
+   
     const confirm = useConfirm();
 
     const deletePost=(id)=>{
 
-                axios
+                axiosInstance
             .delete(`${import.meta.env.VITE_BASE_URL}/posts/force-delete/${id}`)
             .then(res => {
                 const message = res.data.message
@@ -136,7 +137,7 @@
     
         ,methods: {
             getDeletedPosts(){
-                axios
+                axiosInstance
             .get(`${import.meta.env.VITE_BASE_URL}/posts/deleted`, {
                     params: { perPage: this.perPage, page: this.page }
                 })
@@ -148,7 +149,7 @@
             },
     
             restorePost(id){
-                axios
+                axiosInstance
             .put(`${import.meta.env.VITE_BASE_URL}/posts/restore/${id}`)
             .then(res => {
                 const message = res.data.message
