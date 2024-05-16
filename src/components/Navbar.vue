@@ -7,7 +7,10 @@
         <div>
             <img  src="/logo.jpg" class="mx-3 border rounded-circle" style="width:50px"/>
         </div>
-    <RouterLink to="/" class="text-decoration-none mx-3 my-auto fw-bold ">Home</RouterLink>
+            <RouterLink to="/" class="text-decoration-none mx-3 my-auto fw-bold ">Home</RouterLink>
+            <RouterLink to="/employer/profile" class="text-decoration-none mx-3 my-auto ">Employer Profile</RouterLink>
+
+
     </div>
     <div>
         <div class="d-flex">
