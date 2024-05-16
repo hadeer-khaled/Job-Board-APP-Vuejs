@@ -26,6 +26,11 @@
             <RouterLink to="/employer/profile" class="mx-3 text-decoration-none fw-bold ">Profile</RouterLink>
         </div>
         
+         <!-- user -->
+        <div v-if="role === ''" class="d-flex align-items-center justify-content-around">
+            <RouterLink to="/login" class="mx-3 text-decoration-none fw-bold ">Login</RouterLink>
+            <RouterLink to="/register" class="mx-3 text-decoration-none fw-bold ">Register</RouterLink>
+        </div>
 
         <div>
 
@@ -55,14 +60,20 @@
 </template>
 
 <script>
+import { useUserStore } from "../store/modules/UserPinia";
 export default {
     data() {
         return {
             loggedUser: true,
             username: '',
             image: '',
-            role: 'employer',
+            role:''
         }
     },
+    setup(){
+        const UserStore = useUserStore();
+       // this.role = UserStore.user;
+    }
+
 }
 </script>
