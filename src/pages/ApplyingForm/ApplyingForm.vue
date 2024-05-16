@@ -28,11 +28,10 @@ import { required, email } from '@vuelidate/validators'
       <!-- CV -->
       <div class="form-group my-3">
         <label for="cv">Upload CV</label>
-        <input type="file" class="form-control" id="cv" @change="handleFileUpload" required>
-        <p class="text-danger " :hidden="err ? true : false">Wrong File Format</p>
+        <input type="file" class="form-control" id="cv" @change="handleFileUpload">
       </div>
 
-      <button type="submit" class="btn btn-primary m-auto my-2" :disabled="!err">Submit</button>
+      <button type="submit" class="btn btn-primary m-auto my-2">Submit</button>
     </form>
 
   </div>
@@ -41,6 +40,7 @@ import { required, email } from '@vuelidate/validators'
 </template>
 
 <script>
+import axiosInstance from '../../axios';
 export default {
   data() {
     return {
@@ -56,8 +56,12 @@ export default {
       return /^01[0125][0-9]{8}$/.test(this.phone);
     },
     phoneErrorMessage() {
-      return this.phoneIsValid ? null : 'Please enter a 10-digit phone number.';
+      return this.phoneIsValid ? null : 'Please enter a 11-digit phone number.';
     },
+    emailIsValid()
+    {
+      return this.userEmail.split('@').lengths === 2;
+    }
   },
   methods: {
     handleFileUpload(event) {
@@ -65,35 +69,95 @@ export default {
 
       if(/\.pdf$/i.test(this.cvFile.name))
       {
-        this.err = true;
+        this.err = false;
       }
       else
       {
-        this.err = false;
+        this.err = true;
       }
     },
     submitForm() {
-        const formData = new FormData();
-        formData.append('email', this.userEmail);
-        formData.append('phone', this.phone);
-        formData.append('cv', this.cvFile);
-        formData.append('candidateId', 1);
-        formData.append('postId', this.$route.params.id);
 
-        axios
+        if (!this.cvFile && (!this.userEmail || !this.phone))
+        {
+          this.$toast.open({
+            message: "You should provide both email and phone number or resume only",
+            type: 'error',
+            duration: 3000,
+          })
+          return 
+        }
+        console.log(this.err)
+
+        if (this.err)
+        {
+          this.$toast.open({
+            message: "Wrong file format",
+            type: 'error',
+            duration: 3000,
+          })
+          return          
+        }
+        console.log('check mail  ',this.emailIsValid);
+        if (this.emailIsValid)
+        {
+            this.$toast.open({
+            message: "Wrong Email",
+            type: 'error',
+            duration: 3000,
+          })
+          return          
+        }
+
+        if (!this.phoneIsValid)
+        {
+            this.$toast.open({
+            message: "Wrong phone number",
+            type: 'error',
+            duration: 3000,
+          })
+          return          
+        }
+
+        const formData = new FormData();
+
+        if(this.userEmail && this.phone)
+        {
+          formData.append('email', this.userEmail);
+          formData.append('phone', this.phone);
+        }
+
+        if(this.cvFile)
+        {
+          formData.append('resume', this.cvFile);
+        }
+
+        formData.append('post_id', this.$route.params.id);
+
+        axiosInstance
         .post(`${import.meta.env.VITE_BASE_URL}/applications`, formData)
         .then((response) => {
-          console.log(response);
+          this.$toast.open({
+            message: "Appliced Successfully",
+            type: 'success',
+            duration: 3000
+          })
         })
         .catch((error) => {
           console.error(error);
         });
+    },
+    phoneIsValid()
+    {
+      return /^01[0125][0-9]{8}$/.test(this.phone);
+    },
+    phoneErrorMessage() {
+      return this.phoneIsValid ? null : 'Please enter a 10-digit phone number.';
+    },
+    emailIsValid()
+    {
+      return this.userEmail.split('@') === 2;
     }
   },
-  validations:
-  {
-      userEmail: {email},
-      cvFile: {required}
-  }
 };
 </script>

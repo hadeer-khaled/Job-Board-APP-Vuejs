@@ -217,7 +217,7 @@ export default {
             router.push('/verify')
         }
         if(token){
-           router.push('/reset')
+            router.push('/reset')
         }
         if(this.work_type.length === 0 && !this.salary)
         {
@@ -228,7 +228,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts/locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;
@@ -243,9 +243,9 @@ export default {
             
             if (this.salary && this.salary <= 0)
             {
-                let instance = this.$toast.open({
+                this.$toast.open({
                     message:"Cannot search with zero or negative",
-                    position:'bottom-right',
+                    position:'bottom-left',
                     type:'error',
                     duration:3000
                 });

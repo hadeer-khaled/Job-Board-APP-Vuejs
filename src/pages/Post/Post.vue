@@ -26,9 +26,10 @@ import axios from 'axios';
     :work_type="data.work_type"
     :skills="data.skills"
     >
-
+    
+    <p>aaaaa{{ data }}</p>
     <template v-slot:apply> 
-        <RouterLink v-if="!passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.post_id}`">Apply</RouterLink>
+        <RouterLink v-if="!passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.id}`">Apply</RouterLink>
     </template>
 
     <template v-slot:seeApplications> 
