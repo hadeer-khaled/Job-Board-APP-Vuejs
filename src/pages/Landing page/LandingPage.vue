@@ -6,6 +6,7 @@ import AutoComplete from 'primevue/autocomplete';
 import { RouterLink } from 'vue-router';
 import Navbar from '../../components/Navbar.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
+import Button from 'primevue/button';
 
 </script>
 
@@ -14,10 +15,14 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     <!-- Navbar -->
     <Navbar />
 
+
+        
             <div class="w-25 m-auto d-flex align-baseline my-2">
                 <AutoComplete v-model="searchTitle" :suggestions="suggestions" @complete="search"></AutoComplete>
                 <button class="btn btn-outline-primary  mx-3 my-2 my-sm-0 " type="submit" @click="getSearchPosts">Search</button>
             </div>
+     
+
     <div class="row">
     
     <div class="col-3 px-5">
@@ -66,7 +71,16 @@ import PostCard from '../../components/PostComponents/PostCard.vue';
     </div>
     </div>
 
-    <div class="col-9">
+    <div class="col-9 position-relative">
+        <!-- <div class=" position-absolute top-0 end-0" > -->
+        <router-link :to="'/employer/add-post'">
+            <button class="btn btn-primary position-absolute  mx-5" style="
+                right: 10px !important;
+                top: -30px !important;
+            ">Add New Job</button>
+        </router-link>
+    
+        <!-- </div> -->
         
     <div v-for="post in posts" :key="post.id" class="border border-2 my-3 mx-5">
     
@@ -213,7 +227,7 @@ export default {
             let url = import.meta.env.VITE_BASE_URL;
 
             axios
-            .get(url+'/posts' , {params: queryParams})
+            .get(url+'/home/posts' , {params: queryParams})
             .then((res) => {
                 this.posts = res.data.data;
             })
