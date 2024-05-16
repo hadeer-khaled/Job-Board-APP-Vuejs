@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axiosInstance from '../../axios/index';
-
+import router from '../../router';
 
 export const useUserStore = defineStore({
   id: "user",
@@ -67,9 +67,14 @@ export const useUserStore = defineStore({
         
     },
     async logout() {
-      console.log("dddddd");
       localStorage.clear();
+      router.push('/');
     },
+    async resetUser() {
+      this.user = null
+      this.applications = []
+      this.error = null
+    }
    
   },
 });

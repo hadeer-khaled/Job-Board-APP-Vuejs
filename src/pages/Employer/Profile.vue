@@ -8,7 +8,7 @@
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
               <div class="position-relative">
-              <Avatar :image="employer.company_logo" 
+              <Avatar :image="company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
                       <form @submit.prevent="updateImage" enctype="multipart/form-data" class="position-absolute" style="width:fit-content ; bottom: 25px; right: 0px;">
                        
@@ -49,7 +49,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-briefcase"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.company_name" />
+                  <InputText v-model="employer.company_name" placeholder="Company Name"/>
                   <span v-if = "v$.employer.company_name.$error">
                     {{v$.employer.company_name.$errors[0].$message}}
                   </span>
@@ -60,7 +60,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-user"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.name" />
+                  <InputText v-model="employer.name" placeholder="Full Name"/>
                    <span v-if = "v$.employer.name.$error">
                     {{v$.employer.name.$errors[0].$message}}
                   </span>
@@ -71,7 +71,7 @@
                   <InputGroupAddon>
                     <i class="pi pi-at"></i>
                   </InputGroupAddon>
-                  <InputText v-model="employer.email" />
+                  <InputText v-model="employer.email" placeholder="Your Email" />
                    <span v-if = "v$.employer.email.$error">
                     {{v$.employer.email.$errors[0].$message}}
                   </span>
@@ -98,23 +98,25 @@
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
             </div>
-              <div>
-                <p class="mx-3 fw-bold my-3">Status</p>
-                <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
-                  <option value="all">All</option>
-                  <option value="approved">Approved</option>
-                  <option value="pending">Pending</option>
-                  <option value="rejected">Rejected</option>
-                </select>
+            <div class="d-flex align-items-center justify-content-around mt-4">
+                <div class="d-flex align-items-center">        
+                    <p class="mx-1 fw-bold my-3">Job Status</p>
+                    <select class="form-select w-50 mx-3" name="status" v-model="selectedJobStatus">
+                      <option value="all">All</option>
+                      <option value="approved">Approved</option>
+                      <option value="pending">Pending</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div>
+                    <Button @click="getJobs()"  label="Post New Job" severity="secondary">Filter</button>
+                </div>
             </div> 
-            <div>
-              <button @click="getJobs()">filter</button>
-            </div>
-
+            
           </template>
         </Card>
 
-      </div> <!-- if employer -->
+      </div> <!-- end if employer -->
 
       <div v-else class="col-3">
           <Card class="mb-2" >
@@ -135,12 +137,13 @@
                   :location="job.location"
                   :application_deadline="job.application_deadline"
                   :created_at="job.created_at"
-                  :logo="employer.company_logo "
+                  :logo="company_logo "
                   :work_type="job.work_type"
                   :start_salary="job.start_salary"
                   :end_salary="job.end_salary"
                   :post_id="job.id"
                   :company="employer.company_name"
+                  :status="job.status"
                   :route="`/posts/${job.id}`
                   "/>
                 <!-- <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />  -->
@@ -221,6 +224,7 @@ import Paginator from 'primevue/paginator';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import axiosInstance from '../../axios/index';
+
 import { useUserStore } from '../../store/modules/UserPinia';
 
 
@@ -231,7 +235,8 @@ import { required, email , minLength} from '@vuelidate/validators'
 
 import Swal from 'sweetalert2'
 
-var static_employer_id = 1;
+// var static_employer_id = 1;
+
 
 export default {
    components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
@@ -239,16 +244,17 @@ export default {
       data:()=>(
         {
           v$:useVuelidate(),
-          employer: {
-              company_name: '',
-              company_logo: '',
-              name: '',
-              username: '',
-              email: '',
-              user_id:''
-          },
+          // employer: {
+          //     company_name: '',
+          //     name: '',
+          //     username: '',
+          //     email: '',
+          //     user_id:''
+          // },
+          employer: useUserStore().user,
+          company_logo:useUserStore().user.company_logo,
           file:"", 
-          selectedWorkType:"",
+          selectedJobStatus:"all",
           paginationLinks: {},
           next: null,
           prev: null, 
@@ -273,7 +279,7 @@ export default {
           formData.append('logo', file)
           formData.append('_method', "put")
           axiosInstance
-            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`, formData)
             .then(res => {
                 console.log('res', res);
                 this.fetchEmployerData();
@@ -287,35 +293,38 @@ export default {
             .catch(err => console.log(err.response));
         },
         
-        selectImage(){
-          const selectedFile = this.$refs.file.files[0];
-          this.file = selectedFile;
-          console.log("selectedFile",selectedFile)
-        }, 
+        // selectImage(){
+        //   const selectedFile = this.$refs.file.files[0];
+        //   this.file = selectedFile;
+        //   console.log("selectedFile",selectedFile)
+        // }, 
 
-        updateImage(){
-          const formData = new FormData()
-          formData.append('logo', this.file)
-          formData.append('_method', "put")
-          axiosInstance
-            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
-            .then(res => {
-                console.log('res', res);
-                Swal.fire({
-                  icon: "success",
-                  text: "Your Image have been updated successfully!",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-                })
-            .catch(err => console.log(err.response));
+        // updateImage(){
+        //   const formData = new FormData()
+        //   formData.append('logo', this.file)
+        //   formData.append('_method', "put")
+        //   axiosInstance
+        //     .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+        //     .then(res => {
+        //         console.log('res', res);
+        //         Swal.fire({
+        //           icon: "success",
+        //           text: "Your Image have been updated successfully!",
+        //           showConfirmButton: false,
+        //           timer: 1500
+        //         });
+        //         })
+        //     .catch(err => console.log(err.response));
         
-        },
+        // },
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
+            const { company_logo, image, username,...employerWithoutLogo } = this.employer;
+            console.log(employerWithoutLogo)
+
             axiosInstance
-            .put(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, this.employer)
+            .put(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`, employerWithoutLogo)
             .then(res => {
                 var employerData = res.data.data
                 console.log('Returned Updated Employer:', employerData);
@@ -346,30 +355,30 @@ export default {
           // this.fetchJobs(url);
           // this.getJobs(url);
         },
-        fetchJobs(pageUrl = null) {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
-            axiosInstance
-            .get(url)
-            .then(res => {
-                this.jobs = res.data.jobs.data
-                console.log(" this.jobs " ,  this.jobs )
-                this.paginationLinks = res.data.jobs.links;
-                this.paginationLinks.pop(this.paginationLinks.length-1)
-                this.paginationLinks.shift()
-                this.next = res.data.jobs.next_page_url;
-                this.prev = res.data.jobs.prev_page_url;
-                console.log("jobs: " , res.data.jobs.data)
-                })
-            .catch(err => console.log(err));
-          },
+        // fetchJobs(pageUrl = null) {
+        //     const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+        //     axiosInstance
+        //     .get(url)
+        //     .then(res => {
+        //         this.jobs = res.data.jobs.data
+        //         console.log(" this.jobs " ,  this.jobs )
+        //         this.paginationLinks = res.data.jobs.links;
+        //         this.paginationLinks.pop(this.paginationLinks.length-1)
+        //         this.paginationLinks.shift()
+        //         this.next = res.data.jobs.next_page_url;
+        //         this.prev = res.data.jobs.prev_page_url;
+        //         console.log("jobs: " , res.data.jobs.data)
+        //         })
+        //     .catch(err => console.log(err));
+        //   },
 
         fetchEmployerData(){
             axiosInstance
-            .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
+            .get(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`)
             .then(res => {
                 var employerData = res.data.data
                 this.employer.company_name =employerData.company_name
-                this.employer.company_logo =employerData.company_logo
+                this.company_logo =employerData.company_logo
                 this.employer.name =employerData.name 
                 this.employer.username =employerData.username
                 this.employer.email =employerData.email
@@ -382,9 +391,9 @@ export default {
         getJobs(pageUrl = null){
           console.log(pageUrl)
            const queryParams = {};
-           queryParams.status = this.selectedWorkType;
+           queryParams.status = this.selectedJobStatus;
            console.log(queryParams)
-           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${this.employer.id}`;
             console.log(url)
             axiosInstance
             .get(url ,  {params: queryParams})
@@ -407,6 +416,7 @@ export default {
       mounted() {
         this.fetchEmployerData();
         this.getJobs()
+        console.log("useUserStore", useUserStore().user)
 
         // this.fetchJobs();
       }

@@ -19,6 +19,7 @@ const app = createApp(App);
 
 app.use(router)
   .use(PrimeVue)
+  .use(ToastService)
   .use(ToastPlugin)
   .use(ConfirmationService)
   .use(createPinia())

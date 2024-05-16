@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar/>
+    <Navbar />
     <div class="container reset-password-container">
       <div class="row justify-content-center">
         <div class="col-md-8">
@@ -15,8 +15,7 @@
                     type="password" 
                     class="form-control" 
                     id="password" 
-                    required 
-                    :placeholder="'Enter your password'" 
+                    :placeholder="errorMessages.password || 'Enter your new password'" 
                     :class="{ 'is-invalid': errorMessages.password }"
                   >
                   <div v-if="errorMessages.password" class="invalid-feedback">
@@ -30,7 +29,6 @@
                     type="password" 
                     class="form-control" 
                     id="confirm-password" 
-                    required 
                     :placeholder="errorMessages.confirmPassword || 'Confirm your password'" 
                     :class="{ 'is-invalid': errorMessages.confirmPassword }"
                   >
@@ -53,7 +51,7 @@
 <script>
 import Navbar from '../../components/Navbar.vue';
 import axiosInstance from '../../axios';
-import router from '../../router'; 
+import router from '../../router';
 
 export default {
   components: {
@@ -75,16 +73,20 @@ export default {
   },
   methods: {
     validatePassword(password) {
-      const re = /^(?=.*[A-Z])(?=.*[a-z])((?=.*\d)|(?=.*\W+)).{8,}$/;
-      return re.test(password);
+      return password.length >= 8;
     },
     async resetPassword() {
       this.errorMessages = {};
-      if (!this.validatePassword(this.password)) {
-        this.errorMessages.password = 'Password must contain at least 8 characters, including uppercase, lowercase, and either a number or special character.';
+
+      if (!this.password) {
+        this.errorMessages.password = 'Password required.';
+      } else if (!this.validatePassword(this.password)) {
+        this.errorMessages.password = 'Password must contain at least eight characters.';
       }
 
-      if (this.password !== this.confirmPassword) {
+      if (!this.confirmPassword) {
+        this.errorMessages.confirmPassword = 'Confirm password required.';
+      } else if (this.password !== this.confirmPassword) {
         this.errorMessages.confirmPassword = 'Passwords do not match.';
       }
 
@@ -110,7 +112,7 @@ export default {
 
 <style scoped>
 .reset-password-container {
-  margin-top: 80px; 
+  margin-top: 80px;
 }
 
 .card {

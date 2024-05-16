@@ -33,19 +33,19 @@ import Button from 'primevue/button';
 
     <!-- Work Place -->
     <p class="mx-3 fw-bold my-3">Work Place</p>
-    <div class="px-5 py-2">
+    <div class="">
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
         <label class="form-check-label" for="flexCheckDefault">Remote</label>
     </div>
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
         <label class="form-check-label" for="flexCheckDefault">On-Site</label>
     </div>    
 
-    <div class="form-check-reverse mx-5">
+    <div class="form-check mx-5">
         <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
         <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
     </div>
@@ -73,15 +73,6 @@ import Button from 'primevue/button';
     </div>
 
     <div class="col-9 position-relative">
-        <!-- <div class=" position-absolute top-0 end-0" > -->
-        <router-link :to="'/employer/add-post'">
-            <button class="btn btn-primary position-absolute  mx-5" style="
-                right: 10px !important;
-                top: -30px !important;
-            ">Add New Job</button>
-        </router-link>
-    
-        <!-- </div> -->
         
       <button type="button" class="btn btn-light border border-black d-lg-none mx-5" data-bs-toggle="modal" data-bs-target="#sidebarModal">
             Filters
@@ -100,16 +91,16 @@ import Button from 'primevue/button';
                         <div class="bg-white mt-3 border border-2 py-3">
                             <!-- Work Place -->
                             <p class="mx-3 fw-bold my-3">Work Place</p>
-                            <div class="px-5 py-2">
-                                <div class="form-check-reverse mx-5">
+                            <div class="">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="remote" v-model="work_type" />
                                     <label class="form-check-label" for="flexCheckDefault">Remote</label>
                                 </div>
-                                <div class="form-check-reverse mx-5">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="on-site" v-model="work_type"/>
                                     <label class="form-check-label" for="flexCheckDefault">On-Site</label>
                                 </div>
-                                <div class="form-check-reverse mx-5">
+                                <div class="form-check mx-5">
                                     <input class="form-check-input" name="g1" type="checkbox" value="hybrid" v-model="work_type"/>
                                     <label class="form-check-label" for="flexCheckDefault">Hybrid</label>
                                 </div>
@@ -226,7 +217,7 @@ export default {
             router.push('/verify')
         }
         if(token){
-           router.push('/reset')
+            router.push('/reset')
         }
         if(this.work_type.length === 0 && !this.salary)
         {
@@ -237,7 +228,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts//locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;
@@ -248,13 +239,13 @@ export default {
     methods: {
         fetchPosts(pageUrl = null)
         {
-const queryParams = {};
+            const queryParams = {};
             
             if (this.salary && this.salary <= 0)
             {
-                let instance = this.$toast.open({
+                this.$toast.open({
                     message:"Cannot search with zero or negative",
-                    position:'bottom-right',
+                    position:'bottom-left',
                     type:'error',
                     duration:3000
                 });
