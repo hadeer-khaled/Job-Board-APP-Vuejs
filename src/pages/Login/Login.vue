@@ -61,7 +61,8 @@ export default {
    data() {
     return {
       verify: null, 
-      errorMessage:{}
+      errorMessage:{},
+      userEmail:''
     }
   },
   mounted() {
@@ -75,15 +76,19 @@ export default {
 ,
  methods: {
     async resetPassword() {
-   
-        try {
+       if( !this.userEmail){
+         alert('Failed to send password reset link. please write your email');
+       }else{
+          try {
           await axiosInstance.post('http://127.0.0.1:8000/api/forgot-password', {
             email: userEmail.value
           });
           alert('Password reset link sent successfully.');
         } catch (error) {
-          alert('Failed to send password reset link. please write your email');
+          alert('Failed to send password reset link. ');
         }
+       }
+        
      
     },
 
