@@ -8,7 +8,7 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import { useUserStore } from "./store/modules/UserPinia";
-
+import ToastService from 'primevue/toastservice';
 import 'primevue/resources/primevue.min.css'; // Core CSS
 import 'primevue/resources/themes/saga-blue/theme.css'; // Theme
 import 'primeicons/primeicons.css'; // Icons
@@ -19,6 +19,7 @@ const app = createApp(App);
 
 app.use(router)
   .use(PrimeVue)
+  .use(ToastService)
   .use(ToastPlugin)
   .use(createPinia())
   .mount('#app');

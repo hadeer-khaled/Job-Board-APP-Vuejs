@@ -16,13 +16,13 @@ import Navbar from './components/Navbar.vue';
 import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
 import Admin from './pages/Admin/Admin.vue';
 import AdminPost from './pages/Post/AdminPost.vue';
+import DeletePost from './pages/Employer/DeletedPosts.vue';
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
-  { path: '/application/:id', component: ApplyingForm },
-  { path: '/admin', component: Admin },
+  { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
   { path: '/application/:id', component: ApplyingForm },
   { path: '/login', component: Login } ,
