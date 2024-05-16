@@ -233,8 +233,9 @@ export default {
       }
       if (!password.value) {
         errorMessages.value.password = "Password required.";
-      }else if (!validatePassword(password.value) ){
-        errorMessages.value.passwordStrong = "Must contain least eight characters, at least one number, lowercase, uppercase letter, and one special character.";
+      }
+      if (password.value.length <9) {
+        errorMessages.value.passwordStrong = "Must contain least eight characters";
       }
       if (!confirmPassword.value) {
         errorMessages.value.confirmPasswordRe = "Password confirmation required.";
