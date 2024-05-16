@@ -19,6 +19,7 @@
               <label for="userEmail" class="form-label">Email</label>
               <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail" :placeholder="errorMessages.userEmail || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.userEmail }">
               <small v-if="errorMessages.userEmailRe" class="text-danger">{{ errorMessages.userEmailRe }}</small>
+              <small v-if="errorMessage.userEmail" class="text-danger">{{ errorMessage.userEmail }}</small>
             </div>
             <div class="form-group mb-4">
               <label for="password" class="form-label">Password</label>
@@ -32,8 +33,8 @@
             <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
             <small v-if="errorMessages.general" class="text-danger d-block mt-3 text-center">{{ errorMessages.general }}</small>
           </form>
-         <div class="d-flex justify-content-end mt-3">
-          <router-link to="/" style="text-decoration: none;">Forget password?</router-link>
+          <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-outline-secondary" type="button" @click="resetPassword"> Forget password? </button>
         </div>
         </div>
       </div>
@@ -59,7 +60,9 @@ export default {
   },
    data() {
     return {
-      verify: null
+      verify: null, 
+      errorMessage:{},
+      userEmail:''
     }
   },
   mounted() {
@@ -71,6 +74,25 @@ export default {
     }
   }
 ,
+ methods: {
+    async resetPassword() {
+       if( !this.userEmail){
+         alert('Failed to send password reset link. please write your email');
+       }else{
+          try {
+          await axiosInstance.post('http://127.0.0.1:8000/api/forgot-password', {
+            email: userEmail.value
+          });
+          alert('Password reset link sent successfully.');
+        } catch (error) {
+          alert('Failed to send password reset link. ');
+        }
+       }
+        
+     
+    },
+
+  },
   setup() {
     const userStore = useUserStore();
     const userEmail = ref('');
@@ -105,7 +127,7 @@ export default {
              timestamp: new Date(), 
              email: userEmail.value,
            })
-            console.log('ssssssssssssssssss' );
+
             const params = new URLSearchParams(window.location.search);
             const verifyParam = params.get("verify");
             if (verifyParam) {
@@ -128,11 +150,6 @@ export default {
       }
     };
 
-    const validEmail = (email) => {
-      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      return re.test(String(email).toLowerCase());
-    };
-
     const togglePasswordVisibility = () => {
       const passwordInput = document.getElementById('password5');
       if (passwordInput.type === 'password') {
@@ -143,7 +160,10 @@ export default {
         passwordFieldIcon.value = 'fa-eye-slash';
       }
     };
-
+   const validEmail = (email) => {
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      return re.test(String(email).toLowerCase());
+    };
     return {
       userStore,
       submitForm,

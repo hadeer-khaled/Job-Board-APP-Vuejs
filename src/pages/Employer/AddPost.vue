@@ -101,7 +101,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axiosInstance from '../../axios/index';
 import Navbar from '../../components/Navbar.vue';
 
 import InlineMessage from 'primevue/inlinemessage';
@@ -189,7 +189,7 @@ export default {
   
   methods: {
       fetchSkills() {
-      axios.get(`${import.meta.env.VITE_BASE_URL}/skills`)
+      axiosInstance.get(`${import.meta.env.VITE_BASE_URL}/skills`)
         .then(response => {
           this.allSkills = response.data.data;
           console.log('Skills fetched successfully:', this.allSkills);
@@ -232,7 +232,7 @@ export default {
       this.v$.$validate();
       if(!this.v$.$error){
         console.log("postData",postData)
-      axios.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
+      axiosInstance.post(`${import.meta.env.VITE_BASE_URL}/posts`, postData)
         .then(response => {
           console.log('Job post added successfully:', response.data);
           Swal.fire({

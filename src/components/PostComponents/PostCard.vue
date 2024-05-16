@@ -4,8 +4,12 @@
         <div class="position-relative">
             <div>
             <!-- Logo -->
-            <img v-if="logo" style="position:absolute;top:0px;right:0px;width:100px" :src="logo" alt="Logo" class="border rounded-circle">
+            <!-- <img v-if="logo" style="position:absolute;top:0px;right:0px;width:100px" :src="logo" alt="Logo" class="border rounded-circle"> -->
+               <Avatar :image="logo" style="position:absolute;top:0px;right:0px;width:100px"
+                      class="custom-avatar mb-3" shape="circle" />
             <img v-if="!logo" style="position:absolute;top:0px;right:0px;width:100px" src="/default.jpg" alt="Logo" class="">
+               <Avatar v-if="!logo" image="/default.jpg" style="position:absolute;top:0px;right:0px;width:100px"
+                      class="custom-avatar mb-3" shape="circle" />
             </div>
       <div class="">
 
@@ -37,13 +41,18 @@
          </div>
       </div>
    </div>
+   <slot name="Restore"></slot>
 </div>
+
+
 </template>
 
 
 <script>
 import { RouterLink } from 'vue-router';
 import { formatDistanceToNow } from 'date-fns';
+import Avatar from 'primevue/avatar';
+
 
 export default {
    props: {
@@ -59,6 +68,7 @@ export default {
       logo: String,
       route: String
    },
+   components:{Avatar},
    computed: {
       formattedDate()
       {
@@ -91,3 +101,11 @@ export default {
    }
 };
 </script>
+
+<style  scoped>
+.custom-avatar {
+  width: 100px !important; 
+  height: 100px !important; 
+}
+
+</style>

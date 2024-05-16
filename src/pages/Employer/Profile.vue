@@ -7,9 +7,42 @@
         <Card class="mb-2" >
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
-              <Avatar image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRfV9n69zxuV4DQX7sYF7ql8ajx47wLioPeP-m4qFbHLkD9UNwfQSneRtkQEDnx-QxFs&usqp=CAU" 
+              <div class="position-relative">
+              <Avatar :image="employer.company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
-            
+                      <form @submit.prevent="updateImage" enctype="multipart/form-data" class="position-absolute" style="width:fit-content ; bottom: 25px; right: 0px;">
+                       
+                                <!-- <div>
+                                 <FileUpload
+                                    mode="basic"
+                                    name="logo"
+                                    :auto="true" 
+                                    customUpload @uploader="customUploader"
+                                    accept="image/*"
+                                  >
+                                  </FileUpload>
+                                </div> -->
+
+                                <FileUpload  name="logo"
+                                :auto="true" 
+                                customUpload  
+                                @uploader="customUploader"
+                                accept="image/*" :maxFileSize="1000000" 
+                                :pt="{ content : 'my-content' , buttonbar: 'my-buttonbar' }"  >
+                                      <template  #header="{ chooseCallback }" :pt="{  }">
+                                              <Button @click="chooseCallback()" icon="pi pi-pencil" rounded severity="success" ></Button>
+                                      </template>
+                                  </FileUpload>
+
+                        <!-- <input type="file" ref="file" @change="selectImage" /> -->
+                        <!-- <i class="pi pi-pencil"></i> -->
+                        <!-- <Button type="submit"  label="Update Image" icon="pi pi-check" iconPos="right"  severity="success"   /> -->
+
+                    </form> 
+
+
+              </div>
+                         
               <form @submit.prevent="saveChanges" v-if="employer" class="d-flex flex-column align-items-center justify-content-center ">
                 <!-- Company Name -->
                 <InputGroup class="mb-2" >
@@ -61,9 +94,21 @@
                     <Button  label="Post New Job"  severity="info"/>
               </router-link>
 
-              <router-link :to="'/employer/add-post'">
+              <router-link :to="'/employer/deleted-posts'">
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
+            </div>
+              <div>
+                <p class="mx-3 fw-bold my-3">Status</p>
+                <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
+                  <option value="all">All</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+            </div> 
+            <div>
+              <button @click="getJobs()">filter</button>
             </div>
 
           </template>
@@ -98,7 +143,32 @@
                   :company="employer.company_name"
                   :route="`/posts/${job.id}`
                   "/>
-                <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" /> 
+                <!-- <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />  -->
+                      <nav class="mx-5" aria-label="Page navigation example">
+                          <ul class="pagination">
+
+                          <!-- Prev -->
+                          <li :class="{ 'page-item': true, disabled: !prev }">
+                          <a class="page-link" @click="changePage(prev)" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                          </li>
+
+                          <!-- Pages -->
+                          <li v-for="link in paginationLinks" :key="link.label" :class="{ 'page-item': true, active: link.active }">
+                          <a v-if="!link.active" @click="changePage(link.url)" class="page-link">{{ link.label }}</a>
+                          <span class="page-link" v-else>{{ link.label }}</span>
+                          </li>
+
+                          <!-- Next -->
+                          <li :class="{ 'page-item': true, disabled: !next }">
+                          <a class="page-link" @click="changePage(next)" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                          </li>
+                          </ul>
+                        </nav>
+              
               </div>
               <div v-else>
                   <Message severity="contrast">You don't have any jobs for now.</Message>
@@ -140,16 +210,22 @@ import Card from 'primevue/card';
 import Navbar from '../../components/Navbar.vue';
 import MyPaginator from '../../components/MyPaginator.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
-import axios from 'axios';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import InputText from 'primevue/inputtext';
+import InputSwitch from 'primevue/inputswitch'
 import Avatar from 'primevue/avatar';
 import Message from 'primevue/message';
 import Skeleton from 'primevue/skeleton';
 import Paginator from 'primevue/paginator';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import axiosInstance from '../../axios/index';
+import { useUserStore } from '../../store/modules/UserPinia';
+
+
+import FileUpload from 'primevue/fileupload';
+
 import { useVuelidate } from '@vuelidate/core'
 import { required, email , minLength} from '@vuelidate/validators'
 
@@ -159,7 +235,7 @@ var static_employer_id = 1;
 
 export default {
    components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
-   TabView , TabPanel ,MyPaginator , PostCard,Message,Skeleton},
+   TabView , TabPanel ,MyPaginator , PostCard,Message,Skeleton,FileUpload,InputSwitch},
       data:()=>(
         {
           v$:useVuelidate(),
@@ -170,11 +246,12 @@ export default {
               username: '',
               email: '',
               user_id:''
-
-          }, 
-           paginationLinks: {},
-              next: null,
-              prev: null, 
+          },
+          file:"", 
+          selectedWorkType:"",
+          paginationLinks: {},
+          next: null,
+          prev: null, 
           jobs: null
           }),
 
@@ -188,11 +265,56 @@ export default {
             }
           }
         },
-      methods: {   
+      methods: { 
+        customUploader(event) {
+          const file = event.files[0];
+          console.log(file)
+          const formData = new FormData()
+          formData.append('logo', file)
+          formData.append('_method', "put")
+          axiosInstance
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .then(res => {
+                console.log('res', res);
+                this.fetchEmployerData();
+                Swal.fire({
+                  icon: "success",
+                  text: "Your Image have been updated successfully!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                })
+            .catch(err => console.log(err.response));
+        },
+        
+        selectImage(){
+          const selectedFile = this.$refs.file.files[0];
+          this.file = selectedFile;
+          console.log("selectedFile",selectedFile)
+        }, 
+
+        updateImage(){
+          const formData = new FormData()
+          formData.append('logo', this.file)
+          formData.append('_method', "put")
+          axiosInstance
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .then(res => {
+                console.log('res', res);
+                Swal.fire({
+                  icon: "success",
+                  text: "Your Image have been updated successfully!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                })
+            .catch(err => console.log(err.response));
+        
+        },
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
-            axios
+            axiosInstance
             .put(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, this.employer)
             .then(res => {
                 var employerData = res.data.data
@@ -215,16 +337,18 @@ export default {
         changePage(pageUrl) {
             if(pageUrl)
             {
-                this.fetchJobs(pageUrl);
+                // this.fetchJobs(pageUrl);
+                this.getJobs(pageUrl);
             }
         },
         handlePageChange(url) {
           console.log('Page changed to:', url);
-          this.fetchJobs(url);
+          // this.fetchJobs(url);
+          // this.getJobs(url);
         },
         fetchJobs(pageUrl = null) {
             const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
-            axios
+            axiosInstance
             .get(url)
             .then(res => {
                 this.jobs = res.data.jobs.data
@@ -239,8 +363,8 @@ export default {
             .catch(err => console.log(err));
           },
 
-          fetchEmployerData(){
-            axios
+        fetchEmployerData(){
+            axiosInstance
             .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
             .then(res => {
                 var employerData = res.data.data
@@ -255,36 +379,41 @@ export default {
             .catch(err => console.log(err));
           },
 
-          // getJobs(e){
-      
-          //   const status = e.target.value;
-          //   const url = `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}?status=${status}`;
-      
-          //   axios
-          //   .get(url)
-          //   .then(res => {
-          //       this.jobs = res.data.jobs.data;
-          //       this.paginationLinks = res.data.jobs.links;
-          //       this.next = res.data.jobs.next_page_url+`?status=${status}`;
-          //       this.prev = res.data.jobs.prev_page_url+`?status=${status}`;
-          //       console.log("filtered: " , res.data.jobs.data)
-          //       })
-          //   .catch(err => console.log(err));
+        getJobs(pageUrl = null){
+          console.log(pageUrl)
+           const queryParams = {};
+           queryParams.status = this.selectedWorkType;
+           console.log(queryParams)
+           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+            console.log(url)
+            axiosInstance
+            .get(url ,  {params: queryParams})
+            .then(res => {
+                this.jobs = res.data.jobs.data
+                console.log(" this.jobs " ,  this.jobs )
+                this.paginationLinks = res.data.jobs.links;
+                this.paginationLinks.pop(this.paginationLinks.length-1)
+                this.paginationLinks.shift()
+                this.next = res.data.jobs.next_page_url;
+                this.prev = res.data.jobs.prev_page_url;
+                console.log("jobs: " , res.data.jobs.data)
+                })
+            .catch(err => console.log(err));
             
-          // }
+          }
 
 
       },
       mounted() {
         this.fetchEmployerData();
-        
+        this.getJobs()
 
-        this.fetchJobs();
+        // this.fetchJobs();
       }
 };
 
 </script>
-<style lang="stylus" scoped>
+<style  scoped>
 
 .custom-avatar {
   width: 200px !important; 
@@ -300,4 +429,15 @@ button {
 .p-card .p-card-body {
      padding: 0px !important; 
 }
+
+::v-deep  .my-buttonbar{  
+      width: fit-content;
+      padding: 0px !important;
+      border: 0px;
+      background-color: transparent;
+}
+::v-deep  .my-content{  
+     display: none;
+}
+
 </style>

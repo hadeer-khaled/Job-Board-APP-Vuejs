@@ -26,7 +26,6 @@
             <RouterLink to="/employer/profile" class="mx-3 text-decoration-none fw-bold ">Profile</RouterLink>
         </div>
         
-
         <div>
 
         </div>
@@ -36,13 +35,15 @@
     <div v-if="!loggedUser">
         <div class="d-flex">
 
-            <span style="height:40px;width:1px;background-color:#D9DDE4;margin-right:16px"></span>
-            <a class="btn btn-primary mx-3" @click="$router.push('/login')">Login</a>
-            <a class="btn btn-light border-2 border-black ss mx-3 " @click="$router.push('/register')">Register</a>
-        </div>
-    </div>
+                    <span style="height:40px;width:1px;background-color:#D9DDE4;margin-right:16px"></span>
+                    <a class="btn btn-primary mx-3" @click="$router.push('/login')">Login</a>
+                    <a class="btn btn-light border-2 border-black ss mx-3 "
+                        @click="$router.push('/register')">Register</a>
+                </div>
+            </div>
 
     <div v-if="loggedUser">
+        <button class="btn btn-primary mx-3" @click="logout">Logout</button>
         <div class="d-flex align-items-center  justify-content-center ">
         <p class="mx-3 my-auto">User Name</p>
         <img v-if="!image" style="width: 50px;" src="/default_user1.png" alt="user img">
@@ -55,14 +56,42 @@
 </template>
 
 <script>
+import { useUserStore } from "../store/modules/UserPinia";
+import { ref, onMounted, watch } from 'vue';
+
 export default {
-    data() {
-        return {
-            loggedUser: true,
-            username: '',
-            image: '',
-            role: 'employer',
-        }
-    },
-}
+  setup() {
+    const loggedUser = ref(false);
+    const role = ref('');
+    const userStore = useUserStore();
+
+    const updateRoleAndLoggedUser = () => {
+      role.value = userStore.user?.role || '';
+      loggedUser.value = !!role.value;
+    };
+
+    onMounted(() => {
+      updateRoleAndLoggedUser();
+    });
+
+    watch(() => userStore.user, () => {
+      updateRoleAndLoggedUser();
+    });
+
+    const logout = () => {
+      userStore.logout();
+      loggedUser.value = false;
+      role.value = '';
+      // Redirect to home or login page
+      this.$router.push('/login');
+    };
+
+    return {
+      loggedUser,
+      role,
+      userStore,
+      logout,
+    };
+  }
+};
 </script>

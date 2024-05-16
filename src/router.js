@@ -8,20 +8,36 @@ import ApplyingForm from './pages/ApplyingForm/ApplyingForm.vue';
 import JobApplications from './pages/Employer/JobApplications.vue';
 import Login from './pages/Login/Login.vue';
 import Verify from './pages/Verify/Verify.vue';
-import Register from './pages/Register/Register.vue';import EmployerPost from './pages/Post/EmployerPost.vue';
+import Reset from './pages/Reset/Reset.vue';
+import Register from './pages/Register/Register.vue';
+import EmployerPost from './pages/Post/EmployerPost.vue';
+import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
+import Navbar from './components/Navbar.vue';
+import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
+import Admin from './pages/Admin/Admin.vue';
+import AdminPost from './pages/Post/AdminPost.vue';
+import DeletePost from './pages/Employer/DeletedPosts.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
+  { path: '/employer/deleted-posts', component: DeletePost },
   { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
   { path: '/application/:id', component: ApplyingForm },
-  { path: '/login', component: Login } ,
+  { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/verify', component: Verify},
+  { path: '/Reset', component: Reset},
   { path: '/employer/posts/:id' , component: EmployerPost },
+  // Candidates
+  { path: '/candidate/profile', component: CandidateProfile },
+  { path: '/candidate/applications', component: CandidateApplications },
+  { path: '/employer/posts/:id', component: EmployerPost },
+  { path: '/admin', component: Admin },
+  { path: '/admin/post/:id', component: AdminPost },
 ];
 
 const router = createRouter({
