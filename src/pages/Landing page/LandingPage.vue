@@ -140,7 +140,7 @@ post:first-child {
 
 <script>
 import { ref } from 'vue';
-
+import router from '../../router'; 
 const filteredTitles = ref([]);
 
 
@@ -163,7 +163,14 @@ export default {
     };
     },
     mounted() 
-    {
+    { 
+        const { verify } = this.$route.query;
+        const params = new URLSearchParams(window.location.search);
+        const verifyParam = params.get("verify");
+        if(verifyParam){
+            router.push('/verify')
+        }
+        
         if(this.work_type.length === 0 && !this.salary)
         {
             this.fetchPosts();
@@ -173,7 +180,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/posts/locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts//locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;
