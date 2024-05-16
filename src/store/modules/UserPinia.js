@@ -11,31 +11,45 @@ export const useUserStore = defineStore({
 
   }),
   actions: {
+    async getUser() {
+      try {
+        const response = await axiosInstance.get(
+          '/user'
+        );
+        this.user = response.data.user;
+        console.log(this.user);
+        return response;
+        
+      } catch (error) {
+        console.log("error.",error);
+        throw error;
+      }
+    },
     async empRegister(userData) {
       try {
       
         const response = await axiosInstance.post(
           `/EmpRegister`,
           userData,
-          config
         );
+        console.log("response", response);
         return response;
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.log("error",error);
         throw error;
       }
     },
     async candidateRegister(userData) {
       try {
-      
+        console.log("user data", userData);
         const response = await axiosInstance.post(
           `/CandidateRegister`,
           userData,
-          config
         );
+        console.log("response", response);
         return response;
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.log("error",error);
         throw error;
       }
     },
@@ -51,6 +65,9 @@ export const useUserStore = defineStore({
         throw error;
       }
         
+    },
+    async logout() {
+      localStorage.clear();
     },
    
   },
