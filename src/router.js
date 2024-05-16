@@ -13,7 +13,7 @@ import Register from './pages/Register/Register.vue';
 import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
-import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
+import CandidateApplications from './pages/CandidateApplictions/CandidateApplications.vue';
 
 import Admin from './pages/Admin/Admin.vue';
 import AdminPost from './pages/Post/AdminPost.vue';

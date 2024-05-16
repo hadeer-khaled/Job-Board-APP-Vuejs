@@ -21,8 +21,20 @@ export const useApplicationsStore = defineStore({
             }
         },
         async removeApplication(app_id){
-            const newApplications = this.applications.filter(application => application.id != app_id);
-            this.applications = [...newApplications];
+            try {
+                await axiosInstance.delete('/applications', {
+                    data: {
+                        app_id
+                    }
+                });
+                
+                const newApplications = this.applications.filter(application => application.id != app_id);
+                this.applications = [...newApplications];
+                
+                return true;
+            } catch (err) {
+                return false;
+            }
         }
     },
 });
