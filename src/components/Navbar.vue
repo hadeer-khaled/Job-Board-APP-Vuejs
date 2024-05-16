@@ -43,17 +43,44 @@
             </div>
 
     <div v-if="loggedUser">
-        <button class="btn btn-primary mx-3" @click="logout">Logout</button>
         <div class="d-flex align-items-center  justify-content-center ">
-        <p class="mx-3 my-auto">User Name</p>
-        <img v-if="!image" style="width: 50px;" src="/default_user1.png" alt="user img">
-        <img v-if="image" style="width: 50px;" :src="image" alt="user img">
+        <p class="mx-3 my-auto fw-bold r">{{ userStore.user.username }}</p>
+        <img v-if="!userStore.user.image" style="width: 50px;" src="/default_user1.png" alt="user img">
+
+        <div class="navbar-user-image d-flex align-items-center justify-content-center">
+            <img v-if="userStore.user.image" class="user-img" :src="userStore.user.image" alt="User Image">
+        </div>
+        <button class="mx-3 border border-0 " @click="logout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="currentColor">
+            <path d="M10 17v-3H5v-4h5V7l5 5-5 5zm7-14H7c-1.1 0-2 .9-2 2v3h2V5h10v14H7v-3H5v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+        </button>
         </div>
     </div>
 
 </nav>
     </div>
 </template>
+
+<style scoped>
+.navbar-user-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin-right: 15px; /* Adjust this according to your navbar design */
+}
+
+.user-img {
+  width: 50px; /* Adjust size as needed */
+  height: 50px; /* Ensure it maintains a square aspect ratio */
+  border-radius: 50%;
+  border: 2px solid #ffffff; /* Add a white border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+</style>
+
 
 <script>
 import { useUserStore } from "../store/modules/UserPinia";
@@ -80,8 +107,10 @@ export default {
 
     const logout = () => {
       userStore.logout();
+      userStore.resetUser(); 
       loggedUser.value = false;
       role.value = '';
+
       // Redirect to home or login page
       this.$router.push('/login');
     };

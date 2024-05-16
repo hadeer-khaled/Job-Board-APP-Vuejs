@@ -70,6 +70,11 @@ export const useUserStore = defineStore({
       localStorage.clear();
       router.push('/');
     },
+    async resetUser() {
+      this.user = null
+      this.applications = []
+      this.error = null
+    }
    
   },
 });
