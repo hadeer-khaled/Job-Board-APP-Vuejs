@@ -2,7 +2,20 @@
   <div>
     <Navbar/>
     <section class="vh-100 register-section d-flex justify-content-center align-items-center">
-      <div class="card text-black register-card shadow">
+      <div class="carousel-section">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" @mouseover="handleMouseOver">
+          <div class="carousel-indicators">
+            <button v-for="(image, index) in carouselImages" type="button" :data-bs-target="'#carouselExampleIndicators'" :data-bs-slide-to="index" :class="{ active: index === activeImageIndex }" :key="index" aria-label="Slide {{ index + 1 }}"></button>
+          </div>
+          <div class="carousel-inner">
+            <div v-for="(image, index) in carouselImages" :class="['carousel-item', { active: index === activeImageIndex }]" :key="index">
+              <img :src="image.src" class="d-block w-100" :alt="'Image ' + (index + 1)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card text-black register-card shadow d-flex flex-row">
+
         <div class="card-body p-md-5">
           <h2 class="text-center mb-4">Register</h2>
           <form @submit.prevent="submitForm" novalidate="true">
@@ -15,22 +28,22 @@
             </div>
             <div v-if="currentStep === 0">
               <div class="form-group mb-4">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">Name<span class="text-danger text-danger-astric">*</span></label>
                 <input type="text" class="form-control" id="name" v-model="name" :placeholder="errorMessages.name || 'Enter your name'" required :class="{ 'is-invalid': errorMessages.name }">
               </div>
               <div class="form-group mb-4">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Username<span class="text-danger text-danger-astric">*</span></label>
                 <input type="text" class="form-control" id="username" v-model="username" :placeholder="errorMessages.username || 'Enter your username'" required :class="{ 'is-invalid': errorMessages.username }">
                  <p v-if="errorMessages.usernameFromServer" class="text-danger">{{ errorMessages.usernameFromServer}}</p>
               </div>
               <div class="form-group mb-4">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email<span class="text-danger text-danger-astric">*</span></label>
                 <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
                 <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
                 <small v-if="errorMessages.emailFromServer" class="text-danger">{{ errorMessages.emailFromServer}}</small>
               </div>
               <div class="form-group mb-4">
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label">Password<span class="text-danger text-danger-astric">*</span></label>
                 <div class="input-group">
                   <input type="password" class="form-control" id="password" v-model="password" :placeholder="errorMessages.password || 'Enter your password'" required :class="{ 'is-invalid': errorMessages.password }">
                   <button class="btn btn-outline-secondary" type="button" @click="togglePasswordVisibility">
@@ -40,7 +53,7 @@
               </div>
                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.passwordStrong }}</small>
               <div class="form-group mb-4">
-                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <label for="confirmPassword" class="form-label">Confirm Password<span class="text-danger text-danger-astric">*</span></label>
                 <div class="input-group">
                   <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" :placeholder="errorMessages.confirmPasswordRe || 'Confirm your password'" required :class="{ 'is-invalid': errorMessages.confirmPasswordRe }">
                   <button class="btn btn-outline-secondary" type="button" @click="toggleConfirmPasswordVisibility">
@@ -54,7 +67,7 @@
                 <input type="file" class="form-control" id="image" @change="onImageChange">
               </div>
               <div class="form-group mb-4">
-                <label for="role" class="form-label">Role</label>
+                <label for="role" class="form-label">Role<span class="text-danger text-danger-astric">*</span></label>
                 <select class="form-control" id="role" v-model="role" required :class="{ 'is-invalid': errorMessages.role }">
                   <option value="" disabled>Select your role</option>
                   <option value="candidate">Candidate</option>
@@ -98,7 +111,9 @@
              
              <button type="submit" class="btn btn-primary w-100" v-if="role !== 'candidate'">Register</button>
              <p v-if="errorMessages.errorFromServer" class="text-danger">{{ errorMessages.errorFromServer}}</p>
+              <p v-if="errorMessages.imageFromServer" class="text-danger">{{ errorMessages.imageFromServer}}</p>
           </form>
+     
         </div>
       </div>
     </section>
@@ -120,6 +135,35 @@ export default {
     CandidateFields,
     EmployerFields,
     FontAwesomeIcon
+  },
+   data(){
+     return {
+      carouselImages: [
+        { src: 'https://res.cloudinary.com/deqwn8wr6/image/upload/v1715739563/live-collaboration_wlfyki.svg', description: 'First Image Description' },
+        { src: 'https://res.cloudinary.com/deqwn8wr6/image/upload/v1715739562/subscribe_gejtmt.svg', description: 'Second Image Description' },
+        { src: 'https://res.cloudinary.com/deqwn8wr6/image/upload/v1715739562/security_yu7oyj.svg', description: 'Third Image Description' }
+      ],
+      activeImageIndex: 0,
+      cursorStyles: ['default', 'pointer', 'text', 'wait'],
+  }},
+  mounted() {
+   this.handleMouseOver();
+    setInterval(this.nextImage, 5000); 
+  },
+ 
+  methods: {
+     handleMouseOver() {
+      document.body.style.cursor = this.cursorStyles[this.activeImageIndex % this.cursorStyles.length];
+    },
+    nextImage() {
+      this.activeImageIndex = (this.activeImageIndex + 1) % this.carouselImages.length;
+      this.handleMouseOver();
+    },
+    prevImage() {
+      this.activeImageIndex = (this.activeImageIndex - 1 + this.carouselImages.length) % this.carouselImages.length;
+      this.handleMouseOver();
+    }
+  
   },
   setup() {
     const userStore = useUserStore();
@@ -146,7 +190,7 @@ export default {
     const steps = ref(['Data', 'Additional Info']);
     const errors= [];
     const errorMessage= [];
-
+  
     const roleProps = computed(() => {
       return role.value === 'candidate' ? {
         education: education.value,
@@ -253,6 +297,8 @@ export default {
             console.log(experienceLevel.value);
           try{
             await userStore.candidateRegister(formData);
+            errorMessages.value.created="Candidte created Succefully!";
+            router.push('/login');
           }catch(error){
           if (error.response.data.exception=="Illuminate\\Database\\UniqueConstraintViolationException" ) {
                    errorMessages.value.usernameFromServer="username already exist";
@@ -269,6 +315,8 @@ export default {
           if (logo.value) formData.append('logo', logo.value);
           try{
               await userStore.empRegister(formData);
+              errorMessages.value.created=" created Succefully!";
+              router.push('/login');
           }catch(error){
             if (error.response.data.exception=="Illuminate\\Database\\UniqueConstraintViolationException" ) {
                    errorMessages.value.usernameFromServer="username already exist";
@@ -338,6 +386,45 @@ export default {
 }
 .register-card {
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
+}
+.register-section {
+  background-color: #eee;
+}
+
+.register-card {
+  border-radius: 25px;
+  display: flex;
+  flex-direction: row;
+}
+
+.carousel-section {
+  width: 22%;
+}
+
+.card-body {
+  width: 60%;
+}
+
+@media (max-width: 576px) {
+  .register-card {
+    flex-direction: column;
+  }
+
+  .carousel-section,
+  .card-body {
+    width: 50%;
+  }
+}
+
+.is-invalid {
+  border-color: red;
+}
+
+.text-danger {
+  color: red;
+}
+.text-danger-astric{
+  font-size: 1.2em; 
 }
 </style>

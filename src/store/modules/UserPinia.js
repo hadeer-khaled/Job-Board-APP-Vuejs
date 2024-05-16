@@ -11,6 +11,20 @@ export const useUserStore = defineStore({
 
   }),
   actions: {
+    async getUser() {
+      try {
+        const response = await axiosInstance.get(
+          '/user'
+        );
+        this.user = response.data.user;
+        console.log(this.user);
+        return response;
+        
+      } catch (error) {
+        console.log("error.",error);
+        throw error;
+      }
+    },
     async empRegister(userData) {
       try {
       
@@ -53,6 +67,7 @@ export const useUserStore = defineStore({
         
     },
     async logout() {
+      console.log("dddddd");
       localStorage.clear();
     },
    

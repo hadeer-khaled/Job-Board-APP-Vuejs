@@ -8,11 +8,18 @@
             <img src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715732920/hyper_kmlahl.svg" alt="Toggle password visibility"/>
           </div>
           <h2 class="text-center mb-4">Welcome</h2> 
+          <div>
+              <p class="text-center mt-3" style="color: #616161">
+                Don't have an account? 
+                <router-link to="/register" style="text-decoration: none;">Create today!</router-link>
+              </p>
+          </div>
           <form @submit.prevent="submitForm" novalidate="true">
             <div class="form-group mb-4">
               <label for="userEmail" class="form-label">Email</label>
               <input type="email" class="form-control" name="userEmail" id="userEmail" v-model="userEmail" :placeholder="errorMessages.userEmail || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.userEmail }">
               <small v-if="errorMessages.userEmailRe" class="text-danger">{{ errorMessages.userEmailRe }}</small>
+              <small v-if="errorMessage.userEmail" class="text-danger">{{ errorMessage.userEmail }}</small>
             </div>
             <div class="form-group mb-4">
               <label for="password" class="form-label">Password</label>
@@ -26,7 +33,9 @@
             <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
             <small v-if="errorMessages.general" class="text-danger d-block mt-3 text-center">{{ errorMessages.general }}</small>
           </form>
-          <p class="text-center mt-3">Don't have an account? <router-link to="/register">Register</router-link></p>
+          <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-outline-secondary" type="button" @click="resetPassword"> Forget password? </button>
+        </div>
         </div>
       </div>
     </section>
@@ -40,6 +49,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import router from '../../router'; 
+import axiosInstance from '../../axios/index';
 
 library.add(faEye, faEyeSlash);
 
@@ -47,6 +57,36 @@ export default {
   components: {
     Navbar,
     FontAwesomeIcon
+  },
+   data() {
+    return {
+      verify: null, 
+      errorMessage:{}
+    }
+  },
+  mounted() {
+    const { verify } = this.$route.query;
+    const params = new URLSearchParams(window.location.search);
+    const verifyParam = params.get("verify");
+    if (verifyParam) {
+      this.verify = true;
+    }
+  }
+,
+ methods: {
+    async resetPassword() {
+   
+        try {
+          await axiosInstance.post('http://127.0.0.1:8000/api/forgot-password', {
+            email: userEmail.value
+          });
+          alert('Password reset link sent successfully.');
+        } catch (error) {
+          alert('Failed to send password reset link. please write your email');
+        }
+     
+    },
+
   },
   setup() {
     const userStore = useUserStore();
@@ -77,9 +117,23 @@ export default {
             password: password.value
           });
 
-          if (userStore.user.role === 'admin') router.push('/');
-          else if (userStore.user.role === 'candidate') router.push('/');
-          else if (userStore.user.role === 'employer') router.push('/');
+           try {
+             const response =await axiosInstance.post('/email/verified', {
+             timestamp: new Date(), 
+             email: userEmail.value,
+           })
+
+            const params = new URLSearchParams(window.location.search);
+            const verifyParam = params.get("verify");
+            if (verifyParam) {
+                const path = window.location.pathname;
+                window.history.replaceState({}, document.title, path);
+            }
+            router.push('/');
+           } catch (error) {
+             console.log("error",error);
+           }
+          
         } catch (error) {
           if (error.response && error.response.status === 401) {
             errorMessages.value.general = 'Unauthorized: Incorrect email or password.';
@@ -89,11 +143,6 @@ export default {
           }
         }
       }
-    };
-
-    const validEmail = (email) => {
-      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      return re.test(String(email).toLowerCase());
     };
 
     const togglePasswordVisibility = () => {
@@ -106,7 +155,10 @@ export default {
         passwordFieldIcon.value = 'fa-eye-slash';
       }
     };
-
+   const validEmail = (email) => {
+      var re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      return re.test(String(email).toLowerCase());
+    };
     return {
       userStore,
       submitForm,
@@ -145,5 +197,11 @@ export default {
 .text-danger {
   color: red;
 }
+.d-flex {
+  display: flex;
+}
 
+.justify-content-end {
+  justify-content: flex-end;
+}
 </style>

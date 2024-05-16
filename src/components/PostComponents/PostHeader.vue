@@ -13,28 +13,24 @@
             <!-- Job Title -->
             <h4 class="css-o171kl">{{ job_title }}</h4>
 
-            <div class="">
-               <p class="fw-bold">{{ company }}, <span class="text-decoration-none fw-light">{{ location }}</span></p>
-               <!-- created_at -->
-               <div class="text-success">{{ formattedDate }}</div>
-            </div>
-         </div>
          <div class="">
-            <!-- work_type -->
-            <div class="m-0 my-2 ">
-               <span
-                  class="text-capitalize text-black  fw-bolder btn btn-sm bg-light px-2 border border-black rounded-3  disabled">{{
-                     work_type }}</span>
-            </div>
-            <!-- salary_range -->
-            <div>
-               <p class="fw-bold">salary range: <span> {{ start_salary }} - {{ end_salary }} EGP</span></p>
-               <!-- deadline -->
-               <div>
-                  <p class="position-absolute bottom-0 end-0 text-danger fw-bold" :hidden="passedDeadline"> <span
-                        class="fw-bolder text-black-50">Deadline:</span> {{ formattedDeadline }}</p>
-                  <p v-if="passedDeadline" class="position-absolute bottom-0 end-0 text-danger">Closed</p>
-               </div>
+            <p class="fw-bold">{{ company }}, <span class="text-decoration-none fw-light">{{ location }}</span></p> 
+            <!-- created_at -->
+            <div class="text-success">{{ formattedDate }}</div>
+         </div>
+      </div>
+      <div class="">
+         <!-- work_type -->
+         <div class="m-0 my-2 ">
+            <span class="text-capitalize text-black  fw-bolder btn btn-sm bg-light px-2 border border-black rounded-3  disabled">{{ work_type }}</span>
+         </div>
+         <!-- salary_range -->
+         <div><p class="fw-bold">salary range: <span> {{ start_salary }} - {{ end_salary }} EGP</span></p> 
+         <!-- deadline -->
+         <div>
+            <p class="position-absolute bottom-0 end-0 text-danger fw-bold" :hidden="passedDeadline"> <span class="fw-bolder text-black-50" >Deadline:</span> {{ formattedDeadline }}</p>
+            <p v-if="passedDeadline" class="position-absolute bottom-0 end-0 text-danger fw-bold">Closed</p>
+         </div>
 
                <!-- skills -->
                <div class="border border-3 rounded-4 w-50 p-3 mb-3">
@@ -49,7 +45,8 @@
 
 
             </div>
-            <slot name="apply"></slot>
+            <slot v-if="!passedDeadline" name="apply"></slot>
+         <slot name="seeApplications"></slot>
             <slot name="Admin"></slot>
 
          </div>
@@ -60,8 +57,10 @@
 <script>
 import { formatDistanceToNow } from 'date-fns';
 import { ref, watch } from 'vue';
+import Button from 'primevue/button';
 
 export default {
+    components:{Button},
    props: {
       job_title: String,
       company: String,
@@ -100,8 +99,8 @@ export default {
          if (this.$props.application_deadline) {
             const currentDate = new Date()
             const date = new Date(this.$props.application_deadline)
-            console.log(currentDate > date)
-            return currentDate > date;
+            console.log(1111,currentDate > date)
+            return currentDate > date ;
          }
       }
    },
