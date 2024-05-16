@@ -94,7 +94,7 @@
                     <Button  label="Post New Job"  severity="info"/>
               </router-link>
 
-              <router-link :to="'/employer/add-post'">
+              <router-link :to="'/employer/deleted-posts'">
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
             </div>
@@ -210,7 +210,6 @@ import Card from 'primevue/card';
 import Navbar from '../../components/Navbar.vue';
 import MyPaginator from '../../components/MyPaginator.vue';
 import PostCard from '../../components/PostComponents/PostCard.vue';
-import axios from 'axios';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import InputText from 'primevue/inputtext';
@@ -221,6 +220,9 @@ import Skeleton from 'primevue/skeleton';
 import Paginator from 'primevue/paginator';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import axiosInstance from '../../axios/index';
+import { useUserStore } from '../../store/modules/UserPinia';
+
 
 import FileUpload from 'primevue/fileupload';
 
@@ -270,7 +272,7 @@ export default {
           const formData = new FormData()
           formData.append('logo', file)
           formData.append('_method', "put")
-          axios
+          axiosInstance
             .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
             .then(res => {
                 console.log('res', res);
@@ -295,7 +297,7 @@ export default {
           const formData = new FormData()
           formData.append('logo', this.file)
           formData.append('_method', "put")
-          axios
+          axiosInstance
             .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
             .then(res => {
                 console.log('res', res);
@@ -312,7 +314,7 @@ export default {
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
-            axios
+            axiosInstance
             .put(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, this.employer)
             .then(res => {
                 var employerData = res.data.data
@@ -346,7 +348,7 @@ export default {
         },
         fetchJobs(pageUrl = null) {
             const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
-            axios
+            axiosInstance
             .get(url)
             .then(res => {
                 this.jobs = res.data.jobs.data
@@ -362,7 +364,7 @@ export default {
           },
 
         fetchEmployerData(){
-            axios
+            axiosInstance
             .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
             .then(res => {
                 var employerData = res.data.data
@@ -384,7 +386,7 @@ export default {
            console.log(queryParams)
            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
             console.log(url)
-            axios
+            axiosInstance
             .get(url ,  {params: queryParams})
             .then(res => {
                 this.jobs = res.data.jobs.data
