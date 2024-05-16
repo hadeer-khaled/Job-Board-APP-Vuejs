@@ -39,11 +39,7 @@
                     <label class="small mb-1" for="inputCity">City</label>
                     <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" v-model="city">
                 </div>
-                <div class="mb-3">
-                    <label class="small mb-1" for="inputSkills">Skills</label><br/>
-                    <AutoComplete v-model="selectedSkill" forceSelection :suggestions="filteredSkills" @complete="search" />
-                </div>
-
+                
                 <!-- Form Group (email address)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputResume">Resume</label>
@@ -51,6 +47,24 @@
                     <button class="btn btn-primary" @click="previewResume(resume)">Preview</button>
                 </div>
                 <!-- Save changes button-->
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputSkills">Skills</label><br/>
+                    <AutoComplete v-model="selectedSkill" forceSelection :suggestions="filteredSkills" @complete="search" />
+                    <button type="button" class="btn btn-primary" @click="addSkill">Add</button>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex flex-wrap">
+                        <span v-for="(skill, index) in skills" :key="index" 
+                            class="my-1 px-3 py-2 rounded position-relative" 
+                            :style="{ backgroundColor: 'rgba(116, 184, 210, 0.48)' }"
+                            :class="{ 'mx-2': index !== 0, 'me-2': index === 0 }">
+                            {{ skill.skill }}
+                            <button @click="removeSkill(skill)" type="button" class="btn-close position-absolute top-0 end-0" aria-label="Close" style="font-size: x-small;"></button>
+                        </span>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary" type="button" @click="submit">Save changes</button>
             </form>
         </div>
@@ -82,12 +96,15 @@
                 education : this.user.education,
                 username : this.user.username,
                 resume : this.user.resume,
-                skills : this.user.skills,
-                allSkills: ['skill1', 'skill2', 'skill3'],
+                skills : this.user.skills || [],
+                allSkills: null,
                 filteredSkills: null,
                 selectedSkill: '',
                 uploadedResume : null,
             }
+        },
+        beforeMount() {
+            this.fetchSkills();
         },
         validations() {
             return {
@@ -101,6 +118,13 @@
             $lazy: true,
         },
         methods: {
+            fetchSkills() {
+                axiosInstance.get('/skills')
+                .then((res) => {
+                    this.allSkills = res.data.data;
+                })
+                .catch(err => console.log(err));
+            },
             async submit(event) {
                 const result = await this.v.$validate();
                 if (!result) {
@@ -117,6 +141,7 @@
                         faculty: this.faculty,
                         education: this.education,
                         username: this.username,
+                        skills: [this.skills],
                     };
                     for (const key in data) {
                         if (data.hasOwnProperty(key)) {
@@ -145,14 +170,29 @@
             search(event) {
                 setTimeout(() => {
                     if (!event.query.trim().length) {
-                        this.filteredSkills = [...this.allSkills];
-                        console.log("WE HERE");
+                        this.filteredSkills = this.allSkills.map((skill) => {
+                            return skill.skill;
+                        });
+                        
                     } else {
-                        this.filteredSkills = this.allSkills.filter((skill) => {
+                        const mappedSkills = this.allSkills.map((skill) => {
+                            return skill.skill;
+                        });
+                        this.filteredSkills = mappedSkills.filter((skill) => {
                             return skill.toLowerCase().startsWith(event.query.toLowerCase());
                         });
                     }
                 }, 250);
+            },
+            addSkill() {
+                this.selectedSkill = this.allSkills.find((skill) => this.selectedSkill == skill.skill);
+                this.skills.push(this.selectedSkill);
+                this.selectedSkill = '';
+            },
+            removeSkill(rmSkill) {
+                this.skills = this.skills.filter((skill) => {
+                    return skill !== rmSkill;
+                })
             }
             
         }

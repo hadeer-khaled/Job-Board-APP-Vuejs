@@ -1,8 +1,6 @@
 <script setup>
     import Navbar from '../../components/Navbar.vue';
-    import axios from 'axios';
     import { useUserStore } from '../../store/modules/UserPinia';
-    import useVuelidate from '@vuelidate/core';
     import AccountDetails from '../../components/CandidateComponents/AccountDetails.vue';
     import ProfilePictureCard from '../../components/CandidateComponents/ProfilePictureCard.vue';
 </script>
@@ -31,7 +29,7 @@
         data() {
             return {
                 user : null,
-                userStore : useUserStore(), 
+                userStore : useUserStore(),
             }
         },
         beforeMount() {
@@ -46,7 +44,7 @@
             },
             fetchUser() {
                 this.user = this.userStore.user;
-            }
+            },
             
         }
     }
