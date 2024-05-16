@@ -42,7 +42,7 @@
                 <!-- Form Group (email address)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputResume">Resume</label>
-                    <input class="form-control" id="inputResume" type="file">
+                    <input class="form-control" id="inputResume" type="file" @change="fileChange">
                     <button class="btn btn-primary" @click="previewResume(resume)">Preview</button>
                 </div>
                 <!-- Save changes button-->
@@ -73,6 +73,7 @@
                 education : this.user.education,
                 username : this.user.username,
                 resume : this.user.resume,
+                uploadedResume : null,
             }
         },
         validations() {
@@ -88,15 +89,15 @@
         },
         methods: {
             async submit(event) {
-                console.log(this.v.$errors);
                 const result = await this.v.$validate();
-
                 if (!result) {
                     console.log("ERROR");
                     return;
                 }
                 else {
+                    const formData = new FormData();
                     const data = {
+                        _method: 'put',
                         name: this.name,
                         email: this.email,
                         city: this.city,
@@ -104,10 +105,18 @@
                         education: this.education,
                         username: this.username,
                     };
-                    const url = import.meta.env.VITE_BASE_URL;
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            formData.append(key, data[key]);
+                        }
+                    }
+                    if (this.uploadedResume) {
+                        formData.append('resume', this.uploadedResume);
+                    }
                     axiosInstance
-                    .patch(url+'/candidates/'+this.user.id, data)
-                    .then((res) => {                        
+                    .post('/candidates/'+this.user.id, formData)
+                    .then((res) => {
+                        console.log("Updated candidate", res.data.data);                        
                         this.userStore.user = res.data.data;
                     })
                     .catch(err => console.log(err))
@@ -115,6 +124,10 @@
             },
             previewResume(url) {
                 window.open(url, '_blank').focus();
+            },
+            fileChange(e) {
+                const file = e.target.files[0];  
+                this.uploadedResume = file;
             }
         }
     }
