@@ -37,7 +37,10 @@
          </div>
       </div>
    </div>
+   <slot name="Restore"></slot>
 </div>
+
+
 </template>
 
 

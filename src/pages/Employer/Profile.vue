@@ -61,7 +61,7 @@
                     <Button  label="Post New Job"  severity="info"/>
               </router-link>
 
-              <router-link :to="'/employer/add-post'">
+              <router-link :to="'/employer/deleted-posts'">
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
             </div>

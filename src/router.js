@@ -9,11 +9,13 @@ import JobApplications from './pages/Employer/JobApplications.vue';
 import Login from './pages/Login/Login.vue';
 import Register from './pages/Register/Register.vue';import EmployerPost from './pages/Post/EmployerPost.vue';
 
+import DeletePost from './pages/Employer/DeletedPosts.vue';
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
+  { path: '/employer/deleted-posts', component: DeletePost },
   { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
   { path: '/application/:id', component: ApplyingForm },
