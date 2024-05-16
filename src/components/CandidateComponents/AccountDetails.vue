@@ -39,6 +39,11 @@
                     <label class="small mb-1" for="inputCity">City</label>
                     <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" v-model="city">
                 </div>
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputSkills">Skills</label><br/>
+                    <AutoComplete v-model="selectedSkill" forceSelection :suggestions="filteredSkills" @complete="search" />
+                </div>
+
                 <!-- Form Group (email address)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputResume">Resume</label>
@@ -57,8 +62,12 @@
     import useVuelidate from '@vuelidate/core'; 
     import { email, minLength, required } from '@vuelidate/validators';
     import axiosInstance from '../../axios';
+    import AutoComplete from 'primevue/autocomplete';
     export default {
         props: ['user', 'userStore'],
+        components: {
+            AutoComplete,
+        },
         setup() {
             return {
                 v : useVuelidate()
@@ -73,6 +82,10 @@
                 education : this.user.education,
                 username : this.user.username,
                 resume : this.user.resume,
+                skills : this.user.skills,
+                allSkills: ['skill1', 'skill2', 'skill3'],
+                filteredSkills: null,
+                selectedSkill: '',
                 uploadedResume : null,
             }
         },
@@ -128,7 +141,20 @@
             fileChange(e) {
                 const file = e.target.files[0];  
                 this.uploadedResume = file;
+            },
+            search(event) {
+                setTimeout(() => {
+                    if (!event.query.trim().length) {
+                        this.filteredSkills = [...this.allSkills];
+                        console.log("WE HERE");
+                    } else {
+                        this.filteredSkills = this.allSkills.filter((skill) => {
+                            return skill.toLowerCase().startsWith(event.query.toLowerCase());
+                        });
+                    }
+                }, 250);
             }
+            
         }
     }
 </script>
