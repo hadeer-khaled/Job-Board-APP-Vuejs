@@ -73,15 +73,6 @@ import Button from 'primevue/button';
     </div>
 
     <div class="col-9 position-relative">
-        <!-- <div class=" position-absolute top-0 end-0" > -->
-        <router-link :to="'/employer/add-post'">
-            <button class="btn btn-primary position-absolute  mx-5" style="
-                right: 10px !important;
-                top: -30px !important;
-            ">Add New Job</button>
-        </router-link>
-    
-        <!-- </div> -->
         
       <button type="button" class="btn btn-light border border-black d-lg-none mx-5" data-bs-toggle="modal" data-bs-target="#sidebarModal">
             Filters
