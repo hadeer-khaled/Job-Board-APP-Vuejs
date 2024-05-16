@@ -6,8 +6,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import Table from './Table.vue';
+import axiosInstance from '../../axios';
 
 export default {
     components: {
@@ -35,7 +36,7 @@ export default {
     },
     methods: {
         getPendingJobs() {
-            axios.get(`${import.meta.env.VITE_BASE_URL}/admin/pendingjobs`, {
+            axiosInstance.get(`${import.meta.env.VITE_BASE_URL}/admin/pendingjobs`, {
                 params: { perPage: this.perPage, page: this.page }
             })
                 .then(res => {
