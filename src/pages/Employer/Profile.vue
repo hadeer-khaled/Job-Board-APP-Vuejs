@@ -7,8 +7,45 @@
         <Card class="mb-2" >
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
-              <Avatar image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRfV9n69zxuV4DQX7sYF7ql8ajx47wLioPeP-m4qFbHLkD9UNwfQSneRtkQEDnx-QxFs&usqp=CAU" 
+              <div class="position-relative">
+              <Avatar :image="employer.company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
+                      <form @submit.prevent="updateImage" enctype="multipart/form-data" class="position-absolute" style="width:fit-content ; bottom: 25px; right: 0px;">
+                       
+                                <!-- <div>
+                                 <FileUpload
+                                    mode="basic"
+                                    name="logo"
+                                    @select="showSelectedFiles"
+                                    :auto="true" 
+                                    customUpload @uploader="customUploader"
+                                    accept="image/*"
+                                  >
+                                  </FileUpload>
+                                </div> -->
+
+                                <FileUpload  name="logo" @select="showSelectedFiles"
+                                :auto="true" 
+                                customUpload  
+                                @uploader="customUploader"
+                                accept="image/*" :maxFileSize="1000000" 
+                                :pt="{ content : 'my-content' , buttonbar: 'my-buttonbar' }"  >
+                                      <template  #header="{ chooseCallback }" :pt="{  }">
+                                              <Button @click="chooseCallback()" icon="pi pi-pencil" rounded severity="success" ></Button>
+                                      </template>
+                                  </FileUpload>
+
+                        <!-- <input type="file" ref="file" @change="selectImage" /> -->
+                        <!-- <i class="pi pi-pencil"></i> -->
+                        <!-- <Button type="submit"  label="Update Image" icon="pi pi-check" iconPos="right"  severity="success"   /> -->
+
+                    </form> 
+
+
+              </div>
+                     
+
+                  
             
               <form @submit.prevent="saveChanges" v-if="employer" class="d-flex flex-column align-items-center justify-content-center ">
                 <!-- Company Name -->
@@ -144,12 +181,16 @@ import axios from 'axios';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import InputText from 'primevue/inputtext';
+import InputSwitch from 'primevue/inputswitch'
 import Avatar from 'primevue/avatar';
 import Message from 'primevue/message';
 import Skeleton from 'primevue/skeleton';
 import Paginator from 'primevue/paginator';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+
+import FileUpload from 'primevue/fileupload';
+
 import { useVuelidate } from '@vuelidate/core'
 import { required, email , minLength} from '@vuelidate/validators'
 
@@ -159,7 +200,7 @@ var static_employer_id = 1;
 
 export default {
    components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
-   TabView , TabPanel ,MyPaginator , PostCard,Message,Skeleton},
+   TabView , TabPanel ,MyPaginator , PostCard,Message,Skeleton,FileUpload,InputSwitch},
       data:()=>(
         {
           v$:useVuelidate(),
@@ -170,9 +211,9 @@ export default {
               username: '',
               email: '',
               user_id:''
-
-          }, 
-           paginationLinks: {},
+          },
+          file:"", 
+          paginationLinks: {},
               next: null,
               prev: null, 
           jobs: null
@@ -188,7 +229,85 @@ export default {
             }
           }
         },
-      methods: {   
+      methods: { 
+        showSelectedFiles(event){
+          console.log(event.files)
+        }, 
+        customUploader(event) {
+          const file = event.files[0];
+          console.log(file)
+          const formData = new FormData()
+          formData.append('logo', file)
+          formData.append('_method', "put")
+          axios
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .then(res => {
+                console.log('res', res);
+                this.fetchEmployerData();
+                Swal.fire({
+                  icon: "success",
+                  text: "Your Image have been updated successfully!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                })
+            .catch(err => console.log(err.response));
+        },
+          handleUpload(event) {
+            this.file = event.files[0]; // Get the uploaded file
+            console.log( this.file)
+            const formData = new FormData();
+            formData.append('logo', this.file);
+            formData.append('_method', 'put'); // Assuming PUT method
+
+            axios
+              .post(`${import.meta.env.VITE_BASE_URL}/employers/${this.static_employer_id}`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data', // Set content type for file upload
+                },
+              })
+              .then((res) => {
+                console.log('res', res);
+                Swal.fire({
+                  icon: 'success',
+                  text: 'Your Image has been updated successfully!',
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              })
+              .catch((err) => {
+                console.error('Error:', err.response);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error Uploading File',
+                  text: err.response.data.message || 'An error occurred.', // Handle error message
+                });
+              });
+          },
+        selectImage(){
+          const selectedFile = this.$refs.file.files[0];
+          this.file = selectedFile;
+          console.log("selectedFile",selectedFile)
+        }, 
+
+        updateImage(){
+          const formData = new FormData()
+          formData.append('logo', this.file)
+          formData.append('_method', "put")
+          axios
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .then(res => {
+                console.log('res', res);
+                Swal.fire({
+                  icon: "success",
+                  text: "Your Image have been updated successfully!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                })
+            .catch(err => console.log(err.response));
+        
+        },
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
@@ -284,7 +403,7 @@ export default {
 };
 
 </script>
-<style lang="stylus" scoped>
+<style  scoped>
 
 .custom-avatar {
   width: 200px !important; 
@@ -300,4 +419,15 @@ button {
 .p-card .p-card-body {
      padding: 0px !important; 
 }
+
+::v-deep  .my-buttonbar{  
+      width: fit-content;
+      padding: 0px !important;
+      border: 0px;
+      background-color: transparent;
+}
+::v-deep  .my-content{  
+     display: none;
+}
+
 </style>
