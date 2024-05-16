@@ -16,7 +16,6 @@
                                  <FileUpload
                                     mode="basic"
                                     name="logo"
-                                    @select="showSelectedFiles"
                                     :auto="true" 
                                     customUpload @uploader="customUploader"
                                     accept="image/*"
@@ -24,7 +23,7 @@
                                   </FileUpload>
                                 </div> -->
 
-                                <FileUpload  name="logo" @select="showSelectedFiles"
+                                <FileUpload  name="logo"
                                 :auto="true" 
                                 customUpload  
                                 @uploader="customUploader"
@@ -230,9 +229,6 @@ export default {
           }
         },
       methods: { 
-        showSelectedFiles(event){
-          console.log(event.files)
-        }, 
         customUploader(event) {
           const file = event.files[0];
           console.log(file)
@@ -253,37 +249,7 @@ export default {
                 })
             .catch(err => console.log(err.response));
         },
-          handleUpload(event) {
-            this.file = event.files[0]; // Get the uploaded file
-            console.log( this.file)
-            const formData = new FormData();
-            formData.append('logo', this.file);
-            formData.append('_method', 'put'); // Assuming PUT method
-
-            axios
-              .post(`${import.meta.env.VITE_BASE_URL}/employers/${this.static_employer_id}`, formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data', // Set content type for file upload
-                },
-              })
-              .then((res) => {
-                console.log('res', res);
-                Swal.fire({
-                  icon: 'success',
-                  text: 'Your Image has been updated successfully!',
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-              })
-              .catch((err) => {
-                console.error('Error:', err.response);
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error Uploading File',
-                  text: err.response.data.message || 'An error occurred.', // Handle error message
-                });
-              });
-          },
+        
         selectImage(){
           const selectedFile = this.$refs.file.files[0];
           this.file = selectedFile;
