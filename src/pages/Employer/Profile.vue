@@ -7,8 +7,15 @@
         <Card class="mb-2" >
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
-              <Avatar image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeRfV9n69zxuV4DQX7sYF7ql8ajx47wLioPeP-m4qFbHLkD9UNwfQSneRtkQEDnx-QxFs&usqp=CAU" 
+              <Avatar :image="employer.company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
+                    <form @submit.prevent="updateImage" enctype="multipart/form-data">
+                        <input type="file" ref="file" @change="selectImage" />
+
+                        <Button type="submit"  label="Update Image" icon="pi pi-check" iconPos="right"  severity="success"   />
+                    </form>  
+
+                  
             
               <form @submit.prevent="saveChanges" v-if="employer" class="d-flex flex-column align-items-center justify-content-center ">
                 <!-- Company Name -->
@@ -170,9 +177,9 @@ export default {
               username: '',
               email: '',
               user_id:''
-
-          }, 
-           paginationLinks: {},
+          },
+          file:"", 
+          paginationLinks: {},
               next: null,
               prev: null, 
           jobs: null
@@ -188,7 +195,30 @@ export default {
             }
           }
         },
-      methods: {   
+      methods: { 
+        selectImage(){
+          const selectedFile = this.$refs.file.files[0];
+          this.file = selectedFile;
+          console.log("selectedFile",selectedFile)
+        },  
+        updateImage(){
+          const formData = new FormData()
+          formData.append('logo', this.file)
+          formData.append('_method', "put")
+          axios
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .then(res => {
+                console.log('res', res);
+                Swal.fire({
+                  icon: "success",
+                  text: "Your Image have been updated successfully!",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                })
+            .catch(err => console.log(err.response));
+        
+        },
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
