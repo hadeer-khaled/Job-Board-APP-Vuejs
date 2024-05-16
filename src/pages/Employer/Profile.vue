@@ -42,10 +42,7 @@
 
 
               </div>
-                     
-
-                  
-            
+                         
               <form @submit.prevent="saveChanges" v-if="employer" class="d-flex flex-column align-items-center justify-content-center ">
                 <!-- Company Name -->
                 <InputGroup class="mb-2" >
@@ -101,6 +98,18 @@
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
             </div>
+              <div>
+                <p class="mx-3 fw-bold my-3">Status</p>
+                <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
+                  <option value="all">All</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+            </div> 
+            <div>
+              <button @click="getJobs()">filter</button>
+            </div>
 
           </template>
         </Card>
@@ -134,7 +143,32 @@
                   :company="employer.company_name"
                   :route="`/posts/${job.id}`
                   "/>
-                <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" /> 
+                <!-- <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />  -->
+                      <nav class="mx-5" aria-label="Page navigation example">
+                          <ul class="pagination">
+
+                          <!-- Prev -->
+                          <li :class="{ 'page-item': true, disabled: !prev }">
+                          <a class="page-link" @click="changePage(prev)" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                          </li>
+
+                          <!-- Pages -->
+                          <li v-for="link in paginationLinks" :key="link.label" :class="{ 'page-item': true, active: link.active }">
+                          <a v-if="!link.active" @click="changePage(link.url)" class="page-link">{{ link.label }}</a>
+                          <span class="page-link" v-else>{{ link.label }}</span>
+                          </li>
+
+                          <!-- Next -->
+                          <li :class="{ 'page-item': true, disabled: !next }">
+                          <a class="page-link" @click="changePage(next)" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                          </li>
+                          </ul>
+                        </nav>
+              
               </div>
               <div v-else>
                   <Message severity="contrast">You don't have any jobs for now.</Message>
@@ -212,9 +246,10 @@ export default {
               user_id:''
           },
           file:"", 
+          selectedWorkType:"",
           paginationLinks: {},
-              next: null,
-              prev: null, 
+          next: null,
+          prev: null, 
           jobs: null
           }),
 
@@ -300,12 +335,14 @@ export default {
         changePage(pageUrl) {
             if(pageUrl)
             {
-                this.fetchJobs(pageUrl);
+                // this.fetchJobs(pageUrl);
+                this.getJobs(pageUrl);
             }
         },
         handlePageChange(url) {
           console.log('Page changed to:', url);
-          this.fetchJobs(url);
+          // this.fetchJobs(url);
+          // this.getJobs(url);
         },
         fetchJobs(pageUrl = null) {
             const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
@@ -324,7 +361,7 @@ export default {
             .catch(err => console.log(err));
           },
 
-          fetchEmployerData(){
+        fetchEmployerData(){
             axios
             .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
             .then(res => {
@@ -340,31 +377,36 @@ export default {
             .catch(err => console.log(err));
           },
 
-          // getJobs(e){
-      
-          //   const status = e.target.value;
-          //   const url = `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}?status=${status}`;
-      
-          //   axios
-          //   .get(url)
-          //   .then(res => {
-          //       this.jobs = res.data.jobs.data;
-          //       this.paginationLinks = res.data.jobs.links;
-          //       this.next = res.data.jobs.next_page_url+`?status=${status}`;
-          //       this.prev = res.data.jobs.prev_page_url+`?status=${status}`;
-          //       console.log("filtered: " , res.data.jobs.data)
-          //       })
-          //   .catch(err => console.log(err));
+        getJobs(pageUrl = null){
+          console.log(pageUrl)
+           const queryParams = {};
+           queryParams.status = this.selectedWorkType;
+           console.log(queryParams)
+           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+            console.log(url)
+            axios
+            .get(url ,  {params: queryParams})
+            .then(res => {
+                this.jobs = res.data.jobs.data
+                console.log(" this.jobs " ,  this.jobs )
+                this.paginationLinks = res.data.jobs.links;
+                this.paginationLinks.pop(this.paginationLinks.length-1)
+                this.paginationLinks.shift()
+                this.next = res.data.jobs.next_page_url;
+                this.prev = res.data.jobs.prev_page_url;
+                console.log("jobs: " , res.data.jobs.data)
+                })
+            .catch(err => console.log(err));
             
-          // }
+          }
 
 
       },
       mounted() {
         this.fetchEmployerData();
-        
+        this.getJobs()
 
-        this.fetchJobs();
+        // this.fetchJobs();
       }
 };
 
