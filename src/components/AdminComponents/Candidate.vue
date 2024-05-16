@@ -7,8 +7,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axiosInstance from 'axiosInstance';
 import Table from './Table.vue';
+import axiosInstance from '../../axios';
 
 export default {
     components: {
@@ -35,7 +36,7 @@ export default {
     },
     methods: {
         getCndidates() {
-            axios.get(`${import.meta.env.VITE_BASE_URL}/admin/candidates`, {
+            axiosInstance.get(`${import.meta.env.VITE_BASE_URL}/admin/candidates`, {
                 params: { perPage: this.perPage, page: this.page }
             })
                 .then(res => {

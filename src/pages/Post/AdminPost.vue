@@ -2,8 +2,9 @@
 import PostHeader from '../../components/PostComponents/PostHeader.vue';
 import PostDescription from '../../components/PostComponents/PostDescription.vue';
 import Navbar from '../../components/Navbar.vue';
-import axios from 'axios';
+
 import Button from 'primevue/button';
+import axiosInstance from '../../axios';
 </script>
 <template>
 
@@ -52,8 +53,8 @@ export default {
         }
     },
     mounted() {
-        axios
-            .get(`http://localhost:8000/api/posts/${this.$route.params.id}`)
+        axiosInstance
+            .get(`${import.meta.env.VITE_BASE_URL}/posts/${this.$route.params.id}`)
             .then(response => {
                 this.post = response.data.data;
                 this.company = response.data.data.employer.company_name;
@@ -62,7 +63,7 @@ export default {
     },
     methods: {
         changeStatus(e) {
-            axios.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status: e })
+            axiosInstance.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status: e })
                 .then((res) => {
                     console.log(res);
                     this.$router.push('/admin');
