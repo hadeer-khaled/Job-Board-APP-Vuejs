@@ -144,8 +144,9 @@
                   :post_id="job.id"
                   :company="employer.company_name"
                   :status="job.status"
-                  :route="`/posts/${job.id}`
-                  "/>
+                  :route="`/posts/${job.id}`"
+                  :role="employer.role"
+                  />
                 <!-- <MyPaginator :paginationData="{ links: paginationLinks, next: next, prev: prev }" @page-change="handlePageChange" />  -->
                       <nav class="mx-5" aria-label="Page navigation example">
                           <ul class="pagination">

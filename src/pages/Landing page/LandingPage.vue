@@ -140,6 +140,7 @@ import Button from 'primevue/button';
     :post_id="post.id"
     :company="post.employer.company_name"
     :route="`/posts/${post.id}`"
+    :role="userStore.user?.role || null"
     />
     
     </div>
@@ -185,6 +186,7 @@ post:first-child {
 <script>
 import { ref } from 'vue';
 import router from '../../router'; 
+import { useUserStore } from '../../store/modules/UserPinia';
 const filteredTitles = ref([]);
 
 
@@ -204,6 +206,7 @@ export default {
         searchLocation:'',
         tob_title:'',
         suggestions:[],
+        userStore: useUserStore(),
     };
     },
     mounted() 
