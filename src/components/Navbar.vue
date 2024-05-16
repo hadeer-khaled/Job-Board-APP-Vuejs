@@ -55,19 +55,25 @@
 
 <script>
 import { useUserStore } from "../store/modules/UserPinia";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 export default {
   setup() {
-    const loggedUser = ref(true);
+    const loggedUser = ref(false);
     const role = ref('');
     const userStore = useUserStore();
 
+    const updateRoleAndLoggedUser = () => {
+      role.value = userStore.user?.role || '';
+      loggedUser.value = !!role.value;
+    };
+
     onMounted(() => {
-      role.value = userStore.user;
-      if (!role.value) {
-        loggedUser.value = false;
-      }
+      updateRoleAndLoggedUser();
+    });
+
+    watch(() => userStore.user, () => {
+      updateRoleAndLoggedUser();
     });
 
     return {
