@@ -1,7 +1,7 @@
 <template>
     <div>
         <Table :jobs="jobs" :perPage="perPage" :first="first" :total="total" :columns="columns" @page="onPage"
-            @onChange="onPageChange"></Table>
+            @onChange="onPageChange" uri="post"></Table>
     </div>
 </template>
 

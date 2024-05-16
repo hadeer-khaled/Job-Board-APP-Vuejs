@@ -7,7 +7,7 @@
             </Column>
             <Column :exportable="false" field="customButton" header="Actions">
                 <template #body="rowData">
-                    <RouterLink class="text-decoration-none btn btn-primary" :to="`/admin/post/${rowData.data.id}`">
+                    <RouterLink class="text-decoration-none btn btn-primary" :to="`/admin/${uri}/${rowData.data.id}`">
                         View Details
                     </RouterLink>
                 </template>
@@ -46,6 +46,10 @@ export default {
         },
         columns: {
             type: Array,
+            required: true
+        },
+        uri: {
+            type: String,
             required: true
         }
     },
