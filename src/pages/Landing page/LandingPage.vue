@@ -237,7 +237,7 @@ export default {
             this.applyFilters();
         }
 
-        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts//locations`)
+        axios.get(`${import.meta.env.VITE_BASE_URL}/home/posts/locations`)
         .then((res)=> {
             this.titles = res.data.titles;
             this.locations = res.data.locations;

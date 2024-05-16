@@ -14,10 +14,10 @@ import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
 import CandidateApplications from './pages/CandidateApplictions.vue/CandidateApplications.vue';
-
 import Admin from './pages/Admin/Admin.vue';
 import AdminPost from './pages/Post/AdminPost.vue';
 import DeletePost from './pages/Employer/DeletedPosts.vue';
+
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
@@ -38,7 +38,6 @@ const routes = [
   { path: '/employer/posts/:id', component: EmployerPost },
   { path: '/admin', component: Admin },
   { path: '/admin/post/:id', component: AdminPost },
-
 ];
 
 const router = createRouter({
