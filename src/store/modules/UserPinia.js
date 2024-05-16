@@ -67,6 +67,7 @@ export const useUserStore = defineStore({
         
     },
     async logout() {
+      console.log("dddddd");
       localStorage.clear();
     },
    

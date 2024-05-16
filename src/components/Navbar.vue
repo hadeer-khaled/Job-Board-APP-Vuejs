@@ -42,6 +42,7 @@
     </div>
 
     <div v-if="loggedUser">
+        <button class="btn btn-primary mx-3" @click="logout">Logout</button>
         <div class="d-flex align-items-center  justify-content-center ">
         <p class="mx-3 my-auto">User Name</p>
         <img v-if="!image" style="width: 50px;" src="/default_user1.png" alt="user img">
@@ -76,10 +77,20 @@ export default {
       updateRoleAndLoggedUser();
     });
 
+    const logout = () => {
+      userStore.logout();
+      loggedUser.value = false;
+      role.value = '';
+      // Redirect to home or login page
+      this.$router.push('/login');
+    };
+
     return {
       loggedUser,
       role,
+      userStore,
+      logout,
     };
-  },
+  }
 };
 </script>
