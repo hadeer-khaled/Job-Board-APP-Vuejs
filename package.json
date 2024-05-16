@@ -17,7 +17,6 @@
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.8",
     "bootstrap-vue": "^2.23.1",
-    "date-fns": "^3.6.0",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^3.52.0",
