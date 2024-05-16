@@ -21,6 +21,12 @@
                     <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" v-model="email">
                     <small class="text-danger" v-if="v.email.$error">{{ v.email.$errors[0].$message }}</small>
                 </div>
+
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputPassword">Password</label>
+                    <input class="form-control" id="inputPassword" type="password" placeholder="Enter your password" v-model="password">
+                    <small class="text-danger" v-if="v.password.$error">{{ v.password.$errors[0].$message }}</small>
+                </div>
                 <!-- Form Row        -->
                 <div class="row gx-3 mb-3">
                     <!-- Form Group (faculty name)-->
@@ -91,6 +97,7 @@
             return {
                 name : this.user.name,
                 email : this.user.email,
+                password : null,
                 city : this.user.city,
                 faculty : this.user.faculty,
                 education : this.user.education,
@@ -111,6 +118,7 @@
                 name : { required },
                 email : { required, email },
                 username : { required },
+                password : { minLength: minLength(8) },
             }
         },
         validationConfig: {
@@ -141,7 +149,7 @@
                         faculty: this.faculty,
                         education: this.education,
                         username: this.username,
-                        skills: [this.skills],
+                        skills: JSON.stringify(this.skills),
                     };
                     for (const key in data) {
                         if (data.hasOwnProperty(key)) {
@@ -150,6 +158,9 @@
                     }
                     if (this.uploadedResume) {
                         formData.append('resume', this.uploadedResume);
+                    }
+                    if (this.password) {
+                        formData.append('password', this.password);
                     }
                     axiosInstance
                     .post('/candidates/'+this.user.id, formData)
