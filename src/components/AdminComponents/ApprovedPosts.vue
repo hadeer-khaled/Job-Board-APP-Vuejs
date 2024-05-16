@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table :jobs="jobs" :perPage="perPage" :first="first" :total="total" :columns="columns" @page="onPage">
+        <Table :jobs="jobs" :perPage="perPage" :first="first" :total="total" :columns="columns" @page="onPage" uri="post">
         </Table>
 
     </div>

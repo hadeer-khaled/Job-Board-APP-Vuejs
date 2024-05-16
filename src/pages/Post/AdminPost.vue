@@ -16,11 +16,13 @@ import Button from 'primevue/button';
                 :application_deadline="post.application_deadline" :created_at="post.created_at"
                 :start_salary="post.start_salary" :end_salary="post.end_salary" :post_id="post.id"
                 :work_type="post.work_type" :skills="post.skills">
-                <template v-slot:Admin v-if="post.status == 'pending'">
+                <template v-slot:Admin >
+                <template v-if="post.status == 'pending'">
                     <Button label="Accept" severity="success" value="approved" rounded
                         @click="changeStatus('approved')"></Button>
                     <Button label="Reject" severity="danger" rounded value="rejected"
                         @click="changeStatus('rejected')"></Button>
+                </template>
                 </template>
             </PostHeader>
 
