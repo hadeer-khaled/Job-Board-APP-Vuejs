@@ -43,6 +43,7 @@
             
          </div>
          <slot name="apply"></slot>
+         <slot name="seeApplications"></slot>
          </div>
    </div>
 </div>
@@ -51,8 +52,10 @@
 <script>
 import { formatDistanceToNow } from 'date-fns';
 import { ref, watch } from 'vue';
+import Button from 'primevue/button';
 
 export default {
+    components:{Button},
    props: {
       job_title: String,
       company: String,
