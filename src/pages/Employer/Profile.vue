@@ -8,7 +8,7 @@
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
               <div class="position-relative">
-              <Avatar :image="employer.company_logo" 
+              <Avatar :image="company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
                       <form @submit.prevent="updateImage" enctype="multipart/form-data" class="position-absolute" style="width:fit-content ; bottom: 25px; right: 0px;">
                        
@@ -98,23 +98,25 @@
                     <Button label="Deleted Jobs"  severity="contrast" />
               </router-link>
             </div>
-              <div>
-                <p class="mx-3 fw-bold my-3">Status</p>
-                <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
-                  <option value="all">All</option>
-                  <option value="approved">Approved</option>
-                  <option value="pending">Pending</option>
-                  <option value="rejected">Rejected</option>
-                </select>
+            <div class="d-flex align-items-center justify-content-around mt-4">
+                <div class="d-flex align-items-center">        
+                    <p class="mx-1 fw-bold my-3">Job Status</p>
+                    <select class="form-select w-50 mx-3" name="status" v-model="selectedWorkType">
+                      <option value="all">All</option>
+                      <option value="approved">Approved</option>
+                      <option value="pending">Pending</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div>
+                    <Button @click="getJobs()"  label="Post New Job" severity="secondary">Filter</button>
+                </div>
             </div> 
-            <div>
-              <button @click="getJobs()">filter</button>
-            </div>
-
+            
           </template>
         </Card>
 
-      </div> <!-- if employer -->
+      </div> <!-- end if employer -->
 
       <div v-else class="col-3">
           <Card class="mb-2" >
@@ -135,7 +137,7 @@
                   :location="job.location"
                   :application_deadline="job.application_deadline"
                   :created_at="job.created_at"
-                  :logo="employer.company_logo "
+                  :logo="company_logo "
                   :work_type="job.work_type"
                   :start_salary="job.start_salary"
                   :end_salary="job.end_salary"
@@ -241,14 +243,14 @@ export default {
           v$:useVuelidate(),
           employer: {
               company_name: '',
-              company_logo: '',
               name: '',
               username: '',
               email: '',
               user_id:''
           },
+          company_logo:"",
           file:"", 
-          selectedWorkType:"",
+          selectedWorkType:"all",
           paginationLinks: {},
           next: null,
           prev: null, 
@@ -287,30 +289,30 @@ export default {
             .catch(err => console.log(err.response));
         },
         
-        selectImage(){
-          const selectedFile = this.$refs.file.files[0];
-          this.file = selectedFile;
-          console.log("selectedFile",selectedFile)
-        }, 
+        // selectImage(){
+        //   const selectedFile = this.$refs.file.files[0];
+        //   this.file = selectedFile;
+        //   console.log("selectedFile",selectedFile)
+        // }, 
 
-        updateImage(){
-          const formData = new FormData()
-          formData.append('logo', this.file)
-          formData.append('_method', "put")
-          axiosInstance
-            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
-            .then(res => {
-                console.log('res', res);
-                Swal.fire({
-                  icon: "success",
-                  text: "Your Image have been updated successfully!",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-                })
-            .catch(err => console.log(err.response));
+        // updateImage(){
+        //   const formData = new FormData()
+        //   formData.append('logo', this.file)
+        //   formData.append('_method', "put")
+        //   axiosInstance
+        //     .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+        //     .then(res => {
+        //         console.log('res', res);
+        //         Swal.fire({
+        //           icon: "success",
+        //           text: "Your Image have been updated successfully!",
+        //           showConfirmButton: false,
+        //           timer: 1500
+        //         });
+        //         })
+        //     .catch(err => console.log(err.response));
         
-        },
+        // },
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
@@ -346,22 +348,22 @@ export default {
           // this.fetchJobs(url);
           // this.getJobs(url);
         },
-        fetchJobs(pageUrl = null) {
-            const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
-            axiosInstance
-            .get(url)
-            .then(res => {
-                this.jobs = res.data.jobs.data
-                console.log(" this.jobs " ,  this.jobs )
-                this.paginationLinks = res.data.jobs.links;
-                this.paginationLinks.pop(this.paginationLinks.length-1)
-                this.paginationLinks.shift()
-                this.next = res.data.jobs.next_page_url;
-                this.prev = res.data.jobs.prev_page_url;
-                console.log("jobs: " , res.data.jobs.data)
-                })
-            .catch(err => console.log(err));
-          },
+        // fetchJobs(pageUrl = null) {
+        //     const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+        //     axiosInstance
+        //     .get(url)
+        //     .then(res => {
+        //         this.jobs = res.data.jobs.data
+        //         console.log(" this.jobs " ,  this.jobs )
+        //         this.paginationLinks = res.data.jobs.links;
+        //         this.paginationLinks.pop(this.paginationLinks.length-1)
+        //         this.paginationLinks.shift()
+        //         this.next = res.data.jobs.next_page_url;
+        //         this.prev = res.data.jobs.prev_page_url;
+        //         console.log("jobs: " , res.data.jobs.data)
+        //         })
+        //     .catch(err => console.log(err));
+        //   },
 
         fetchEmployerData(){
             axiosInstance
@@ -369,7 +371,7 @@ export default {
             .then(res => {
                 var employerData = res.data.data
                 this.employer.company_name =employerData.company_name
-                this.employer.company_logo =employerData.company_logo
+                this.company_logo =employerData.company_logo
                 this.employer.name =employerData.name 
                 this.employer.username =employerData.username
                 this.employer.email =employerData.email
