@@ -80,7 +80,7 @@ export default {
                     return 'success';
 
                 case 'pending':
-                    return 'warning';
+                    return 'secondary';
 
                 case 'rejected':
                     return 'danger';

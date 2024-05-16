@@ -235,7 +235,8 @@ import { required, email , minLength} from '@vuelidate/validators'
 
 import Swal from 'sweetalert2'
 
-var static_employer_id = 1;
+// var static_employer_id = 1;
+
 
 export default {
    components:{ Button, Navbar ,InputGroup,InputText ,InputGroupAddon,Card,Avatar,Paginator , 
@@ -243,13 +244,14 @@ export default {
       data:()=>(
         {
           v$:useVuelidate(),
-          employer: {
-              company_name: '',
-              name: '',
-              username: '',
-              email: '',
-              user_id:''
-          },
+          // employer: {
+          //     company_name: '',
+          //     name: '',
+          //     username: '',
+          //     email: '',
+          //     user_id:''
+          // },
+          employer: useUserStore().user,
           company_logo:"",
           file:"", 
           selectedJobStatus:"all",
@@ -277,7 +279,7 @@ export default {
           formData.append('logo', file)
           formData.append('_method', "put")
           axiosInstance
-            .post(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, formData)
+            .post(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`, formData)
             .then(res => {
                 console.log('res', res);
                 this.fetchEmployerData();
@@ -318,8 +320,11 @@ export default {
         saveChanges() {
           this.v$.$validate();
           if(!this.v$.$error){
+            const { company_logo, image, username,...employerWithoutLogo } = this.employer;
+            console.log(employerWithoutLogo)
+
             axiosInstance
-            .put(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`, this.employer)
+            .put(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`, employerWithoutLogo)
             .then(res => {
                 var employerData = res.data.data
                 console.log('Returned Updated Employer:', employerData);
@@ -369,7 +374,7 @@ export default {
 
         fetchEmployerData(){
             axiosInstance
-            .get(`${import.meta.env.VITE_BASE_URL}/employers/${static_employer_id}`)
+            .get(`${import.meta.env.VITE_BASE_URL}/employers/${this.employer.id}`)
             .then(res => {
                 var employerData = res.data.data
                 this.employer.company_name =employerData.company_name
@@ -388,7 +393,7 @@ export default {
            const queryParams = {};
            queryParams.status = this.selectedJobStatus;
            console.log(queryParams)
-           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${static_employer_id}`;
+           const url = pageUrl || `${import.meta.env.VITE_BASE_URL}/jobs/employer/${this.employer.id}`;
             console.log(url)
             axiosInstance
             .get(url ,  {params: queryParams})
@@ -411,6 +416,7 @@ export default {
       mounted() {
         this.fetchEmployerData();
         this.getJobs()
+        console.log("useUserStore", useUserStore().user)
 
         // this.fetchJobs();
       }
