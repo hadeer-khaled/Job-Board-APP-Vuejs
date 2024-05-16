@@ -8,6 +8,7 @@ import ApplyingForm from './pages/ApplyingForm/ApplyingForm.vue';
 import JobApplications from './pages/Employer/JobApplications.vue';
 import Login from './pages/Login/Login.vue';
 import Verify from './pages/Verify/Verify.vue';
+import Reset from './pages/Reset/Reset.vue';
 import Register from './pages/Register/Register.vue';
 import EmployerPost from './pages/Post/EmployerPost.vue';
 import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
@@ -25,6 +26,7 @@ const routes = [
   { path: '/login', component: Login } ,
   { path: '/register', component: Register },
   { path: '/verify', component: Verify},
+  { path: '/Reset', component: Reset},
   { path: '/employer/posts/:id' , component: EmployerPost },
   // Candidates
   { path: '/candidate/profile', component: CandidateProfile },
