@@ -72,7 +72,7 @@
     <script setup>
     import { useConfirm } from "primevue/useconfirm";
     import axiosInstance from '../../axios/index';
-   
+   import { useUserStore } from "../../store/modules/UserPinia";
     const confirm = useConfirm();
 
     const deletePost=(id)=>{
@@ -137,9 +137,11 @@
     
         ,methods: {
             getDeletedPosts(){
+                const employer_id = useUserStore().user
+                console.log("0000"+employer_id)
                 axiosInstance
             .get(`${import.meta.env.VITE_BASE_URL}/posts/deleted`, {
-                    params: { perPage: this.perPage, page: this.page }
+                    params: { perPage: this.perPage, page: this.page , employer_id:employer_id }
                 })
             .then(res => {
                 this.posts = res.data.data;

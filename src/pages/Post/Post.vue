@@ -5,6 +5,40 @@ import PostDescription from '../../components/PostComponents/PostDescription.vue
 import Navbar from '../../components/Navbar.vue';
 import EmployerPost from '../../pages/Post/EmployerPost.vue';
 import axios from 'axios';
+
+import { useConfirm } from "primevue/useconfirm";
+import {useToast} from 'vue-toast-notification';
+    import 'vue-toast-notification/dist/theme-sugar.css';
+   
+const $toast = useToast();
+    const confirm = useConfirm();
+
+    const deletePost=(id)=>{
+        console.log(id)
+                axios
+            .delete(`${import.meta.env.VITE_BASE_URL}/posts/${id}`)
+            .then(res => {
+                const message = res.data.message
+                $toast.success(message);
+            })
+            .catch(err => console.log(err));
+            }
+    const requireConfirmation = (event,id) => {
+        confirm.require({
+            target: event.currentTarget,
+            group:'headless',
+                message: 'Are you sure you want to delete this post?',
+                icon: 'pi pi-info-circle',
+                accept: () => {
+                deletePost(id)
+
+                },
+                reject: () => {
+                    this.$toast.add({severity:'error', summary: 'Rejected', detail:'You have rejected', life: 3000});
+                }
+            });
+    }
+    
 </script>
 
 <template>
@@ -35,7 +69,10 @@ import axios from 'axios';
     <template v-slot:seeApplications> 
        <router-link :to="'/job-applications/' + data.id" v-show="role === 'employer'">
             <button class="btn btn-primary p">View Job Applications</button>
-        </router-link>
+
+           
+        </router-link> 
+        <Button label="Delete" severity="danger" raised @click="requireConfirmation($event, data.id)" />
     </template>
     
     </PostHeader>
@@ -56,14 +93,28 @@ import axios from 'axios';
     </div>
 
     </div>
+    <ConfirmPopup group="headless">
+            <template #container="{ message, acceptCallback, rejectCallback }">
+                <div class="border-round p-3">
+                    <span>{{ message.message }}</span>
+                    <div class="flex align-items-center gap-2 mt-3">
+                        <Button label="Yes" @click="acceptCallback" size="small"></Button>
+                        <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
+                    </div>
+                </div>
+            </template>
+        </ConfirmPopup>
 </template>
 
 <script>
 import Button from 'primevue/button';
 import { useUserStore } from '../../store/modules/UserPinia';
+import ConfirmPopup from 'primevue/confirmpopup';
 
 export default {
-   components:{Button},
+   components:{Button,
+    ConfirmPopup
+   },
    data(){
         return {
         data: [],
