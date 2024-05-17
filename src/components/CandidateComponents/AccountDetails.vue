@@ -45,6 +45,16 @@
                     <label class="small mb-1" for="inputCity">City</label>
                     <input class="form-control" id="inputCity" type="text" placeholder="Enter your city" v-model="city">
                 </div>
+
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputGithub">GitHub URL</label>
+                    <input class="form-control" id="inputGithub" type="text" placeholder="Enter your GitHub URL" v-model="github">
+                </div>
+
+                <div class="mb-3">
+                    <label class="small mb-1" for="inputLinkedin">LinkedIn URL</label>
+                    <input class="form-control" id="inputLinkedin" type="text" placeholder="Enter your LinkedIn URL" v-model="linkedin">
+                </div>
                 
                 <!-- Form Group (email address)-->
                 <div class="mb-3">
@@ -83,6 +93,7 @@
     import { email, minLength, required } from '@vuelidate/validators';
     import axiosInstance from '../../axios';
     import AutoComplete from 'primevue/autocomplete';
+import Swal from 'sweetalert2';
     export default {
         props: ['user', 'userStore'],
         components: {
@@ -103,6 +114,8 @@
                 education : this.user.education,
                 username : this.user.username,
                 resume : this.user.resume,
+                github : this.user.github,
+                linkedin : this.user.linkedin,
                 skills : this.user.skills || [],
                 allSkills: null,
                 filteredSkills: null,
@@ -149,6 +162,8 @@
                         faculty: this.faculty,
                         education: this.education,
                         username: this.username,
+                        github: this.github,
+                        linkedin: this.linkedin,
                         skills: JSON.stringify(this.skills),
                     };
                     for (const key in data) {
@@ -165,10 +180,21 @@
                     axiosInstance
                     .post('/candidates/'+this.user.id, formData)
                     .then((res) => {
-                        console.log("Updated candidate", res.data.data);                        
                         this.userStore.user = res.data.data;
+                        Swal.fire({
+                            icon: "success",
+                            text: "Profile updated successfully",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => 
+                        Swal.fire({
+                            icon: "error",
+                            text: "Error occured",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }))
                 }
             },
             previewResume(url) {
@@ -209,3 +235,65 @@
         }
     }
 </script>
+
+<style scoped>
+    body{
+        margin-top:20px;
+        color:#69707a;
+    }
+    .img-account-profile {
+        height: 10rem;
+    }
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+    .card .card-header {
+        font-weight: 500;
+    }
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+    .form-control, .dataTable-input {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .nav-borders .nav-link.active {
+        color: #0061f2;
+        border-bottom-color: #0061f2;
+    }
+    .nav-borders .nav-link {
+        color: #69707a;
+        border-bottom-width: 0.125rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+</style>

@@ -1,9 +1,9 @@
 <template>
   <div>
     <Navbar/>
-    <section class="vh-100 register-section d-flex justify-content-center align-items-center " >
+    <section class="register-section d-flex justify-content-center align-items-center">
       <div class="carousel-section">
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" @mouseover="handleMouseOver">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
             <button v-for="(image, index) in carouselImages" type="button" :data-bs-target="'#carouselExampleIndicators'" :data-bs-slide-to="index" :class="{ active: index === activeImageIndex }" :key="index" aria-label="Slide {{ index + 1 }}"></button>
           </div>
@@ -144,24 +144,17 @@ export default {
         { src: 'https://res.cloudinary.com/deqwn8wr6/image/upload/v1715739562/security_yu7oyj.svg', description: 'Third Image Description' }
       ],
       activeImageIndex: 0,
-      cursorStyles: ['default', 'pointer', 'text', 'wait'],
   }},
   mounted() {
-   this.handleMouseOver();
     setInterval(this.nextImage, 5000); 
   },
  
   methods: {
-     handleMouseOver() {
-      document.body.style.cursor = this.cursorStyles[this.activeImageIndex % this.cursorStyles.length];
-    },
     nextImage() {
       this.activeImageIndex = (this.activeImageIndex + 1) % this.carouselImages.length;
-      this.handleMouseOver();
     },
     prevImage() {
       this.activeImageIndex = (this.activeImageIndex - 1 + this.carouselImages.length) % this.carouselImages.length;
-      this.handleMouseOver();
     }
   
   },
@@ -386,17 +379,9 @@ export default {
   background-color: #f8f9fa;
 }
 .register-card {
-  width: 80%;
-  max-width: 600px;
-}
-.register-section {
-  background-color: #eee;
-}
-
-.register-card {
+  width: 100%;
+  max-width: 700px;
   border-radius: 25px;
-  display: flex;
-  flex-direction: row;
 }
 
 .carousel-section {
