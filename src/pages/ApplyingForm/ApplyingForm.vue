@@ -8,7 +8,7 @@ import { required, email } from '@vuelidate/validators'
 <template>
   <div>
   <Navbar/>
-  <div class="container w-50 my-auto m-auto">
+  <div class="container w-50 m-auto">
     <h3 class="mx-4">Job Application</h3>
     <form @submit.prevent="submitForm" class="d-flex flex-column align-items-baseline justify-content-between p-4">
 
@@ -97,7 +97,7 @@ export default {
           })
           return          
         }
-        
+
         if (this.emailIsValid)
         {
             this.$toast.open({
