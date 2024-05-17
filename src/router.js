@@ -15,10 +15,12 @@ import CandidateProfile from './pages/CandidateProfile/CandidateProfile.vue';
 import Navbar from './components/Navbar.vue';
 import CandidateApplications from './pages/CandidateApplictions/CandidateApplications.vue';
 
-import Admin from './pages/Admin/Admin.vue';
+import AdminPosts from './pages/Admin/AdminPosts.vue';
 import AdminPost from './pages/Post/AdminPost.vue';
 import DeletePost from './pages/Employer/DeletedPosts.vue';
-import EditPost from './pages/Employer/EditPost.vue';
+import Candidates from './components/AdminComponents/Candidates.vue';
+import Candidate from './pages/Admin/CandidatePage.vue';
+
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -37,8 +39,11 @@ const routes = [
   // Candidates
   { path: '/candidate/profile', component: CandidateProfile },
   { path: '/candidate/applications', component: CandidateApplications },
-  { path: '/admin', component: Admin },
+  { path: '/admin/posts', component: AdminPosts },
+  { path: '/admin/users', component: Candidates},
   { path: '/admin/post/:id', component: AdminPost },
+  { path:'/admin/candidates/:id', component: Candidate},
+  
 ];
 
 const router = createRouter({

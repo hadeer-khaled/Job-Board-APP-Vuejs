@@ -11,8 +11,8 @@
 
         <!-- Admin -->
         <div v-if="role === 'admin'" class="d-flex align-items-center justify-content-around">
-            <RouterLink class="mx-3 text-decoration-none fw-bold ">Posts</RouterLink>
-            <RouterLink class="mx-3 text-decoration-none fw-bold ">Users</RouterLink>
+            <RouterLink class="mx-3 text-decoration-none fw-bold  " to="/admin/posts">Dashboard</RouterLink>
+            <RouterLink class="mx-3 text-decoration-none fw-bold  " to="/admin/users">Users</RouterLink>
         </div>
         
         <!-- Candidate -->

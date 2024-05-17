@@ -1,18 +1,23 @@
 <template>
+    <Navbar/>
+    <div class="card">
     <div>
         <Table :jobs="candidates" :perPage="perPage" :first="first" :total="total" :columns="columns" @page="onPage" :uri="uri">
         </Table>
 
+    </div>
     </div>
 </template>
 
 <script>
 import Table from './Table.vue';
 import axiosInstance from '../../axios';
+import Navbar from '../Navbar.vue';
 
 export default {
     components: {
-        Table
+        Table,
+        Navbar
     },
     data() {
         return {
