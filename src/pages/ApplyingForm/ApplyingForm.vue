@@ -8,26 +8,26 @@ import { required, email } from '@vuelidate/validators'
 <template>
   <div>
   <Navbar/>
-  <div class="container w-50 m-auto">
+  <div class="container w-50 m-auto my-5 border border-2 p-5">
     <h3 class="mx-4">Job Application</h3>
     <form @submit.prevent="submitForm" class="d-flex flex-column align-items-baseline justify-content-between p-4">
 
       <!-- email -->
       <div class="form-group my-3">
-        <label for="userEmail">Email</label>
+        <label class="fw-bold" for="userEmail">Email</label>
         <input type="userEmail" class="form-control" name="userEmail" id="userEmail" v-model="userEmail">
         <!-- <span v-if="!v$.userEmail.email">Incorrect email format.</span> -->
       </div>
 
       <!-- phone_number -->
       <div class="form-group my-3">
-        <label for="phone">Phone Number</label>
+        <label class="fw-bold" for="phone">Phone Number</label>
         <input type="tel" class="form-control" name="phone" id="phone" v-model="phone">
       </div>
 
       <!-- CV -->
       <div class="form-group my-3">
-        <label for="cv">Upload CV</label>
+        <label class="fw-bold" for="cv">Upload CV</label>
         <input type="file" class="form-control" id="cv" @change="handleFileUpload">
       </div>
 
