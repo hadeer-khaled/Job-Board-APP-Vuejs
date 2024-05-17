@@ -50,6 +50,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import router from '../../router'; 
 import axiosInstance from '../../axios/index';
+import Swal from 'sweetalert2';
 
 library.add(faEye, faEyeSlash);
 
@@ -75,23 +76,32 @@ export default {
   }
 ,
  methods: {
-    async resetPassword() {
-       if( !this.userEmail){
-         alert('Failed to send password reset link. please write your email');
-       }else{
-          try {
+      async resetPassword() {
+      if (!this.userEmail) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to send password reset link. Please write your email',
+        });
+      } else {
+        try {
           await axiosInstance.post('http://127.0.0.1:8000/api/forgot-password', {
-            email: userEmail.value
+            email: this.userEmail, 
           });
-          alert('Password reset link sent successfully.');
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Password reset link sent successfully.',
+          });
         } catch (error) {
-          alert('Failed to send password reset link. ');
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Failed to send password reset link. Please write correct email',
+          });
         }
-       }
-        
-     
+      }
     },
-
   },
   setup() {
     const userStore = useUserStore();
