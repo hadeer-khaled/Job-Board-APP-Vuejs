@@ -27,6 +27,7 @@ const routes = [
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
+  {path:'/employer/edit-post/:id', component: EditPost},
   { path: '/employer/deleted-posts', component: DeletePost },
   { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
