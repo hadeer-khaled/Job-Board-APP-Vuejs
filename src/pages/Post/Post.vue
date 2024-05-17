@@ -60,18 +60,22 @@ const requireConfirmation = (event, id) => {
             >
                 <p>aaaaa{{ data }}</p>
                 <template v-slot:apply> 
-                    <RouterLink v-if="!passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.id}`">Apply</RouterLink>
+                    <RouterLink v-if="!application_deadline  || passedDeadline" class="text-decoration-none btn btn-primary" :to="`/application/${data.id}`">Apply</RouterLink>
                 </template>
                 <template v-slot:seeApplications> 
-                    <router-link :to="'/job-applications/' + data.id" v-show="role === 'employer'">
+                    <router-link :to="'/job-applications/' + data.id" v-show="role === 'employer' && data.employer_id ==loggedEmployerId">
                         <button class="btn btn-primary p">View Job Applications</button>
                     </router-link> 
-                    <Button label="" class="custom-delete-button" icon="pi pi-trash" severity="danger" raised @click="requireConfirmation($event, data.id)" v-show="role === 'employer'" />
-                    <router-link :to="'/employer/edit-post/' + data.id" v-show="role === 'employer'">
+
+
+                    <Button v-show="role === 'employer' && data.employer_id ==loggedEmployerId" label="" class="custom-delete-button" icon="pi pi-trash" severity="danger"  raised @click="requireConfirmation($event, data.id)" />
+                    
+                    <router-link :to="'/employer/edit-post/' + data.id" v-show="role === 'employer' && data.employer_id ==loggedEmployerId">
                         <button class="btn btn-primary p custom-edit-button">
                             <i class="pi pi-pencil"></i> 
                         </button>
                     </router-link> 
+
                 </template>
             </PostHeader>
             <PostDescription title="Job Description" :content="data.description"/>
@@ -108,6 +112,7 @@ export default {
             data: [],
             company: '',
             role: useUserStore().user.role,
+            loggedEmployerId: useUserStore().user.id,
         };
     },
     mounted() {

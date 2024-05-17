@@ -74,7 +74,7 @@ export default {
       end_salary: Number,
       post_id: Number,
       work_type: String,
-      skills: Array
+      skills: Array,
    },
    data() {
       return {
