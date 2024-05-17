@@ -34,9 +34,9 @@
             <span class="text-capitalize text-black  fw-bolder btn btn-sm bg-light px-2 border border-black rounded-3  disabled">{{ work_type }}</span>
          </div>
          <!-- salary_range -->
-         <div><p class="fw-bold">salary range: <span> {{ start_salary }} - {{ end_salary }} EGP</span></p> 
+         <div v-if="start_salary && end_salary"><p class="fw-bold">salary range: <span> {{ start_salary }} - {{ end_salary }} EGP</span></p> 
          <!-- deadline -->
-         <div>
+         <div v-if="application_deadline">
             <p class="position-absolute bottom-0 end-0 text-danger fw-bold" :hidden="passedDeadline"> <span class="fw-bolder text-black-50" >Deadline:</span> {{ formattedDeadline }}</p>
             <p v-if="passedDeadline" class="position-absolute bottom-0 end-0 text-danger fw-bold">Closed</p>
             </div>
