@@ -62,7 +62,7 @@ export default {
     },
     methods: {
         changeStatus(status) {
-            axiosInstance.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status })
+            axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/admin/approve/${this.$route.params.id}`, { status })
                 .then((res) => {
                     console.log(res);
                     this.$router.push('/admin');
