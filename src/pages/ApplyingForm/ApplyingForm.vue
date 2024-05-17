@@ -87,7 +87,6 @@ export default {
           })
           return 
         }
-        console.log(this.err)
 
         if (this.err)
         {
@@ -98,7 +97,7 @@ export default {
           })
           return          
         }
-        console.log('check mail  ',this.emailIsValid);
+        
         if (this.emailIsValid)
         {
             this.$toast.open({
@@ -144,7 +143,14 @@ export default {
           })
         })
         .catch((error) => {
-          console.error(error);
+          if (error.response.data.error === 'duplicate')
+          {
+            this.$toast.open({
+              message: 'You hava already applied for this job !',
+              type: 'error',
+              duration: 3000
+            })
+          }
         });
     },
     phoneIsValid()
