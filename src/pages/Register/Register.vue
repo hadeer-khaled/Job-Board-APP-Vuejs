@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar/>
-    <section class="vh-100 register-section d-flex justify-content-center align-items-center">
+    <section class="vh-100 register-section d-flex justify-content-center align-items-center " >
       <div class="carousel-section">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" @mouseover="handleMouseOver">
           <div class="carousel-indicators">
@@ -386,8 +386,8 @@ export default {
   background-color: #f8f9fa;
 }
 .register-card {
-  width: 100%;
-  max-width: 700px;
+  width: 80%;
+  max-width: 600px;
 }
 .register-section {
   background-color: #eee;
