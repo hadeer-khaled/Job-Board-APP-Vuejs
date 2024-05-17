@@ -3,7 +3,7 @@
     <div class="card-header text-center">Profile Picture</div>
     <div class="card-body text-center">
         <!-- Profile picture image-->
-        <img class="img-account-profile rounded-circle mb-3 profile-img" :src="image" alt="Profile Picture">
+        <img class="img-account-profile rounded-circle mb-3 profile-img" :src="image ?? defaultImage" alt="">
         <!-- Profile picture help block-->
         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
         <!-- Profile picture upload button-->
@@ -15,47 +15,6 @@
 </div>
 
 </template>
-
-<style scoped>
-.profile-card {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-.profile-card .card-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.profile-img {
-    width: 150px; 
-    height: 150px; 
-    border-radius: 50%;
-    border: 4px solid #ffffff; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    object-fit: cover; 
-}
-
-.profile-card .card-body {
-    padding: 2rem; 
-}
-
-.profile-card .btn {
-    background-color: #007bff; 
-    border: none; 
-    padding: 0.5rem 1.5rem; 
-    font-size: 1rem; 
-    border-radius: 25px; 
-    transition: background-color 0.3s; 
-}
-
-.profile-card .btn:hover {
-    background-color: #0056b3; 
-}
-
-</style>
 
 <script>
     import FileUpload from 'primevue/fileupload';
@@ -69,6 +28,7 @@ import axiosInstance from '../../axios';
             return {
                 id : this.user.id,
                 image : this.user.image,
+                defaultImage : 'https://res.cloudinary.com/deqwn8wr6/image/upload/v1715943104/WhatsApp_Image_2024-05-16_at_11.38.12_PM_ozc0dw.jpg',
                 isFileInputVisible : false,
             }
         },
@@ -169,4 +129,41 @@ import axiosInstance from '../../axios';
         margin-left: 1rem;
         margin-right: 1rem;
     }
+    .profile-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.profile-card .card-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.profile-img {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 50%;
+    border: 4px solid #ffffff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    object-fit: cover; 
+}
+
+.profile-card .card-body {
+    padding: 2rem; 
+}
+
+.profile-card .btn {
+    background-color: #007bff; 
+    border: none; 
+    padding: 0.5rem 1.5rem; 
+    font-size: 1rem; 
+    border-radius: 25px; 
+    transition: background-color 0.3s; 
+}
+
+.profile-card .btn:hover {
+    background-color: #0056b3; 
+}
 </style>
