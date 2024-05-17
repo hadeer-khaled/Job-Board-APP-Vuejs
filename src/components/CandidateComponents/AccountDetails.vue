@@ -93,7 +93,7 @@
     import { email, minLength, required } from '@vuelidate/validators';
     import axiosInstance from '../../axios';
     import AutoComplete from 'primevue/autocomplete';
-import Swal from 'sweetalert2';
+    import Swal from 'sweetalert2';
     export default {
         props: ['user', 'userStore'],
         components: {
@@ -109,13 +109,13 @@ import Swal from 'sweetalert2';
                 name : this.user.name,
                 email : this.user.email,
                 password : null,
-                city : this.user.city,
-                faculty : this.user.faculty,
-                education : this.user.education,
+                city : this.user.city || '',
+                faculty : this.user.faculty || '',
+                education : this.user.education || '',
                 username : this.user.username,
                 resume : this.user.resume,
-                github : this.user.github,
-                linkedin : this.user.linkedin,
+                github : this.user.github || '',
+                linkedin : this.user.linkedin || '',
                 skills : this.user.skills || [],
                 allSkills: null,
                 filteredSkills: null,
@@ -198,7 +198,9 @@ import Swal from 'sweetalert2';
                 }
             },
             previewResume(url) {
-                window.open(url, '_blank').focus();
+                if (url != null) {
+                    window.open(url, '_blank').focus();
+                }
             },
             fileChange(e) {
                 const file = e.target.files[0];  
