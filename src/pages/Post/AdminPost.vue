@@ -65,7 +65,7 @@ export default {
             axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/admin/approve/${this.$route.params.id}`, { status })
                 .then((res) => {
                     console.log(res);
-                    this.$router.push('admin/posts');
+                    this.$router.push('/admin/posts');
                 })
                 .catch(err => console.log(err));
         }
