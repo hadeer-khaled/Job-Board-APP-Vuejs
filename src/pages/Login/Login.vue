@@ -85,7 +85,7 @@ export default {
         });
       } else {
         try {
-          await axiosInstance.post('http://127.0.0.1:8000/api/forgot-password', {
+          await axiosInstance.post('/forgot-password', {
             email: this.userEmail, 
           });
           Swal.fire({
