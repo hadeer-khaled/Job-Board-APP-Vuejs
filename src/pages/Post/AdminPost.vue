@@ -65,7 +65,7 @@ export default {
             axiosInstance.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status })
                 .then((res) => {
                     console.log(res);
-                    this.$router.push('/admin');
+                    this.$router.push('admin/posts');
                 })
                 .catch(err => console.log(err));
         }
