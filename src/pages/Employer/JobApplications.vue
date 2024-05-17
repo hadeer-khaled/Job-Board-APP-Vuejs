@@ -150,6 +150,7 @@ export default {
         paginationLinks: {},
         next: null,
         prev: null,   
+        pageUrl: null,
     }),
     methods: {
     getSeverity(status) {
@@ -172,6 +173,7 @@ export default {
         axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'accepted' })
         .then((response) => {
            console.log('Response:', response.data.message);
+           this.fetchApplications(this.pageUrl);
         })
         .catch(error => {
           console.error('Error rejecting application:', error.response.data.message);
@@ -182,6 +184,7 @@ export default {
       axiosInstance.put(`${import.meta.env.VITE_BASE_URL}/application-approval/${appId}`, { status: 'rejected' })
         .then((response) => {
            console.log('Response:', response.data.message);
+           this.fetchApplications(this.pageUrl);
         })
         .catch(error => {
           console.error('Error rejecting application:', error.response.data.message);
@@ -207,7 +210,7 @@ export default {
      changePage(pageUrl) 
         {
             if(pageUrl)
-            {
+            {   this.pageUrl=pageUrl;
                 this.fetchApplications(pageUrl);
             }
         },
