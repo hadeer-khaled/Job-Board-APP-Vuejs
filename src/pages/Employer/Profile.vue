@@ -8,8 +8,11 @@
           <template #content>
             <div class="d-flex flex-column align-items-center justify-content-center "> 
               <div class="position-relative">
-              <Avatar :image="company_logo" 
+              <Avatar v-if="company_logo" :image="company_logo" 
                       class="custom-avatar mb-3" shape="circle" />
+              <Avatar v-else image="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715943069/WhatsApp_Image_2024-05-16_at_11.38.12_PM_1_imarzq.jpg" 
+                      class="custom-avatar mb-3" shape="circle" />
+                    
                       <form @submit.prevent="updateImage" enctype="multipart/form-data" class="position-absolute" style="width:fit-content ; bottom: 25px; right: 0px;">
                        
                                 <!-- <div>
