@@ -112,6 +112,9 @@ export default {
     const passwordFieldType = ref('password');
     const passwordFieldIcon = ref('fa-eye-slash');
 
+    const params = new URLSearchParams(window.location.search);
+    const verifyParam = params.get("verify");
+
     const submitForm = async () => {
       errorMessages.value = {};
 
@@ -131,24 +134,29 @@ export default {
             email: userEmail.value,
             password: password.value
           });
-
-           try {
+         
+          if(verifyParam){
+             try {
              const response =await axiosInstance.post('/email/verified', {
              timestamp: new Date(), 
              email: userEmail.value,
-           })
-
-            const params = new URLSearchParams(window.location.search);
-            const verifyParam = params.get("verify");
-            if (verifyParam) {
-                const path = window.location.pathname;
-                window.history.replaceState({}, document.title, path);
-            }
-            router.push('/');
+             })
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Email verified successfully.',
+            });
            } catch (error) {
-             console.log("error",error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Failed to verify email, please try again',
+            });
            }
-          
+          }
+        const path = window.location.pathname;
+        window.history.replaceState({}, document.title, path);
+        router.push('/');
         } catch (error) {
           if (error.response && error.response.status === 401) {
             errorMessages.value.general = 'Unauthorized: Incorrect email or password.';

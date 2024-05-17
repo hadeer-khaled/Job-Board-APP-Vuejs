@@ -20,6 +20,7 @@ import AdminPost from './pages/Post/AdminPost.vue';
 import DeletePost from './pages/Employer/DeletedPosts.vue';
 import Candidates from './components/AdminComponents/Candidates.vue';
 import Candidate from './pages/Admin/CandidatePage.vue';
+import EditPost from './pages/Employer/EditPost.vue';
 
 
 const routes = [
