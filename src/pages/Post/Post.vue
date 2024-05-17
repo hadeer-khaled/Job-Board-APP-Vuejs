@@ -64,17 +64,19 @@ const requireConfirmation = (event, id) => {
                 </template>
                 <template v-slot:seeApplications> 
                     <router-link :to="'/job-applications/' + data.id" v-show="role === 'employer' && data.employer_id ==loggedEmployerId">
-                        <button class="btn btn-primary p">View Job Applications</button>
+                        <button class="btn btn-primary me-2">View Job Applications</button>
                     </router-link> 
-
-
-                    <Button v-show="role === 'employer' && data.employer_id ==loggedEmployerId" label="" class="custom-delete-button" icon="pi pi-trash" severity="danger"  raised @click="requireConfirmation($event, data.id)" />
-                    
+                    <class class="d-flex justify-content-start align-items-center mt-3">
+                    <button  v-show="role === 'employer' && data.employer_id ==loggedEmployerId" label=""   class="btn btn-danger me-2 btn-sm"  raised @click="requireConfirmation($event, data.id)"
+                     >
+                        <i class="pi pi-trash"></i>
+                    </button>
                     <router-link :to="'/employer/edit-post/' + data.id" v-show="role === 'employer' && data.employer_id ==loggedEmployerId">
-                        <button class="btn btn-primary p custom-edit-button">
+                        <button class="btn btn-primary me-2 btn-sm">
                             <i class="pi pi-pencil"></i> 
                         </button>
                     </router-link> 
+                    </class>
 
                 </template>
             </PostHeader>
