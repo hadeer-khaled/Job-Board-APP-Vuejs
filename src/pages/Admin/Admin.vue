@@ -1,4 +1,5 @@
 <template>
+    <Navbar/>
     <div class="card">
         <TabView>
             <TabPanel header="Pending Posts">
@@ -33,7 +34,7 @@ import ApprovedPosts from '../../components/AdminComponents/ApprovedPosts.vue';
 import Candidate from '../../components/AdminComponents/Candidate.vue';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
-
+import Navbar from '../../components/Navbar.vue';
 export default {
 
     components: {
@@ -42,7 +43,8 @@ export default {
         ApprovedPosts,
         Candidate,
         TabView,
-        TabPanel
+        TabPanel,
+        Navbar
     },
 
 }
