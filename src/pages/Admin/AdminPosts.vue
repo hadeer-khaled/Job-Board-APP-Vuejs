@@ -18,11 +18,7 @@
                     <ApprovedPosts></ApprovedPosts>
                 </p>
             </TabPanel>
-            <TabPanel header="Candidates">
-                <p class="m-0">
-                    <Candidate></Candidate>
-                </p>
-            </TabPanel>
+
         </TabView>
     </div>
 </template>
@@ -31,7 +27,7 @@
 import pendingPosts from '../../components/AdminComponents/PendingPosts.vue';
 import rejectedJobs from '../../components/AdminComponents/RejectedPosts.vue';
 import ApprovedPosts from '../../components/AdminComponents/ApprovedPosts.vue';
-import Candidate from '../../components/AdminComponents/Candidate.vue';
+
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import Navbar from '../../components/Navbar.vue';
@@ -41,7 +37,6 @@ export default {
         pendingPosts,
         rejectedJobs,
         ApprovedPosts,
-        Candidate,
         TabView,
         TabPanel,
         Navbar

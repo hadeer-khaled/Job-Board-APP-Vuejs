@@ -6,49 +6,48 @@ import Navbar from '../../components/Navbar.vue';
 import Button from 'primevue/button';
 import axiosInstance from '../../axios';
 </script>
+
 <template>
-
     <div>
-
         <Navbar />
         <div class="container p-5">
-
             <PostHeader :job_title="post.job_title" :location="post.location" :company="company"
                 :application_deadline="post.application_deadline" :created_at="post.created_at"
                 :start_salary="post.start_salary" :end_salary="post.end_salary" :post_id="post.id"
                 :work_type="post.work_type" :skills="post.skills">
-                <template v-slot:Admin >
-                <template v-if="post.status == 'pending'">
-                    <Button label="Accept" severity="success" value="approved" rounded
-                        @click="changeStatus('approved')"></Button>
-                    <Button label="Reject" severity="danger" rounded value="rejected"
-                        @click="changeStatus('rejected')"></Button>
-                </template>
+                <template v-slot:Admin>
+                    <template v-if="post.status == 'pending'">
+                        <Button 
+                            label="Accept" 
+                            icon="pi pi-check" 
+                            class="p-button-success p-mr-2" 
+                            rounded 
+                            @click="changeStatus('approved')" />
+                        <Button 
+                            label="Reject" 
+                            icon="pi pi-times" 
+                            class="p-button-danger" 
+                            rounded 
+                            @click="changeStatus('rejected')" />
+                    </template>
                 </template>
             </PostHeader>
 
             <PostDescription title="Job Description" :content="post.description" />
-
-            <PostDescription title="Responibilities" :content="post.responsibilities" />
-
+            <PostDescription title="Responsibilities" :content="post.responsibilities" />
             <PostDescription title="Qualifications" :content="post.qualifications" />
-
-
         </div>
-
     </div>
 </template>
 
 <script>
-
 export default {
     components: {
         Button
     },
-
     data() {
         return {
-            post: [],
+            post: {},
             company: ''
         }
     },
@@ -62,8 +61,8 @@ export default {
             .catch(err => console.log(err));
     },
     methods: {
-        changeStatus(e) {
-            axiosInstance.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status: e })
+        changeStatus(status) {
+            axiosInstance.put(`http://localhost:8000/api/admin/approve/${this.$route.params.id}`, { status })
                 .then((res) => {
                     console.log(res);
                     this.$router.push('/admin');
@@ -72,5 +71,10 @@ export default {
         }
     }
 }
-
 </script>
+
+<style scoped>
+.p-mr-2 {
+    margin-right: 0.5rem;
+}
+</style>
