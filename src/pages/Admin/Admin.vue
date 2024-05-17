@@ -1,4 +1,5 @@
 <template>
+    <Navbar />
     <div class="card">
         <TabView>
             <TabPanel header="Pending Posts">
