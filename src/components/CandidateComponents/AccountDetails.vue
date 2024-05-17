@@ -59,14 +59,14 @@
                 <!-- Form Group (email address)-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputResume">Resume</label>
-                    <input class="form-control" id="inputResume" type="file" @change="fileChange">
+                    <input class="form-control mb-2" id="inputResume" type="file" @change="fileChange">
                     <button class="btn btn-primary" @click="previewResume(resume)">Preview</button>
                 </div>
                 <!-- Save changes button-->
                 <div class="mb-3">
                     <label class="small mb-1" for="inputSkills">Skills</label><br/>
                     <AutoComplete v-model="selectedSkill" forceSelection :suggestions="filteredSkills" @complete="search" />
-                    <button type="button" class="btn btn-primary" @click="addSkill">Add</button>
+                    <button type="button" class="btn btn-primary ms-4" @click="addSkill">Add</button>
                 </div>
 
                 <div class="mb-3">

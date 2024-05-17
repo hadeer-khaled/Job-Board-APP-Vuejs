@@ -38,12 +38,6 @@
             this.fetchUser();
         },
         methods: {
-            printUser() {
-                console.log(this.user);
-                for (var prop in this.user) {
-                    console.log(prop + ":" + this.user[prop]);
-                }
-            },
             fetchUser() {
                 this.user = this.userStore.user;
             },
