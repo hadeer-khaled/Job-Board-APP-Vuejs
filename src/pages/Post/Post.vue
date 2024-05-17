@@ -82,19 +82,20 @@ const requireConfirmation = (event, id) => {
             <PostDescription title="Responibilities" :content="data.responsibilities"/>
             <PostDescription title="Qualifications" :content="data.qualifications"/>
         </div>
+  
     </div>
-    <ConfirmPopup group="headless">
-        <template #container="{ message, acceptCallback, rejectCallback }">
-            <div class="border-round p-3">
-                <span>{{ message.message }}</span>
-                <div class="flex align-items-center gap-2 mt-3">
-                    <Button label="Yes" @click="acceptCallback" size="small"></Button>
-                    <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
-                </div>
-                </div>
+      
+         <ConfirmPopup group="headless">
+            <template #container="{ message, acceptCallback, rejectCallback }">
+                <div class="border-round p-3">
+                    <span>{{ message.message }}</span>
+                    <div class="flex align-items-center gap-2 mt-3">
+                        <Button label="Yes" @click="acceptCallback" size="small"></Button>
+                        <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
+                    </div>
+                    </div>
             </template>
         </ConfirmPopup>
-    
 </template>
 
 <script>

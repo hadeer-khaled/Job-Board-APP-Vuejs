@@ -5,7 +5,7 @@
     
     <div class="mx-3 d-flex justify-content-between ">
         <div>
-            <img  src="/logo.jpg" class="mx-3 border rounded-circle" style="width:50px"/>
+            <img  src="https://static.vecteezy.com/system/resources/previews/008/688/110/non_2x/job-search-logo-free-vector.jpg" class="mx-3 border rounded-circle" style="width:50px"/>
         </div>
     <RouterLink to="/" class="text-decoration-none mx-3 my-auto fw-bold ">Home</RouterLink>
 
@@ -45,7 +45,7 @@
     <div v-if="loggedUser">
         <div class="d-flex align-items-center  justify-content-center ">
         <p class="mx-3 my-auto fw-bold r">{{ userStore.user.username }}</p>
-        <img v-if="!userStore.user.image" style="width: 50px;" src="/default_user1.png" alt="user img">
+        <img v-if="!userStore.user.image" style="width: 50px;" src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1715943104/WhatsApp_Image_2024-05-16_at_11.38.12_PM_ozc0dw.jpg" alt="user img">
 
         <div class="navbar-user-image d-flex align-items-center justify-content-center">
             <img v-if="userStore.user.image" class="user-img" :src="userStore.user.image" alt="User Image">
