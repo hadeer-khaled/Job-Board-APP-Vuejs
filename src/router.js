@@ -18,12 +18,14 @@ import CandidateApplications from './pages/CandidateApplictions/CandidateApplica
 import Admin from './pages/Admin/Admin.vue';
 import AdminPost from './pages/Post/AdminPost.vue';
 import DeletePost from './pages/Employer/DeletedPosts.vue';
+import EditPost from './pages/Employer/EditPost.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
   { path: '/posts/:id', component: Post },
   { path: '/employer/profile', component: EmployerProfile },
   { path: '/employer/add-post', component: AddPost },
+  {path:'/employer/edit-post/:id', component: EditPost},
   { path: '/employer/deleted-posts', component: DeletePost },
   { path: '/application/:id' , component: ApplyingForm},
   { path: '/job-applications/:jobId', component: JobApplications },
