@@ -39,7 +39,7 @@
               <div class="form-group mb-4">
                 <label for="email" class="form-label">Email<span class="text-danger text-danger-astric">*</span></label>
                 <input type="email" class="form-control" id="email" v-model="email" :placeholder="errorMessages.emailRe || 'Enter your email'" required :class="{ 'is-invalid': errorMessages.emailRe }">
-                <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.email }}</small>
+                <small v-if="errorMessages.email" class="text-danger">{{ errorMessages.email }}</small>
                 <small v-if="errorMessages.emailFromServer" class="text-danger">{{ errorMessages.emailFromServer}}</small>
               </div>
               <div class="form-group mb-4">
@@ -50,8 +50,8 @@
                     <FontAwesomeIcon :icon="passwordFieldIcon"/>
                   </button>
                 </div>
+                <small v-if="errorMessages.passwordStrong && !errorMessages.password" class="text-danger">{{ errorMessages.passwordStrong }}</small>
               </div>
-               <small v-if="errorMessages.role" class="text-danger">{{ errorMessages.passwordStrong }}</small>
               <div class="form-group mb-4">
                 <label for="confirmPassword" class="form-label">Confirm Password<span class="text-danger text-danger-astric">*</span></label>
                 <div class="input-group">
@@ -227,7 +227,7 @@ export default {
       if (!password.value) {
         errorMessages.value.password = "Password required.";
       }
-      if (password.value.length <9) {
+      if (password.value.length <8) {
         errorMessages.value.passwordStrong = "Must contain least eight characters";
       }
       if (!confirmPassword.value) {
