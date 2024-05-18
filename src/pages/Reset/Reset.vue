@@ -92,7 +92,7 @@ export default {
 
       if (Object.keys(this.errorMessages).length === 0) {
         try {
-          await axiosInstance.post('http://127.0.0.1:8000/api/reset-password', {
+          await axiosInstance.post('/reset-password', {
             token: this.token,
             email: this.email,
             password: this.password,
