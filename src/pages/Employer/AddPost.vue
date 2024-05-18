@@ -229,7 +229,7 @@ export default {
         end_salary: this.endSalary,
         location: this.location,
         work_type: this.workType.code,
-        application_deadline: this.applicationDeadline,
+        application_deadline: this.applicationDeadline.toISOString().split('T')[0],
       };
       this.v$.$validate();
       if(!this.v$.$error){
