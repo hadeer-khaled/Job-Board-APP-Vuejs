@@ -114,8 +114,8 @@ export default {
         return {
             data: [],
             company: '',
-            role: useUserStore().user.role,
-            loggedEmployerId: useUserStore().user.id,
+            role: useUserStore().user ? useUserStore().user.role : 'user',
+            loggedEmployerId: useUserStore().user ? useUserStore().user.id : 0,
         };
     },
     mounted() {
